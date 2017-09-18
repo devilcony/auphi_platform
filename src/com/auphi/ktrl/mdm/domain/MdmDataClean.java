@@ -1,0 +1,24 @@
+/*******************************************************************************
+ *
+ * Auphi Data Integration PlatformKettle Platform
+ * Copyright C 2011-2017 by Auphi BI : http://www.doetl.com 
+
+ * Support：support@pentahochina.com
+ *
+ *******************************************************************************
+ *
+ * Licensed under the LGPL License, Version 3.0 the "License";
+ * you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ *    https://opensource.org/licenses/LGPL-3.0 
+
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************/
+package com.auphi.ktrl.mdm.domain;/**    * This class is used for ...    * @author Tony  * @version    *       1.0, 2016-1-30 下午2:43:32    */public class MdmDataClean {	private Integer id; //主键		private Integer id_model; //数据模型		private String id_model_show;		private String attribute_model;//模型属性		private Integer mdm_id_database;//主数据表-数据源id		private String mdm_id_database_show;//主数据表-数据源id		private String mdm_schema_name;//主数据表-模式名		private String mdm_table_name;//主数据表-表名		private String mdm_primary_key;//主数据表-主键字段		private String mdm_column_name ;//主数据表-名称字段		private String mdm_where_condition;//主数据表-过滤条件		private Integer maping_mode;//主数据表-映射方式		private Integer maping_id_database;//映射关系表-数据源id		private String maping_id_database_show;//映射关系表-数据源id		private String maping_schema_name;//映射关系表-模式名		private String maping_table_name;//映射关系表-表名		public Integer getId() {		return id;	}	public void setId(Integer id) {		this.id = id;	}	public Integer getId_model() {		return id_model;	}	public void setId_model(Integer id_model) {		this.id_model = id_model;	}	public String getAttribute_model() {		return attribute_model;	}	public void setAttribute_model(String attribute_model) {		this.attribute_model = attribute_model;	}	public Integer getMdm_id_database() {		return mdm_id_database;	}	public void setMdm_id_database(Integer mdm_id_database) {		this.mdm_id_database = mdm_id_database;	}	public String getMdm_schema_name() {		return mdm_schema_name;	}	public void setMdm_schema_name(String mdm_schema_name) {		this.mdm_schema_name = mdm_schema_name;	}	public String getMdm_table_name() {		return mdm_table_name;	}	public void setMdm_table_name(String mdm_table_name) {		this.mdm_table_name = mdm_table_name;	}	public String getMdm_primary_key() {		return mdm_primary_key;	}	public void setMdm_primary_key(String mdm_primary_key) {		this.mdm_primary_key = mdm_primary_key;	}	public String getMdm_column_name() {		return mdm_column_name;	}	public void setMdm_column_name(String mdm_column_name) {		this.mdm_column_name = mdm_column_name;	}	public String getMdm_where_condition() {		return mdm_where_condition;	}	public void setMdm_where_condition(String mdm_where_condition) {		this.mdm_where_condition = mdm_where_condition;	}	public Integer getMaping_mode() {		return maping_mode;	}	public void setMaping_mode(Integer maping_mode) {		this.maping_mode = maping_mode;	}	public Integer getMaping_id_database() {		return maping_id_database;	}	public void setMaping_id_database(Integer maping_id_database) {		this.maping_id_database = maping_id_database;	}	public String getMaping_schema_name() {		return maping_schema_name;	}	public void setMaping_schema_name(String maping_schema_name) {		this.maping_schema_name = maping_schema_name;	}	public String getMaping_table_name() {		return maping_table_name;	}	public void setMaping_table_name(String maping_table_name) {		this.maping_table_name = maping_table_name;	}	public String getId_model_show() {		return id_model_show;	}	public void setId_model_show(String id_model_show) {		this.id_model_show = id_model_show;	}	public String getMdm_id_database_show() {		return mdm_id_database_show;	}	public void setMdm_id_database_show(String mdm_id_database_show) {		this.mdm_id_database_show = mdm_id_database_show;	}	public String getMaping_id_database_show() {		return maping_id_database_show;	}	public void setMaping_id_database_show(String maping_id_database_show) {		this.maping_id_database_show = maping_id_database_show;	}	}

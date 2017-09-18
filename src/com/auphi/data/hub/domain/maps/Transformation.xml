@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 角色管理与授权手工映射SQL语句 -->
+<mapper namespace="Transformation">
+	
+
+
+
+	<select id="queryTransformation" parameterType="map" resultType="dto">
+		select name,createDate,modifiedUser, modifiedDate,type from (
+			SELECT name,Created_date as createDate,MODIFIED_USER as modifiedUser,MODIFIED_DATE as modifiedDate,1 as type FROM r_transformation
+		) as t   limit ${start},${end}
+	</select>
+	
+	<select id="queryTransformationCount" parameterType="map" resultType="java.lang.Integer">
+		 select count(NAME) from r_transformation
+			
+	</select>
+
+	
+</mapper>

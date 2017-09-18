@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MdmModel">
+
+	<insert id="insert">
+		insert into MDM_MODEL(ID_MODEL,MODEL_NAME,MODEL_DESC,MODEL_STATUS,MODEL_AUTHOR,MODEL_NOTE,MODEL_CODE) values
+		 (#{id_model},#{model_name},#{model_desc},#{model_status},#{model_author},#{model_note},#{model_code})
+	</insert>
+	
+
+	<update id="update">
+		update MDM_MODEL
+		<set>
+			<if test="model_name != null and model_name != ''">
+				MODEL_NAME=#{model_name}
+			</if>
+			<if test="model_desc != null and model_desc != ''">
+				,MODEL_DESC=#{model_desc}
+			</if>
+			<if test="model_status != null and model_status != ''">
+				,MODEL_STATUS=#{model_status}
+			</if>
+			<if test="model_author != null and model_author != ''">
+				,MODEL_AUTHOR=#{model_author}
+			</if>
+			<if test="model_note != null and model_note != ''">
+				,MODEL_NOTE=#{model_note}
+			</if>
+			<if test="model_code != null and model_code != ''">
+				,MODEL_CODE=#{model_code}
+			</if>
+		</set>
+		WHERE ID_MODEL = #{id_model}
+	</update>
+
+	<resultMap type="MdmModel" id="MdmModel">
+		<result column="ID_MODEL" property="id_model"/>
+		<result column="MODEL_NAME" property="model_name"/>
+		<result column="MODEL_DESC" property="model_desc"/>
+		<result column="MODEL_STATUS" property="model_status"/>
+		<result column="model_status_show" property="model_status_show"/>
+		<result column="MODEL_AUTHOR" property="model_author"/>
+		<result column="MODEL_NOTE" property="model_note"/>
+		<result column="MODEL_CODE" property="model_code"/>
+	</resultMap>
+
+	<select id="query" parameterType="map"  resultMap="MdmModel">
+		select *,(case MODEL_STATUS when 0 then '草稿' when 1 then '已发布'  else '' end ) as model_status_show from MDM_MODEL
+		limit ${start},${end}
+	</select>
+
+	<select id="queryCheckModelCode" parameterType="map"  resultType="java.lang.Integer">
+		select count(*) from MDM_MODEL
+		<where>
+			<if test="id_model != null  and '' != id_model ">
+				AND ID_MODEL != #{id_model}
+			</if>
+
+			<if test="model_code != null  and model_code != '' ">
+				AND  MODEL_CODE = #{model_code}
+			</if>
+		</where>
+
+	</select>
+
+	<select id="queryExportList" parameterType="map"  resultType="java.util.HashMap">
+		select A.ID_MODEL AS ID_MODEL , MODEL_NAME, TABLE_NAME,ATTRIBUTE_NAME,FIELD_NAME,FIELD_TYPE,FIELD_LENGTH
+		from mdm_model a
+		inner join mdm_model_attribute b on a.id_model=b.id_model
+		left join mdm_table c on a.id_model=c.id_model
+		<where>
+			<if test="ids != null  and '' != ids ">
+				AND A.ID_MODEL in (${ids})
+			</if>
+		</where>
+		ORDER BY A.ID_MODEL
+	</select>
+	
+	<select id="query4ComboBox" parameterType="map"  resultMap="MdmModel">
+		select * from MDM_MODEL 
+	</select>
+	
+	<select id="queryMaxId" parameterType="map"  resultType="java.lang.Integer">
+		SELECT MAX(id_model) AS MAXID FROM MDM_MODEL
+	</select>
+
+	<select id="queryById" resultMap="MdmModel">
+		select * from MDM_MODEL where ID_MODEL=#{id_model}
+	</select>
+
+	
+	<select id="queryCount" parameterType="map" resultType="java.lang.Integer">
+		select count(ID_MODEL) from MDM_MODEL
+	</select>
+	
+	<delete id="delete">
+		delete from MDM_MODEL  WHERE ID_MODEL in (${ids}) 
+	</delete>
+
+</mapper>

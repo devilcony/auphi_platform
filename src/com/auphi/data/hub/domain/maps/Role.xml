@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 角色管理与授权手工映射SQL语句 -->
+<mapper namespace="Role">
+	
+	<!-- 角色管理与授权-角色列表 -->
+	<select id="queryRolesForManage" parameterType="map" resultType="dto">
+		SELECT roleid, rolename, deptid, roletype, locked,
+		       (SELECT deptname
+		          FROM eadept
+		         WHERE deptid = a.deptid) AS deptname, remark
+		  FROM earole a
+		 WHERE a.roletype != '3'
+			<if test="roletype != null">  
+				and a.roletype != #{roletype}
+			</if>
+			<if test="roleid != null">  
+				and a.roleid like '${roleid}%'
+			</if>
+			<if test="deptid != null">  
+				and a.deptid like '${deptid}%'
+			</if>
+			<if test="rolename != null">  
+				and a.rolename like '%${rolename}%'
+			</if>
+			<if test="rolename != null">  
+				and a.rolename like '%${queryParam}%' 
+			</if>
+			limit ${start},${end}
+	</select>
+	
+	<!-- 角色管理与授权-角色列表 -->
+	<select id="queryRolesForManageForPageCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(*) as count
+		  FROM earole a WHERE a.roletype != '3'
+			<if test="roleid != null">  
+				and a.roleid like '${roleid}%'
+			</if>
+			<if test="deptid != null">  
+				and a.deptid like '${deptid}%'
+			</if>
+			<if test="rolename != null">  
+				and a.rolename like '%${rolename}%'
+			</if>
+			<if test="queryParam != null">  
+				and a.rolename like '%${queryParam}%'
+			</if>
+	</select>
+	
+	<!-- 查询该角色已授权的菜单 -->
+	<select id="queryMenusInRoleManage" parameterType="map" resultType="dto">
+		SELECT a.menuid, a.authorizelevel,b.menuname
+		  FROM earoleauthorize a, eamenu b
+		 WHERE roleid = #{roleid} and a.menuid = b.menuid and b.leaf = '1'
+	</select>
+	
+	<!-- 插入一条角色表记录 -->
+	<insert id="saveRoleItem" parameterType="dto">
+		INSERT INTO EAROLE (
+		   roleid, rolename, deptid, 
+		   roletype, remark,locked) 
+		VALUES (#{roleid}, #{rolename}, #{deptid},
+		    #{roletype}, #{remark},#{locked})
+	</insert>
+    
+	<!-- 删除角色授权表  -->
+	<delete id="deleteEaroleAuthorizeInRoleManage" parameterType="map" >
+		DELETE FROM earoleauthorize
+		      WHERE roleid = #{roleid}
+	</delete>
+	
+	<!-- 删除角色表  -->
+	<delete id="deleteEaroleInRoleManage" parameterType="map" >
+		DELETE FROM earole
+		      WHERE roleid = #{roleid}
+	</delete>
+	
+	<!-- 删除人员授权表  -->
+	<delete id="deleteEauserauthorizeInRoleManage" parameterType="map" >
+		DELETE FROM eauserauthorize
+		      WHERE roleid = #{roleid}
+	</delete>
+	
+	<!-- 删除UI元素角色授权表  -->
+	<delete id="deleteEarolemenupartInRoleManage" parameterType="map" >
+		DELETE FROM earolemenupart
+		      WHERE roleid = #{roleid}
+	</delete>
+	
+	<!-- 根据主键更新角色 -->
+	<update id="updateRoleItem" parameterType="dto">
+         UPDATE earole
+         <set>
+         	<if test="deptid != null">
+         		deptid = #{deptid},
+         	</if>
+         	<if test="rolename != null">
+         		rolename = #{rolename},
+         	</if>
+         	<if test="roleid != null">
+         		roleid = #{roleid},
+         	</if>
+         	<if test="locked != null">
+         		locked = #{locked},
+         	</if>
+         	<if test="roletype != null">
+         		roletype = #{roletype},
+         	</if>
+         	<if test="remark != null">
+         		remark = #{remark}
+         	</if>
+         </set>
+	        WHERE roleid = #{roleid}    
+	</update>
+	
+	<!-- 插入一条角色授权记录 -->
+	<insert id="saveRoleGrantItem" parameterType="dto">
+		INSERT INTO earoleauthorize (
+		   roleid, menuid, authorizelevel, 
+		   authorizeid) 
+		VALUES (#{roleid}, #{menuid}, #{authorizelevel}, #{authorizeid})
+	</insert>
+	
+	<!-- 删除角色授权  -->
+	<delete id="deleteERoleGrants" parameterType="map" >
+		DELETE FROM earoleauthorize
+		      WHERE roleid = #{roleid} and authorizelevel = #{authorizelevel}
+	</delete>
+	
+	<!-- 根据角色删除角色用户关联信息  -->
+	<delete id="deleteEaUserAuthorizeByRoleId" parameterType="map" >
+		DELETE FROM eauserauthorize
+		      WHERE roleid = #{roleid}
+	</delete>
+	
+	<!-- 插入一条角色用户关联记录 -->
+	<insert id="saveSelectUser" parameterType="dto">
+		INSERT INTO EAUSERAUTHORIZE (
+		   userid, roleid, authorizeid) 
+		VALUES ( #{userid}, #{roleid}, #{authorizeid})
+	</insert>
+	
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+<!-- 
+    <bean name="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="dataSource" ref ="dataSource" />       
+        <property name="applicationContextSchedulerContextKey" value="applicationContextKey"/>
+        <property name="configLocation" value="classpath:quartz_datahub.properties"/>
+    </bean>
+    
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass">
+            <value>
+                cn.skyform.data.hub.service.MyQuartzJobBean
+            </value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="simpleService">
+                    <ref bean="simpleService"/>
+                </entry>
+            </map>
+        </property>
+   
+  </bean>
+--> 
+</beans>

@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统监控手工映射SQL语句 -->
+<mapper namespace="Monitor">
+	<!-- 查询HTTP会话信息 -->
+	<select id="queryHttpSessions" parameterType="map" resultType="userInfo">
+		 SELECT 
+			   sessionid as sessionID, userid, username, account, createtime as sessionCreatedTime,explorer, loginip as loginIP
+	      FROM eahttpsession limit ${start},${end}
+	</select>
+	<select id="queryHttpSessionsForPageCount" parameterType="map" resultType="java.lang.Integer">
+		 SELECT count(*) as count
+	      FROM eahttpsession
+	</select>
+	
+	<!-- 查询HTTP会话信息 -->
+	<select id="queryHttpSessionsByID" parameterType="java.lang.String" resultType="userInfo">
+		 SELECT 
+			   sessionid as sessionID, userid, username, account, createtime as sessionCreatedTime, explorer, loginip as loginIP
+	      FROM eahttpsession where sessionid = #{sessionid}
+	</select>
+	
+	<!-- 插入一条HTTP会话记录 -->
+	<insert id="saveHttpSession" parameterType="userInfo">
+		INSERT INTO eahttpsession (
+		   sessionid, username, account, 
+		   createtime, loginip,userid,explorer) 
+		VALUES (#{sessionID}, #{username}, #{account}, 
+		   #{sessionCreatedTime}, #{loginIP}, #{userid},#{explorer})
+	</insert>
+	
+	<!-- 删除会话 -->
+	<delete id="deleteHttpSession" parameterType="dto" >
+		DELETE 
+		  FROM eahttpsession
+		  <where>
+		  	<if test="sessionid !=null and sessionid != ''">
+		  		 sessionid = #{sessionid}
+		  	</if>
+		  </where>
+	</delete>
+	
+	<!-- 创建一个事件 -->
+	<insert id="saveEvent" parameterType="dto">
+		INSERT INTO eaevent (
+		   eventid, userid, account, 
+		   username, description, activetime,requestpath,methodname,costtime) 
+		VALUES (#{eventid}, #{userid}, #{account}, 
+		   #{username}, #{description}, #{activetime},#{requestpath},#{methodname},#{costtime})
+	</insert>
+	
+	<!-- 查询事件 -->
+	<select id="queryEventsByDto" parameterType="map" resultType="dto">
+		SELECT   eventid, userid, ACCOUNT, username, description, activetime,
+		         requestpath, methodname, NVL(costtime, 0) || '毫秒' AS costtime
+		    FROM eaevent a
+		  <where>
+		  	<if test="eventid != null and eventid!='' ">
+		  		eventid = #{eventid}
+		  	</if>
+		  	<if test="userid != null and userid !='' ">
+		  		and userid = #{userid}
+		  	</if>
+		  	<if test="account != null and account !='' ">
+		  		and account like '%${account}%'
+		  	</if>
+		  	<if test="username != null and username !='' ">
+		  		and username like '%${username}%'
+		  	</if>
+		  	<if test="keyword != null and keyword !='' ">
+		  		and (description like '%${keyword}%' or requestpath like '%${keyword}%' or methodname like '%${keyword}%')
+		  	</if>
+		  	<if test="description != null and description !='' ">
+		  		and description = #{description}
+		  	</if>
+		  	<if test="ksrq != null and ksrq !='' ">
+		  		and to_date(activetime,'yyyy-mm-dd hh24:mi:ss')  <![CDATA[>=]]> to_date(#{ksrq},'yyyy-mm-dd')
+		  	</if>
+		  	<if test="jsrq != null and jsrq !='' ">
+		  		and to_date(activetime,'yyyy-mm-dd hh24:mi:ss')  <![CDATA[<=]]> to_date(#{jsrq},'yyyy-mm-dd')
+		  	</if>
+		  </where>
+
+		ORDER BY eventid DESC
+	</select>
+	
+	<!-- 查询事件 -->
+	<select id="queryEventsByDtoForPageCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(*) as count
+		  FROM eaevent a
+		  <where>
+		  	<if test="eventid != null and eventid!='' ">
+		  		eventid = #{eventid}
+		  	</if>
+		  	<if test="userid != null and userid !='' ">
+		  		and userid = #{userid}
+		  	</if>
+		  	<if test="account != null and account !='' ">
+		  		and account like '%${account}%'
+		  	</if>
+		  	<if test="username != null and username !='' ">
+		  		and username like '%${username}%'
+		  	</if>
+		  	<if test="keyword != null and keyword !='' ">
+		  		and (description like '%${keyword}%' or requestpath like '%${keyword}%' or methodname like '%${keyword}%')
+		  	</if>
+		  	<if test="description != null and description !='' ">
+		  		and description = #{description}
+		  	</if>
+		  	<if test="ksrq != null and ksrq !='' ">
+		  		and to_date(activetime,'yyyy-mm-dd hh24:mi:ss')  <![CDATA[>=]]> to_date(#{ksrq},'yyyy-mm-dd')
+		  	</if>
+		  	<if test="jsrq != null and jsrq !='' ">
+		  		and to_date(activetime,'yyyy-mm-dd hh24:mi:ss')  <![CDATA[<=]]> to_date(#{jsrq},'yyyy-mm-dd')
+		  	</if>
+		  </where>
+	</select>
+	
+	<!-- 查询事件 -->
+	<select id="queryEventsByDtoMysql"  resultType="dto">
+		SELECT   eventid, userid, account, username, description, activetime,
+		         requestpath, methodname,  concat(cast(if(costtime is null,0,costtime) as char),'毫秒') AS costtime 
+		    FROM eaevent a
+		  <where>
+		  	<if test="eventid != null and eventid !='' ">
+		  		eventid = #{eventid}
+		  	</if>
+		  	<if test="userid != null and userid !='' ">
+		  		and userid = #{userid}
+		  	</if>
+		  	<if test="account != null and account !='' ">
+		  		and account like '%${account}%'
+		  	</if>
+		  	<if test="username != null and username !='' ">
+		  		and username like '%${username}%'
+		  	</if>
+		  	<if test="keyword != null and keyword !='' ">
+		  		and (description like '%${keyword}%' or requestpath like '%${keyword}%' or methodname like '%${keyword}%')
+		  	</if>
+		  	<if test="description != null and description !='' ">
+		  		and description = #{description}
+		  	</if>
+		  	<if test="ksrq != null and ksrq !='' ">
+		  		and activetime  <![CDATA[>=]]> #{ksrq}
+		  	</if>
+		  	<if test="jsrq != null and jsrq !='' ">
+		  		and activetime  <![CDATA[>=]]> #{jsrq}
+		  	</if>
+		  </where>
+		ORDER BY eventid DESC
+		limit ${start},${end}
+	</select>
+	
+	<!-- 查询事件 -->
+	<select id="queryEventsByDtoForPageCountMysql"  resultType="java.lang.Integer">
+		SELECT count(*) as count
+		  FROM eaevent a
+		  <where>
+		  	<if test="eventid != null and eventid!='' ">
+		  		eventid = #{eventid}
+		  	</if>
+		  	<if test="userid != null and userid !='' ">
+		  		and userid = #{userid}
+		  	</if>
+		  	<if test="account != null and account !='' ">
+		  		and account like '%${account}%'
+		  	</if>
+		  	<if test="username != null and username !='' ">
+		  		and username like '%${username}%'
+		  	</if>
+		  	<if test="keyword != null and keyword !='' ">
+		  		and (description like '%${keyword}%' or requestpath like '%${keyword}%' or methodname like '%${keyword}%')
+		  	</if>
+		  	<if test="description != null and description !='' ">
+		  		and description = #{description}
+		  	</if>
+		  	<if test="ksrq != null and ksrq !='' ">
+		  		and activetime  <![CDATA[>=]]> #{ksrq}
+		  	</if>
+		  	<if test="jsrq != null and jsrq !='' ">
+		  		and activetime  <![CDATA[>=]]> #{jsrq}
+		  	</if>
+		  </where>
+		  
+	</select>
+	
+	<!-- 删除事件 -->
+	<delete id="deleteEvent" parameterType="java.lang.String" >
+		DELETE 
+		  FROM eaevent WHERE eventid = #{eventid}
+	</delete>
+	
+	<!-- 查询事件 -->
+	<select id="queryEventByEventID" parameterType="java.lang.String" resultType="dto">
+		SELECT eventid, userid, account, username, description, activetime,requestpath,methodname,costtime
+	      FROM eaevent WHERE eventid = #{eventId}
+	</select>
+	
+	<!-- 重置事件 -->
+	<delete id="resetEvent">
+		DELETE  FROM eaevent
+	</delete>
+	
+	<!-- 插入一条SpringBean监控记录 -->
+	<insert id="saveEaBeanMonitorDomain" parameterType="dto">
+		INSERT INTO eabeanmonitor (monitorid, clazz, methodname, pointcuttype, advisetype, activetime, costtime, exception) 
+		      VALUES ( #{monitorid}, #{clazz}, #{methodname}, #{pointcuttype}, #{advisetype}, #{activetime}, #{costtime}, #{exception} )
+	</insert>
+	
+	<!-- 查询监控记录 -->
+	<select id="queryBeanMonitorRecordsByDto" parameterType="map" resultType="dto">
+		SELECT   monitorid, clazz, methodname, pointcuttype, advisetype, activetime,
+		         NVL (costtime, 0) || '毫秒' AS costtime, exception AS exception
+		    FROM eabeanmonitor a
+		<where>
+			<if test="pointcuttype != null and pointcuttype !='' ">
+				 pointcuttype = #{pointcuttype}
+			</if>
+			<if test="advisetype != null and advisetype !='' ">
+				 and advisetype = #{advisetype}
+			</if>
+			<if test="clazz != null and clazz !='' ">
+				 and clazz like '%${clazz}%'
+			</if>
+			<if test="methodname != null and methodname !='' ">
+				 and methodname like '%${methodname}%'
+			</if>
+			<if test="exception != null and exception !='' ">
+				and exception like '%${exception}%'
+			</if>
+			<if test="ksrq != null and ksrq != ''">
+				to_date(activetime,'yyyy-mm-dd hh24:mi:ss')  <![CDATA[>=]]> to_date(#{ksrq},'yyyy-mm-dd')
+			</if>
+			<if test="jsrq != null and jsrq != ''">
+				to_date(activetime,'yyyy-mm-dd hh24:mi:ss')  <![CDATA[<=]]> to_date(#{jsrq},'yyyy-mm-dd')
+			</if>
+			<if test="keyword != null and keyword!='' ">
+			 (clazz like '%${keyword}%' or methodname like '%${keyword}%' or exception like '%${keyword}%')
+			</if>
+		</where>		  
+		ORDER BY monitorid DESC
+	</select>
+	
+	<!-- 查询监控记录 -->
+	<select id="queryBeanMonitorRecordsByDtoForPageCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(*) as count
+		  FROM eabeanmonitor a
+		<where>
+			<if test="pointcuttype != null and pointcuttype !='' ">
+				 pointcuttype = #{pointcuttype}
+			</if>
+			<if test="advisetype != null and advisetype !='' ">
+				 and advisetype = #{advisetype}
+			</if>
+			<if test="clazz != null and clazz !='' ">
+				 and clazz like '%${clazz}%'
+			</if>
+			<if test="methodname != null and methodname !='' ">
+				 and methodname like '%${methodname}%'
+			</if>
+			<if test="exception != null and exception !='' ">
+				and exception like '%${exception}%'
+			</if>
+			<if test="ksrq != null and ksrq != ''">
+				to_date(activetime,'yyyy-mm-dd hh24:mi:ss')  <![CDATA[>=]]> to_date(#{ksrq},'yyyy-mm-dd')
+			</if>
+			<if test="jsrq != null and jsrq != ''">
+				to_date(activetime,'yyyy-mm-dd hh24:mi:ss')  <![CDATA[<=]]> to_date(#{jsrq},'yyyy-mm-dd')
+			</if>
+			<if test="keyword != null and keyword!='' ">
+			 (clazz like '%${keyword}%' or methodname like '%${keyword}%' or exception like '%${keyword}%')
+			</if>
+		</where>		  
+
+	</select>
+	
+	<!-- 查询监控记录 -->
+	<select id="queryBeanMonitorRecordsByDtoMysql" parameterType="map" resultType="dto">
+		SELECT   monitorid, clazz, methodname, pointcuttype, advisetype, activetime,
+		         concat(cast(if(costtime is null,0,costtime) as char),'毫秒') AS costtime, exception AS exception
+		    FROM eabeanmonitor a
+		<where>
+			<if test="pointcuttype != null and pointcuttype !='' ">
+				 pointcuttype = #{pointcuttype}
+			</if>
+			<if test="advisetype != null and advisetype !='' ">
+				 and advisetype = #{advisetype}
+			</if>
+			<if test="clazz != null and clazz !='' ">
+				 and clazz like '%${clazz}%'
+			</if>
+			<if test="methodname != null and methodname !='' ">
+				 and methodname like '%${methodname}%'
+			</if>
+			<if test="exception != null and exception !='' ">
+				and exception like '%${exception}%'
+			</if>
+			<if test="ksrq != null and ksrq != ''">
+				and activetime  <![CDATA[>=]]> #{ksrq}
+			</if>
+			<if test="jsrq != null and jsrq != ''">
+				and activetime  <![CDATA[>=]]> #{jsrq}
+			</if>
+			<if test="keyword != null and keyword!='' ">
+			 (clazz like '%${keyword}%' or methodname like '%${keyword}%' or exception like '%${keyword}%')
+			</if>
+		</where>
+		ORDER BY monitorid DESC
+	</select>
+	
+	<!-- 查询监控记录 -->
+	<select id="queryBeanMonitorRecordsByDtoForPageCountMysql" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(*) as count
+		  FROM eabeanmonitor a
+		<where>
+			<if test="pointcuttype != null and pointcuttype !='' ">
+				 pointcuttype = #{pointcuttype}
+			</if>
+			<if test="advisetype != null and advisetype !='' ">
+				 and advisetype = #{advisetype}
+			</if>
+			<if test="clazz != null and clazz !='' ">
+				 and clazz like '%${clazz}%'
+			</if>
+			<if test="methodname != null and methodname !='' ">
+				 and methodname like '%${methodname}%'
+			</if>
+			<if test="exception != null and exception !='' ">
+				and exception like '%${exception}%'
+			</if>
+			<if test="ksrq != null and ksrq != ''">
+				and activetime  <![CDATA[>=]]> #{ksrq}
+			</if>
+			<if test="jsrq != null and jsrq != ''">
+				and activetime  <![CDATA[>=]]> #{jsrq}
+			</if>
+			<if test="keyword != null and keyword!='' ">
+			 (clazz like '%${keyword}%' or methodname like '%${keyword}%' or exception like '%${keyword}%')
+			</if>
+		</where>
+	</select>
+	
+	<!-- 删除SpringBean监控记录 -->
+	<delete id="deleteBeanMonitorRecord" parameterType="java.lang.String" >
+		DELETE  FROM eabeanmonitor WHERE monitorid = #{monitorid}
+	</delete>
+	<!-- 重置SpringBean监控 -->
+	<delete id="resetBeanMonitorRecords">
+		DELETE  FROM eabeanmonitor
+	</delete>
+	
+	<!-- 查询JDBC监控记录 -->
+	<select id="queryJdbcMonitorRecordsByDto" parameterType="map" resultType="dto">
+		SELECT monitorid, sqltext as sqltext, starttime, NVL(costtime,0) || '毫秒' as costtime, decode(rowcount,'-1','-',rowcount) as rowcount, type
+          FROM eajdbcmonitor
+         <where>
+          	<if test="sql != null and sql !='' ">
+          	 	sqltext like '%${sql}%'
+          	</if>
+          	<if test="starttime != null and starttime !='' ">
+          		to_date(starttime,'yyyy-mm-dd hh24:mi:ss')  <![CDATA[>=]]> to_date(#{starttime},'yyyy-mm-dd hh24:mi:ss')
+          	</if>
+          	<if test="costtime != null and costtime !='' ">
+          		and costtime  <![CDATA[>=]]> #{costtime}
+          	</if>
+          	<if test="rowcount != null and rowcount !='' ">
+          		and rowcount  <![CDATA[>=]]> #{rowcount}
+          	</if>
+          	<if test="type != null and type !='' ">
+          		and type=#{type}
+          	</if>
+          </where>
+		     ORDER BY starttime desc
+	</select>
+	
+	<!-- 查询JDBC监控记录 -->
+	<select id="queryJdbcMonitorRecordsByDtoForPageCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(*) as count
+		  FROM eajdbcmonitor
+          <where>
+          	<if test="sql != null and sql !='' ">
+          	 	sqltext like '%${sql}%'
+          	</if>
+          	<if test="starttime != null and starttime !='' ">
+          		to_date(starttime,'yyyy-mm-dd hh24:mi:ss')  <![CDATA[>=]]> to_date(#{starttime},'yyyy-mm-dd hh24:mi:ss')
+          	</if>
+          	<if test="costtime != null and costtime !='' ">
+          		and costtime  <![CDATA[>=]]> #{costtime}
+          	</if>
+          	<if test="rowcount != null and rowcount !='' ">
+          		and rowcount  <![CDATA[>=]]> #{rowcount}
+          	</if>
+          	<if test="type != null and type !='' ">
+          		and type=#{type}
+          	</if>
+          </where>
+	</select>
+	
+	<!-- 查询JDBC监控记录 -->
+	<select id="queryJdbcMonitorRecordsByDtoMysql" parameterType="map" resultType="dto">
+		SELECT monitorid, sqltext as sqltext, starttime, concat(cast(if(costtime is null,0,costtime) as char),'毫秒') AS costtime, cast(case rowcount when '-1' then '-' else rowcount end as char) as rowcount, type
+          FROM eajdbcmonitor 
+          <where>
+          	<if test="sql != null and sql !='' ">
+          	 	sqltext like '%${sql}%'
+          	</if>
+          	<if test="starttime != null and starttime !='' ">
+          		and starttime  <![CDATA[>=]]> #{starttime}
+          	</if>
+          	<if test="costtime != null and costtime !='' ">
+          		and costtime  <![CDATA[>=]]> #{costtime}
+          	</if>
+          	<if test="rowcount != null and rowcount !='' ">
+          		and rowcount  <![CDATA[>=]]> #{rowcount}
+          	</if>
+          	<if test="type != null and type !='' ">
+          		and type=#{type}
+          	</if>
+          </where>
+		     ORDER BY starttime desc
+	</select>
+	
+	<!-- 查询JDBC监控记录 -->
+	<select id="queryJdbcMonitorRecordsByDtoForPageCountMysql" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(*) as count FROM eajdbcmonitor           
+		  <where>
+          	<if test="sql != null and sql !='' ">
+          	 	sqltext like '%${sql}%'
+          	</if>
+          	<if test="starttime != null and starttime !='' ">
+          		and starttime  <![CDATA[>=]]> #{starttime}
+          	</if>
+          	<if test="costtime != null and costtime !='' ">
+          		and costtime  <![CDATA[>=]]> #{costtime}
+          	</if>
+          	<if test="rowcount != null and rowcount !='' ">
+          		and rowcount  <![CDATA[>=]]> #{rowcount}
+          	</if>
+          	<if test="type != null and type !='' ">
+          		and type=#{type}
+          	</if>
+          </where>
+
+	</select>
+	
+	<!-- 删除JDBC监控记录 -->
+	<delete id="resetJdbcMonitorData" >
+		DELETE FROM eajdbcmonitor
+	</delete>
+</mapper>

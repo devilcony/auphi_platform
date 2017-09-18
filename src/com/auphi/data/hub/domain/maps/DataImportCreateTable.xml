@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 角色管理与授权手工映射SQL语句 -->
+<mapper namespace="Import">
+	
+	<!-- 用户管理与授权-用户列表 -->
+	<select id="queryImportTask" parameterType="map" resultType="dto">
+		 SELECT * from T_CREATE_TABLE limit ${start},${end}
+	</select>
+	
+	<select id="queryImportTaskCount" parameterType="map" resultType="java.lang.Integer">
+		 SELECT count(*) as count from T_CREATE_TABLE 
+	</select>
+
+	<update id="updateImportTask">
+	update T_CREATE_TABLE
+		<set>
+       		<if test="TABLENAME != null " >
+       			TABLENAME = #{TABLENAME},
+       		</if>
+			<if test="COLUMNNAME != null">
+				COLUMNNAME = #{COLUMNNAME},
+			</if>
+			<if test="TYPE != null">
+				TYPE = #{TYPE},
+			</if>
+			<if test="NULLABLE != null">
+				NULLABLE = #{NULLABLE},
+			</if>
+			
+			<if test="DEFAULT1 != null">
+				DEFAULT1 = #{DEFAULT1},
+			</if>
+			<if test="STORAGE != null">
+				STORAGE = #{STORAGE},
+			</if>
+			<if test="COMMENTS != null">
+				COMMENTS = #{COMMENTS},
+			</if>
+       </set>
+	   WHERE ID = #{ID}
+	</update>
+	
+	<insert id="insertImportTask" >
+		insert into T_CREATE_TABLE (TABLENAME,COLUMNNAME,TYPE,NULLABLE,DEFAULT1,STORAGE,COMMENTS) 
+		values (#{TABLENAME},#{COLUMNNAME},#{TYPE},#{NULLABLE},#{DEFAULT1},#{STORAGE},#{COMMENTS})
+	</insert>	
+	
+	<delete id="deleteImportTask" parameterType="dto">
+		delete from T_CREATE_TABLE  WHERE ID in (${strChecked})
+	</delete>
+	
+	
+</mapper>

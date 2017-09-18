@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Hadoop">
+
+	<insert id="insert">
+		insert into kdi_t_hadoop(ID,SERVER,PORT,USERID,PASSWORD,ORGANIZER_ID) values
+		 (#{id},#{server},#{port},#{userid},#{password},#{organizer_id})
+	</insert>
+	
+
+	<update id="update">
+		update kdi_t_hadoop
+		<set>
+			<if test="server != null and server != ''">
+				SERVER=#{server}
+			</if>
+			<if test="port != null and port != ''">
+				,PORT=#{port}
+			</if>
+			<if test="userid != null and userid != ''">
+				,USERID=#{userid}
+			</if>
+			<if test="password != null and password != ''">
+				,PASSWORD=#{password}
+			</if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+	
+	<resultMap type="Hadoop" id="Hadoop">
+		<result column="id" property="id"/>
+		<result column="server" property="server"/>
+		<result column="port" property="port"/>
+		<result column="userid" property="userid"/>
+		<result column="password" property="password"/>
+		<result column="organizer_id" property="organizer_id"/>
+	</resultMap>
+
+	<select id="query" parameterType="map"  resultMap="Hadoop">
+		select * from kdi_t_hadoop where ORGANIZER_ID=${organizer_id} limit ${start},${end}
+	</select>
+	
+	<select id="queryAll" parameterType="map"  resultMap="Hadoop">
+		select * from kdi_t_hadoop limit ${start},${end}
+	</select>
+	
+	<select id="queryMaxId" parameterType="map"  resultType="java.lang.Integer">
+		SELECT MAX(ID) AS MAXID FROM KDI_T_HADOOP
+	</select>
+	
+	<select id="queryById" resultMap="Hadoop">
+		select * from kdi_t_hadoop where ID=#{id}
+	</select>
+
+	
+	<select id="queryCount" parameterType="map" resultType="java.lang.Integer">
+		select count(ID) from kdi_t_hadoop where ORGANIZER_ID=${organizer_id}
+	</select>
+	
+	<select id="queryCountAll" parameterType="map" resultType="java.lang.Integer">
+		select count(ID) from kdi_t_hadoop
+	</select>
+	
+	<delete id="delete">
+		delete from kdi_t_hadoop  WHERE ID in (${ids})
+	</delete>
+
+</mapper>

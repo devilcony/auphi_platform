@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 角色管理与授权手工映射SQL语句 -->
+<mapper namespace="ExportIncrement">
+	
+	<!-- 用户管理与授权-用户列表 -->
+	<select id="queryExportIncrement" parameterType="map" resultType="dto">
+		 SELECT * from T_INCREMENT_INFO order by LAST_DATE DESC limit ${start},${end}
+	</select>
+	
+	<select id="queryExportIncrementCount" parameterType="map" resultType="java.lang.Integer">
+		 SELECT count(*) as count from T_INCREMENT_INFO 
+	</select>
+
+	<update id="updateExportIncrement">
+	update T_INCREMENT_INFO
+		<set>
+       		<if test="CONFIG_ID != null " >
+       			CONFIG_ID = #{CONFIG_ID},
+       		</if>
+			<if test="ROWNUM != null">
+				ROWNUM = #{ROWNUM},
+			</if>
+			<if test="LAST_DATE != null">
+				LAST_DATE = #{LAST_DATE},
+			</if>
+			
+       </set>
+	   WHERE INCREMENT_ID = #{INCREMENT_ID}
+	</update>
+	
+	<insert id="insertExportIncrement" >
+		insert into T_INCREMENT_INFO (CONFIG_ID,ROWNUM,LAST_DATE) 
+		values (#{CONFIG_ID},#{ROWNUM},#{LAST_DATE})
+	</insert>	
+	
+	<delete id="deleteExportIncrement" parameterType="dto">
+		delete from T_INCREMENT_INFO  WHERE INCREMENT_ID in (${strChecked})
+	</delete>
+	
+	
+</mapper>

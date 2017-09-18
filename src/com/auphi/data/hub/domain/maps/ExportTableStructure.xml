@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 角色管理与授权手工映射SQL语句 -->
+<mapper namespace="ExportOraTabStru">
+	
+	<select id="query" parameterType="dto" resultType="dto">
+		SELECT table_id,COLUMN_NAME,DATA_TYPE,COMMENTS FROM t_table_structure
+			limit ${start},${end}
+	</select>
+	
+	<select id="queryCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(*) FROM t_table_structure
+			
+	</select>
+	
+	
+	
+	
+	<!-- 插入一条记录 -->
+	<insert id="insert" parameterType="dto">
+		INSERT INTO t_table_structure (table_id,COLUMN_NAME,DATA_TYPE,COMMENTS) VALUES (${table_id}, #{COLUMN_NAME}, #{DATA_TYPE}, #{COMMENTS})
+	</insert>
+	
+	
+	
+	<select id="saveSelectUser" parameterType="dto" resultType="dto">
+		SELECT table_id,tableName FROM t_table_metadata
+	</select>
+	
+</mapper>

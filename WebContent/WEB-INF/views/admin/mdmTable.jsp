@@ -1,0 +1,1 @@
+<%@ page contentType="text/html; charset=utf-8"%><%@ include file="/common/include/taglib.jsp"%><skyform:html title="主数据表管理" uxEnabled="true"><skyform:import src="/resource/extjs3.1/Autogrid.js"/><skyform:import src="/admin/js/mdmTable.js"/><skyform:body></skyform:body></skyform:html>

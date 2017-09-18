@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 角色管理与授权手工映射SQL语句 -->
+<mapper namespace="Datasource">
+
+
+	<insert id="insertDatasource">
+		insert into t_datasource(sourceName,sourceUserName,sourcePassword,sourceType,sourceDataBaseName,sourcePort,sourceIp) values
+		 (#{sourceName},#{sourceUserName},#{sourcePassword},#{sourceType},#{sourceDataBaseName},#{sourcePort},#{sourceIp})
+	</insert>
+
+	<update id="updateDatasource">
+		update t_datasource
+		<set>
+			<if test="sourceName != null and sourceName != ''">
+				sourceName=#{sourceName}
+			</if>
+			<if test="sourceUserName != null and sourceUserName != ''">
+				,sourceUserName=#{sourceUserName}
+			</if>
+			<if test="sourcePassword != null and sourcePassword != ''">
+				,sourcePassword=#{sourcePassword}
+			</if>
+			<if test="sourceType != null and sourceType != ''">
+				,sourceType=#{sourceType}
+			</if>
+			<if test="sourceDataBaseName != null and sourceDataBaseName != ''">
+				,sourceDataBaseName=#{sourceDataBaseName}
+			</if>
+			<if test="sourceIp != null and sourceIp != ''">
+				,sourceIp=#{sourceIp}
+			</if>
+			<if test="sourcePort != null and sourcePort != ''">
+				,sourcePort=#{sourcePort}
+			</if>
+		</set>
+	</update>
+
+	<resultMap type="datasource" id="datasourceMap">
+		<result column="sourceId" property="sourceId"/>
+		<result column="sourceIp" property="sourceIp"/>
+		<result column="sourceName" property="sourceName"/>
+		<result column="sourceUserName" property="sourceUserName"/>
+		<result column="sourcePassword" property="sourcePassword"/>
+		<result column="sourceType" property="sourceType"/>
+		<result column="sourceDataBaseName" property="sourceDataBaseName"/>
+		<result column="sourcePort" property="sourcePort"/>
+	</resultMap>
+
+
+	<select id="queryDatasourceList" parameterType="map"  resultMap="datasourceMap">
+		select * from t_datasource limit ${start},${end}
+	</select>
+
+	<select id="querySourceList" resultMap="datasourceMap">
+		select * from t_datasource
+	</select>
+
+	<select id="querySourceById" resultMap="datasourceMap">
+		select * from t_datasource where sourceId=#{sourceId}
+	</select>
+
+	
+	<select id="queryDatasourceListCount" parameterType="map" resultType="java.lang.Integer">
+		select count(sourceId) from t_datasource
+	</select>
+
+</mapper>

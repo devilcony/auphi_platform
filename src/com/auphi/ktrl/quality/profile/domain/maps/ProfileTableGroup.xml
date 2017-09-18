@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="profileTableGroup">
+    <resultMap type="ProfileTableGroup" id="ProfileTableGroup">
+        <result column="ID_PROFIEL_TABLE_GROUP" property="profielTableGroupId"/>
+        <result column="PROFIEL_TABLE_GROUP_NAME" property="profielTableGroupName"/>
+        <result column="PROFIEL_TABLE_GROUP_DESC" property="profielTableGroupDesc"/>
+    </resultMap>
+    
+    <sql id="profileTableGroupColumns">
+        a.ID_PROFIEL_TABLE_GROUP  AS "profielTableGroupId",
+        a.PROFIEL_TABLE_GROUP_NAME  AS "profielTableGroupName",
+        a.PROFIEL_TABLE_GROUP_DESC  AS "profielTableGroupDesc"
+    </sql>
+
+    <sql id="profileTableGroupJoins">
+
+    </sql>
+
+    <select id="findList" parameterType="profileTableGroup"  resultType="profileTableGroup">
+        SELECT
+        <include refid="profileTableGroupColumns"/>
+        FROM PROFILE_TABLE_GROUP a
+        <include refid="profileTableGroupJoins"/>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO PROFILE_TABLE_GROUP(
+          PROFIEL_TABLE_GROUP_NAME,
+          PROFIEL_TABLE_GROUP_DESC
+
+        ) VALUES (
+          #{profielTableGroupName},
+          #{profielTableGroupDesc}
+        )
+
+    </insert>
+
+    <update id="update">
+        UPDATE PROFILE_TABLE_GROUP SET
+         PROFIEL_TABLE_GROUP_NAME = #{profielTableGroupName},
+         PROFIEL_TABLE_GROUP_DESC = #{profielTableGroupDesc} WHERE ID_PROFIEL_TABLE_GROUP = #{profielTableGroupId}
+
+    </update>
+
+    <update id="deleteMulti">
+        DELETE FROM PROFILE_TABLE_GROUP WHERE ID_PROFIEL_TABLE_GROUP IN (${ids})
+    </update>
+</mapper>

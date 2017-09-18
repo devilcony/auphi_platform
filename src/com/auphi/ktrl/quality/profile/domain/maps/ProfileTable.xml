@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="profileTable">
+
+    <sql id="profileTableColumns">
+        a.ID_PROFILE_TABLE AS "profileTableId",
+        a.ID_DATABASE AS "databaseId",
+        a.ID_PROFIEL_TABLE_GROUP AS "profielTableGroup.profielTableGroupId",
+        a.PROFIEL_NAME AS "profielName",
+        a.PROFIEL_DESC AS "profielDesc",
+        a.SCHEMA_NAME AS "schemaName",
+        a.TABLE_NAME AS "tableName",
+        a.TABLE_NAME_TAG AS tableNameTag,
+        a.CONDITION AS "condition",
+        a.CREATE_TIME AS "createTime",
+        a.USER_ID AS "userId",
+        b.PROFIEL_TABLE_GROUP_NAME AS "profielTableGroup.profielTableGroupName",
+        b.PROFIEL_TABLE_GROUP_DESC AS "profielTableGroup.profielTableGroupDesc",
+        f.NAME AS "databaseName"
+    </sql>
+
+    <sql id="profileTableColumnJoins">
+        LEFT JOIN PROFILE_TABLE_GROUP b ON b.ID_PROFIEL_TABLE_GROUP = a.ID_PROFIEL_TABLE_GROUP
+        LEFT JOIN R_DATABASE f ON f.ID_DATABASE = a.ID_DATABASE
+    </sql>
+
+
+    <select id="findList" parameterType="profileTable"  resultType="profileTable">
+
+        SELECT
+        <include refid="profileTableColumns"/>
+        FROM PROFILE_TABLE a
+        <include refid="profileTableColumnJoins"/>
+        <where>
+            <if test="profielTableGroup != null and profielTableGroup.profielTableGroupId != null and profielTableGroup.profielTableGroupId != '' ">
+                AND a.ID_PROFIEL_TABLE_GROUP  = #{profielTableGroup.profielTableGroupId}
+            </if>
+        </where>
+
+       ORDER BY a.TABLE_NAME
+    </select>
+
+    <select id="getMaxId" parameterType="profileTable"  resultType="java.lang.Integer">
+
+        SELECT
+          MAX(ID_PROFILE_TABLE)
+        FROM PROFILE_TABLE
+
+
+    </select>
+
+    <select id="get" resultType="profileTable" >
+        SELECT
+        <include refid="profileTableColumns"/>
+        FROM PROFILE_TABLE a
+        <include refid="profileTableColumnJoins"/>
+        WHERE a.ID_PROFILE_TABLE = #{profileTableId}
+    </select>
+
+
+    <insert id="insert">
+      INSERT INTO PROFILE_TABLE(
+      ID_PROFILE_TABLE,
+        ID_DATABASE,
+        ID_PROFIEL_TABLE_GROUP,
+        PROFIEL_NAME,
+        PROFIEL_DESC,
+        `SCHEMA_NAME`,
+        `TABLE_NAME`,
+         TABLE_NAME_TAG,
+        `CONDITION`,
+        CREATE_TIME,
+        USER_ID
+      ) VALUES (
+         #{profileTableId},
+          #{databaseId},
+          #{profielTableGroup.profielTableGroupId},
+          #{profielName},
+          #{profielDesc},
+          #{schemaName},
+          #{tableName},
+          #{tableNameTag},
+          #{condition},
+          #{createTime},
+          #{userId}
+        )
+
+    </insert>
+
+    <update id="update">
+        UPDATE PROFILE_TABLE SET
+        ID_DATABASE = #{databaseId},
+        ID_PROFIEL_TABLE_GROUP = #{profielTableGroup.profielTableGroupId},
+        PROFIEL_NAME = #{profielName},
+        PROFIEL_DESC =  #{profielDesc},
+        `SCHEMA_NAME` =  #{schemaName},
+        `TABLE_NAME` = #{tableName},
+        TABLE_NAME_TAG = #{tableNameTag},
+        `CONDITION` = #{condition},
+        CREATE_TIME = #{createTime},
+        USER_ID = #{userId}
+        WHERE ID_PROFILE_TABLE = #{profileTableId}
+    </update>
+
+    <update id="delete">
+      DELETE FROM PROFILE_TABLE
+		WHERE ID_PROFILE_TABLE = #{profileTableId}
+    </update>
+
+</mapper>

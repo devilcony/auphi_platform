@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 映射SQL语句 -->
+<mapper namespace="Export">
+	
+	<!-- 用户管理与授权-用户列表 -->
+	<select id="queryExportTask" parameterType="map" resultType="dto">
+		 SELECT * from T_DATA_EXPORT_CONFIG limit ${start},${end}
+	</select>
+	
+	<select id="queryExportTaskCount" parameterType="map" resultType="java.lang.Integer">
+		 SELECT count(*) as count from T_DATA_EXPORT_CONFIG 
+	</select>
+
+	<update id="updateExportTask">
+	update T_DATA_EXPORT_CONFIG
+		<set>
+       		<if test="TASK_NAME != null " >
+       			TASK_NAME = #{TASK_NAME},
+       		</if>
+			<if test="TABLE_NAME != null">
+				TABLE_NAME = #{TABLE_NAME},
+			</if>
+			<if test="FIELDS != null">
+				FIELDS = #{FIELDS},
+			</if>
+			<if test="RESULT_SEP != null">
+				RESULT_SEP = #{RESULT_SEP},
+			</if>
+			
+			<if test="CONDITIONS != null">
+				CONDITIONS = #{CONDITIONS},
+			</if>
+			<if test="IS_INCREMENT != null">
+				IS_INCREMENT = #{IS_INCREMENT},
+			</if>
+			<if test="INCREMENTFIELD != null">
+				INCREMENTFIELD = #{INCREMENTFIELD},
+			</if>
+			<if test="STARTTIME != null and STARTTIME !='' ">
+				STARTTIME = #{STARTTIME},
+			</if>
+			<if test="TASKTYPE != null and TASKTYPE !='' ">
+				TASKTYPE = #{TASKTYPE}
+			</if>
+			
+       </set>
+	   WHERE CONFIG_ID = #{CONFIG_ID}
+	</update>
+	
+	<insert id="insertExportTask" >
+		insert into T_DATA_EXPORT_CONFIG (TASK_NAME,TABLE_NAME,FIELDS,RESULT_SEP,CONDITIONS,IS_INCREMENT,INCREMENTFIELD,STARTTIME,TASKTYPE,CREATETIME) 
+		values (#{TASK_NAME},#{TABLE_NAME},#{FIELDS},#{RESULT_SEP},#{CONDITIONS},#{IS_INCREMENT},#{INCREMENTFIELD},#{STARTTIME},#{TASKTYPE},now())
+	</insert>	
+	
+	<delete id="deleteExportTask" parameterType="dto">
+		delete from T_DATA_EXPORT_CONFIG  WHERE CONFIG_ID in (${strChecked})
+	</delete>
+	
+	
+	<select id="queryDataExportInfo"  parameterType="map" resultType="dto">
+		select  CONFIG_ID,TASK_NAME,TABLE_NAME,FIELDS,CONDITIONS,RESULT_SEP,IS_INCREMENT,INCREMENTFIELD,STARTTIME,CREATETIME from t_data_export_config where CONFIG_ID=#{CONFIG_ID}
+	</select>
+	
+	
+	<select id="queryTable" parameterType="map" resultType="dto">
+		 SELECT tableName,table_id from t_export_metadata group by tableName
+	</select>
+	
+	
+	<select id="queryReturnField" parameterType="map" resultType="dto">
+		 SELECT COLUMN_NAME from T_TABLE_STRUCTURE where  table_id=${table_id}
+	</select>
+	
+</mapper>

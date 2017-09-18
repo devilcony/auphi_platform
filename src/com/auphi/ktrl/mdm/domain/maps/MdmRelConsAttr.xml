@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MdmRelConsAttr">
+
+	<insert id="insert">
+		insert into MDM_REL_CONS_ATTR(ID_CONSTAINT,ID_ATTRIBUTE) values
+		 (#{id_constaint},#{id_attribute})
+	</insert>
+	
+
+	<update id="update">
+		update MDM_REL_CONS_ATTR
+		<set>
+			<if test="id_constaint != null and id_constaint != ''">
+				ID_CONSTAINT=#{id_constaint}
+			</if>
+			<if test="id_attribute != null and id_attribute != ''">
+				,ID_ATTRIBUTE=#{id_attribute}
+			</if>		
+												
+		</set>
+		WHERE ID_REL_CONS_ATTR = #{id_rel_cons_attr}
+	</update>
+
+	<resultMap type="MdmRelConsAttr" id="MdmRelConsAttr">
+		<result column="ID_REL_CONS_ATTR" property="id_rel_cons_attr"/>
+		<result column="ID_CONSTAINT" property="id_constaint"/>
+		<result column="ID_ATTRIBUTE" property="id_attribute"/>
+	</resultMap>
+	
+
+	
+	<delete id="delete">
+		delete from MDM_REL_CONS_ATTR  WHERE ID_REL_CONS_ATTR in (${ids}) 
+	</delete>
+
+	<delete id="deletebyIdConstaint">
+		delete from MDM_REL_CONS_ATTR  WHERE ID_CONSTAINT in (${ids}) 
+	</delete>
+
+</mapper>

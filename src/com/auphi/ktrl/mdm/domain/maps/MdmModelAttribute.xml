@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MdmModelAttribute">
+
+	<insert id="insert">
+		insert into MDM_MODEL_ATTRIBUTE(ID_ATTRIBUTE,ID_MODEL,ATTRIBUTE_ORDER,ATTRIBUTE_NAME,STATISTIC_TYPE,FIELD_NAME,FIELD_TYPE,FIELD_LENGTH,FIELD_PRECISION,IS_PRIMARY) values
+		 (#{id_attribute},#{id_model},#{attribute_order},#{attribute_name},#{statistic_type},#{field_name},#{field_type},#{field_length},#{field_precision},#{is_primary})
+	</insert>
+	
+
+	<update id="update">
+		update MDM_MODEL_ATTRIBUTE
+		<set>
+			<if test="id_model != null and id_model != ''">
+				ID_MODEL=#{id_model}
+			</if>
+			<if test="attribute_order != null and attribute_order != ''">
+				,ATTRIBUTE_ORDER=#{attribute_order}
+			</if>
+			<if test="attribute_name != null and attribute_name != ''">
+				,ATTRIBUTE_NAME=#{attribute_name}
+			</if>
+			<if test="statistic_type != null and statistic_type != ''">
+				,STATISTIC_TYPE=#{statistic_type}
+			</if>
+			<if test="field_name != null and field_name != ''">
+				,FIELD_NAME=#{field_name}
+			</if>
+			<if test="field_type != null and field_type != ''">
+				,FIELD_TYPE=#{field_type}
+			</if>
+			<if test="field_length != null and field_length != ''">
+				,FIELD_LENGTH=#{field_length}
+			</if>
+			<if test="field_precision != null and field_precision != ''">
+				,FIELD_PRECISION=#{field_precision}
+			</if>
+			<if test="is_primary != null and is_primary != ''">
+				,IS_PRIMARY=#{is_primary}
+			</if>										
+		</set>
+		WHERE ID_ATTRIBUTE = #{id_attribute}
+	</update>
+
+	<resultMap type="MdmModelAttribute" id="MdmModelAttribute">
+		<result column="ID_ATTRIBUTE" property="id_attribute"/>
+		<result column="ID_MODEL" property="id_model"/>
+		<result column="ATTRIBUTE_ORDER" property="attribute_order"/>
+		<result column="ATTRIBUTE_NAME" property="attribute_name"/>
+		<result column="STATISTIC_TYPE" property="statistic_type"/>
+		<result column="FIELD_NAME" property="field_name"/>
+		<result column="FIELD_TYPE" property="field_type"/>
+		<result column="FIELD_LENGTH" property="field_length"/>
+		<result column="FIELD_PRECISION" property="field_precision"/>
+		<result column="IS_PRIMARY" property="is_primary"/>
+	</resultMap>
+
+	<select id="query" parameterType="map"  resultMap="MdmModelAttribute">
+		select * from MDM_MODEL_ATTRIBUTE where ID_MODEL=${id_model} order by ATTRIBUTE_ORDER limit ${start},${end} 
+	</select>
+	
+	<select id="query4ComboBox" parameterType="map"  resultMap="MdmModelAttribute">
+		select * from MDM_MODEL_ATTRIBUTE where ID_MODEL=${id_model} order by ATTRIBUTE_ORDER 
+	</select>
+	
+	<select id="queryMaxId" parameterType="map"  resultType="java.lang.Integer">
+		SELECT MAX(ID_ATTRIBUTE) AS MAXID FROM MDM_MODEL_ATTRIBUTE
+	</select>
+
+	<select id="queryById" resultMap="MdmModelAttribute">
+		select * from MDM_MODEL_ATTRIBUTE where ID_ATTRIBUTE=#{id_attribute}
+	</select>
+
+	
+	<select id="queryCount" parameterType="map" resultType="java.lang.Integer">
+		select count(ID_ATTRIBUTE) from MDM_MODEL_ATTRIBUTE
+	</select>
+	
+	<delete id="delete">
+		delete from MDM_MODEL_ATTRIBUTE  WHERE ID_ATTRIBUTE in (${ids}) 
+	</delete>
+
+	<delete id="deleteByIdModel">
+		delete from MDM_MODEL_ATTRIBUTE  WHERE ID_MODEL in (${ids}) 
+	</delete>
+	
+	<select id="queryAll"  resultMap="MdmModelAttribute">
+		select * from MDM_MODEL_ATTRIBUTE  
+	</select>
+</mapper>

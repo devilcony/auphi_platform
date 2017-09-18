@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="profileTableResult">
+    <sql id="profileTableResultColumns">
+        a.ID_PROFILE_TABLE_RESULT  AS "profileTableResultId",
+        a.INDICATOR_DATA_TYPE      AS "indicatorDataType",
+        a.INDICATOR_DATA_LENGTH    AS "indicatorDataLength",
+        a.INDICATOR_DATA_PRECISION AS "indicatorDataPrecision",
+        a.INDICATOR_DATA_SCALE     AS "indicatorDataScale",
+        a.INDICATOR_ALL_COUNT      AS "indicatorAllCount",
+        a.INDICATOR_DISTINCT_COUNT AS "indicatorDistinctCount",
+        a.INDICATOR_NULL_COUNT     AS "indicatorNullCount",
+        a.INDICATOR_ZERO_COUNT     AS "indicatorZeroCount",
+        a.INDICATOR_AGG_AVG        AS "indicatorAggAvg",
+        a.INDICATOR_AGG_MAX        AS "indicatorAggMax",
+        a.INDICATOR_AGG_MIN        AS "indicatorAggMin",
+        a.EXECUTE_SQL AS "executeSql",
+        a.CREATE_TIME              AS "createTime",
+        b.ID_PROFILE_TABLE_COLUMN  AS "profileTableColumn.profileTableColumnId",
+        b.PROFILE_TABLE_COLUMN_NAME AS "profileTableColumn.profileTableColumnName",
+        b.PROFILE_TABLE_COLUMN_DESC AS "profileTableColumn.profileTableColumnDesc",
+        d.ID_DATABASE AS "profileTable.databaseId",
+        b.ID_PROFILE_TABLE AS "profileTable.profileTableId",
+        d.PROFIEL_NAME AS "profileTable.profielName",
+        d.PROFIEL_DESC AS "profileTable.profielDesc",
+        d.SCHEMA_NAME AS "profileTable.schemaName",
+        d.TABLE_NAME AS "profileTable.tableName",
+        d.CONDITION AS "profileTable.condition",
+        d.CREATE_TIME AS "profileTable.createTime",
+        d.USER_ID AS "profileTable.userId",
+        d.ID_PROFIEL_TABLE_GROUP  AS "profielTableGroup.profielTableGroupId",
+        e.PROFIEL_TABLE_GROUP_NAME  AS "profielTableGroup.profielTableGroupName",
+        e.PROFIEL_TABLE_GROUP_DESC  AS "profielTableGroup.profielTableGroupDesc",
+        f.NAME AS "profileTable.databaseName"
+    </sql>
+
+    <sql id="profileTableResultJoins">
+        JOIN PROFILE_TABLE_COLUMN b ON b.ID_PROFILE_TABLE_COLUMN = a.ID_PROFILE_TABLE_COLUMN
+        JOIN PROFILE_TABLE d ON d.ID_PROFILE_TABLE = b.ID_PROFILE_TABLE
+        JOIN PROFILE_TABLE_GROUP e ON e.ID_PROFIEL_TABLE_GROUP = d.ID_PROFIEL_TABLE_GROUP
+        JOIN R_DATABASE f ON f.ID_DATABASE = d.ID_DATABASE
+    </sql>
+
+    <select id="findList" parameterType="profileTableResult"  resultType="profileTableResult">
+        SELECT
+        <include refid="profileTableResultColumns"/>
+        FROM  PROFILE_TABLE_COLUMN b
+        LEFT JOIN  (select *
+        from PROFILE_TABLE_RESULT t
+        where not exists
+        (select 1 from PROFILE_TABLE_RESULT
+        where ID_PROFILE_TABLE_COLUMN=t.ID_PROFILE_TABLE_COLUMN
+        and ID_PROFILE_TABLE_RESULT>t.ID_PROFILE_TABLE_RESULT) ) a ON b.ID_PROFILE_TABLE_COLUMN = a.ID_PROFILE_TABLE_COLUMN
+        LEFT JOIN PROFILE_TABLE d ON d.ID_PROFILE_TABLE = b.ID_PROFILE_TABLE
+        LEFT JOIN PROFILE_TABLE_GROUP e ON e.ID_PROFIEL_TABLE_GROUP = d.ID_PROFIEL_TABLE_GROUP
+        LEFT JOIN R_DATABASE f ON f.ID_DATABASE = d.ID_DATABASE
+
+        <where>
+            <if test="profielTableGroup != null and profielTableGroup.profielTableGroupId != null and '' != profielTableGroup.profielTableGroupId ">
+                AND d.ID_PROFIEL_TABLE_GROUP  = #{profielTableGroup.profielTableGroupId}
+            </if>
+            <if test="profileTable != null and profileTable.profileTableId != null and profileTable.profileTableId != '' ">
+                AND  b.ID_PROFILE_TABLE = #{profileTable.profileTableId}
+            </if>
+            <if test="profileTableColumn != null and profileTableColumn.profileTableColumnId != null and profileTableColumn.profileTableColumnId != '' ">
+                AND  b.ID_PROFILE_TABLE_COLUMN  = #{profileTableColumn.profileTableColumnId}
+            </if>
+        </where>
+
+        ORDER BY  b.ID_PROFILE_TABLE
+
+        <if test="start != null and limit != null ">
+            limit ${start},${limit}
+        </if>
+    </select>
+    
+    <select id="findHistoryList" parameterType="profileTableResult"  resultType="profileTableResult">
+        SELECT b.indicatorAllCount ,b.indicatorNullCount,a.CREATE_TIME createTime
+        FROM profile_table_result a,
+        (SELECT  ID_PROFILE_TABLE_COLUMN, AVG(INDICATOR_ALL_COUNT) AS indicatorAllCount, AVG(INDICATOR_NULL_COUNT)AS  indicatorNullCount, MAX(CREATE_TIME) max_day FROM profile_table_result GROUP BY ID_PROFILE_TABLE_COLUMN,DATE_FORMAT(CREATE_TIME,'%m-%d-%Y')) b
+        ,PROFILE_TABLE_COLUMN cl
+        WHERE a.ID_PROFILE_TABLE_COLUMN  = b.ID_PROFILE_TABLE_COLUMN AND a.CREATE_TIME = b.max_day AND a.ID_PROFILE_TABLE_COLUMN = cl.ID_PROFILE_TABLE_COLUMN
+        <if test="profileTableColumn != null and profileTableColumn.profileTableColumnName != null and '' != profileTableColumn.profileTableColumnName ">
+            AND cl.PROFILE_TABLE_COLUMN_NAME  = #{profileTableColumn.profileTableColumnName}
+        </if>
+        ORDER BY a.CREATE_TIME
+        limit 0,10
+    </select>
+
+    <select id="queryCount" parameterType="profileTableResult" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM  etl_platform.PROFILE_TABLE_COLUMN b
+        LEFT JOIN  (select *
+        from PROFILE_TABLE_RESULT t
+        where not exists
+        (select 1 from PROFILE_TABLE_RESULT
+        where ID_PROFILE_TABLE_COLUMN=t.ID_PROFILE_TABLE_COLUMN
+        and ID_PROFILE_TABLE_RESULT>t.ID_PROFILE_TABLE_RESULT) ) a ON b.ID_PROFILE_TABLE_COLUMN = a.ID_PROFILE_TABLE_COLUMN
+        LEFT JOIN etl_platform.PROFILE_TABLE d ON d.ID_PROFILE_TABLE = b.ID_PROFILE_TABLE
+        LEFT JOIN etl_platform.PROFILE_TABLE_GROUP e ON e.ID_PROFIEL_TABLE_GROUP = d.ID_PROFIEL_TABLE_GROUP
+        LEFT JOIN etl_platform.R_DATABASE f ON f.ID_DATABASE = d.ID_DATABASE
+        <where>
+            <if test="profielTableGroup != null and profielTableGroup.profielTableGroupId != null and '' != profielTableGroup.profielTableGroupId ">
+                AND d.ID_PROFIEL_TABLE_GROUP  = #{profielTableGroup.profielTableGroupId}
+            </if>
+            <if test="profileTable != null and profileTable.profileTableId != null and profileTable.profileTableId != '' ">
+                AND  b.ID_PROFILE_TABLE = #{profileTable.profileTableId}
+            </if>
+            <if test="profileTableColumn != null and profileTableColumn.profileTableColumnId != null and profileTableColumn.profileTableColumnId != '' ">
+                AND  b.ID_PROFILE_TABLE_COLUMN  = #{profileTableColumn.profileTableColumnId}
+            </if>
+        </where>
+
+    </select>
+
+    <insert id="insert">
+        INSERT INTO PROFILE_TABLE_RESULT(
+          ID_PROFILE_TABLE_RESULT,
+          ID_PROFILE_TABLE_COLUMN,
+          INDICATOR_DATA_TYPE,
+          INDICATOR_DATA_LENGTH,
+          INDICATOR_DATA_PRECISION,
+          INDICATOR_DATA_SCALE,
+          INDICATOR_ALL_COUNT,
+          INDICATOR_DISTINCT_COUNT,
+          INDICATOR_NULL_COUNT,
+          INDICATOR_ZERO_COUNT,
+          INDICATOR_AGG_AVG,
+          INDICATOR_AGG_MAX,
+          INDICATOR_AGG_MIN,
+          EXECUTE_SQL,
+          CREATE_TIME
+        ) VALUES (
+          #{profileTableResultId},
+          #{profileTableColumn.profileTableColumnId},
+          #{indicatorDataType},
+          #{indicatorDataLength},
+          #{indicatorDataPrecision},
+          #{indicatorDataScale},
+          #{indicatorAllCount},
+          #{indicatorDistinctCount},
+          #{indicatorNullCount},
+          #{indicatorZeroCount},
+          #{indicatorAggAvg},
+          #{indicatorAggMax},
+          #{indicatorAggMin},
+          #{executeSql},
+          #{createTime}
+        )
+    </insert>
+
+</mapper>

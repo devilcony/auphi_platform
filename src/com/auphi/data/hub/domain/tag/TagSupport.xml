@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 权限模型标签数据访问手工映射SQL语句 -->
+<mapper namespace="TagSupport">
+	
+	<!-- 查询菜单树:角色授权/用户授权 -->
+	<select id="queryMenusForRoleGrant" parameterType="map" resultType="menu">
+		SELECT menuid, menuname, parentid, leaf,menutype,sortno
+		  FROM eamenu WHERE menutype = #{menutype}
+		UNION
+        SELECT menuid, menuname, parentid, leaf,menutype,sortno
+		  FROM eamenu WHERE parentid = '0'
+	</select>
+	
+	<!-- 查询菜单树:角色授权/用户授权 -->
+	<select id="queryMenusForGrant" parameterType="map" resultType="menu">
+        SELECT DISTINCT a.menuid,b.menuname,b.parentid, b.leaf,b.menutype,b.sortno 
+          FROM earoleauthorize a, eamenu b  
+         WHERE a.menuid=b.menuid AND a.authorizelevel = '2'
+           AND a.roleid in (SELECT roleid FROM eauserauthorize WHERE userid = #{userid})
+         ORDER BY b.sortno ASC
+	</select>
+	
+	<!-- 查询某角色已授权菜单 -->
+	<select id="queryGrantedMenusByRoleId" parameterType="map" resultType="dto">
+		SELECT roleid, menuid, authorizelevel, authorizeid
+		  FROM earoleauthorize where roleid = #{roleid}
+		  <if test="authorizelevel != null">
+		  	and authorizelevel = #{authorizelevel}
+		  </if>
+	</select>
+	
+	<!-- 查询部门树:选择人员 -->
+	<select id="queryDeptsForRoleGrant" parameterType="map" resultType="dept">
+		SELECT deptid, deptname, parentid
+		  FROM eadept where deptid like '${deptid}%' and enabled='1'
+	</select>
+	
+	<!-- 查询部门下属人员:选择人员 -->
+	<select id="queryUsersForRoleGrant" parameterType="map" resultType="user">
+			SELECT userid,username,usertype,deptid,account, 'false' as checked
+			from eauser WHERE locked = '0' and deptid = #{deptid} and enabled = '1'
+			<if test="usertype != null">
+				and  usertype = #{usertype}
+			</if>
+			<if test="usertype4 != null">
+				or usertype = '4'
+			</if>
+
+	</select>
+	
+	<!-- 查询某角色已关联用户 -->
+	<select id="queryGrantedUsersByRoleId" parameterType="map" resultType="dto">
+		SELECT userid, roleid, authorizeid
+		  FROM eauserauthorize where roleid = #{roleid}
+	</select>
+	
+	<!-- 查询部门树:选择角色 -->
+	<select id="queryDeptsForUserGrant" parameterType="map" resultType="dept">
+		SELECT deptid, deptname, parentid
+		  FROM eadept where deptid like '${deptid}%' and enabled='1'
+	</select>
+	
+	<!-- 查询部门下属角色:选择角色 -->
+	<select id="queryRolesForUserGrant" parameterType="map" resultType="role">
+		SELECT 
+			roleid, rolename, deptid, roletype, locked
+		FROM EAROLE WHERE locked = '0' and deptid = #{deptid}
+		<if test="roletype != null">
+			and roletype = #{roletype}
+		</if>
+	</select>
+	
+	<!-- 查询某人员已关联角色 -->
+	<select id="queryGrantedRolesByUserId" parameterType="map" resultType="dto">
+		SELECT userid, roleid, authorizeid
+		  FROM eauserauthorize where userid = #{userid}
+	</select>
+	
+	<!-- 查询菜单树:人员授权 -->
+	<select id="queryMenusForUserGrant" parameterType="map" resultType="menu">
+		SELECT menuid, menuname, parentid, leaf,menutype,sortno
+		  FROM eamenu WHERE menutype = #{menutype} ORDER BY sortno asc
+	</select>
+	
+	<!-- 查询某人员已授权菜单 -->
+	<select id="queryGrantedMenusByUserId" parameterType="map" resultType="dto">
+		SELECT userid, menuid, authorizeid, authorizelevel
+		  FROM eausermenumap WHERE userid=#{userid} and authorizelevel = #{authorizelevel}
+	</select>
+	
+	<!-- 查询卡片信息0：基于SUPER和DEVELOPER用户 -->
+	<select id="getCardListBasedSuperAndDeveloper" parameterType="map" resultType="menu">
+		SELECT DISTINCT b.menuid, b.menuname, b.iconcls, '1' as authorizelevel, b.sortno
+		           FROM eamenu b
+		          WHERE LENGTH(b.menuid) = 4
+		<if test="accountType == 2">
+			and  b.menutype = '1'
+		</if> 
+	 	ORDER BY b.sortno asc
+	</select>
+	
+	<!-- 查询卡片信息1：基于角色 -->
+	<select id="getCardList" parameterType="map" resultType="menu">
+		SELECT DISTINCT a.menuid, b.menuname, b.iconcls, a.authorizelevel, b.sortno
+		           FROM earoleauthorize a, eamenu b
+		          WHERE a.authorizelevel = '1'
+		            AND a.menuid = b.menuid
+		            AND LENGTH(a.menuid) = 4
+		            AND a.roleid IN (SELECT roleid
+		                                 FROM eauserauthorize
+		                                WHERE userid = #{userid})
+		       ORDER BY b.sortno asc
+	</select>
+	
+	<!-- 查询卡片信息2:基于人员 -->
+	<select id="getCardListBasedUser" parameterType="map" resultType="menu">
+		SELECT DISTINCT a.menuid, b.menuname, b.iconcls, a.authorizelevel, b.sortno
+		           FROM eausermenumap a, eamenu b
+                  WHERE	a.menuid = b.menuid and a.userid=#{userid} and a.authorizelevel = '1' AND LENGTH(a.menuid) = 4
+               ORDER BY b.sortno asc           
+	</select>
+	
+	<!-- 查询卡片菜单子树信息：基于SUPER和DEVELOPER用户 -->
+	<select id="getCardTreeListBasedSuperAndDeveloper" parameterType="map" resultType="menu">
+		SELECT DISTINCT b.menuid, b.menuname, b.iconcls,b.parentid,b.request,b.sortno, b.leaf,decode(length(b.menuid),4,'true','false') as isRoot, 
+		                decode(b.expanded,'1','true','0','false',null) as expanded,'1' as authorizelevel, decode(b.icon,null,'tab_blank.png',b.icon) as icon
+		           FROM eamenu b
+		          WHERE  b.menuid like '${menuid}%'
+		       ORDER BY b.sortno asc
+	</select>
+	
+	<!-- 查询卡片菜单子树信息：基于SUPER和DEVELOPER用户 -->
+	<select id="getCardTreeListBasedSuperAndDeveloperMysql" parameterType="map" resultType="menu">
+		SELECT DISTINCT b.menuid, b.menuname, b.iconcls,b.parentid,b.request,b.sortno, b.leaf,if(length(b.menuid)=4, 'true', 'false') as isRoot, 
+		                case b.expanded when '1' then 'true' when '0' then 'false' else null end as expanded,'1' as authorizelevel, if(length(b.icon)>1, b.icon, 'tab_blank.png') as icon
+		           FROM eamenu b
+		          WHERE  b.menuid like '${menuid}%'  
+		       ORDER BY b.sortno asc
+	</select>
+	
+	<!-- 查询卡片菜单子树信息：基于角色 -->
+	<select id="getCardTreeList" parameterType="map" resultType="menu">
+		SELECT DISTINCT a.menuid, b.menuname, b.iconcls,b.parentid,b.request,b.sortno, b.leaf,decode(length(b.menuid),4,'true','false') as isRoot, 
+		                decode(b.expanded,'1','true','0','false',null) as expanded,a.authorizelevel, decode(b.icon,null,'tab_blank.png',b.icon) as icon
+		           FROM earoleauthorize a, eamenu b
+		          WHERE a.authorizelevel = '1'
+		            AND a.menuid = b.menuid and a.menuid like '${menuid}%'
+		            AND a.roleid IN (SELECT roleid
+		                                 FROM eauserauthorize
+		                                WHERE userid = #{userid})
+		       ORDER BY b.sortno asc
+	</select>
+	
+	<!-- 查询卡片菜单子树信息：基于角色 -->
+	<select id="getCardTreeListMysql" parameterType="map" resultType="menu">
+		SELECT DISTINCT a.menuid, b.menuname, b.iconcls,b.parentid,b.request,b.sortno, b.leaf,if(length(b.menuid)=4, 'true', 'false') as isRoot, 
+		                case b.expanded when '1' then 'true' when '0' then 'false' else null end as expanded,a.authorizelevel,if(length(b.icon)>1, b.icon, 'tab_blank.png
+') as icon
+		           FROM earoleauthorize a, eamenu b
+		          WHERE a.authorizelevel = '1'
+		            AND a.menuid = b.menuid and a.menuid like '${menuid}%'
+		            AND a.roleid IN (SELECT roleid
+		                                 FROM eauserauthorize
+		                                WHERE userid = #{userid})
+		       ORDER BY b.sortno asc
+	</select>
+	
+	<!-- 查询卡片菜单子树信息：基于人员 -->
+	<select id="getCardTreeListBasedUser" parameterType="map" resultType="menu">
+		SELECT DISTINCT a.menuid, b.menuname, b.iconcls,b.parentid,b.request,b.sortno, b.leaf,decode(length(b.menuid),4,'true','false') as isRoot, 
+		                decode(b.expanded,'1','true','0','false',null) as expanded,a.authorizelevel, decode(b.icon,null,'tab_blank.png',b.icon) as icon
+		           FROM eausermenumap a, eamenu b
+		          WHERE a.authorizelevel = '1'
+		            AND a.menuid = b.menuid and a.userid = #{userid}
+		       ORDER BY b.sortno asc
+	</select>
+	
+	<!-- 查询卡片菜单子树信息：基于人员 -->
+	<select id="getCardTreeListBasedUserMysql" parameterType="map" resultType="menu">
+		SELECT DISTINCT a.menuid, b.menuname, b.iconcls,b.parentid,b.request,b.sortno, b.leaf,if(length(b.menuid)=4, 'true', 'false') as isRoot, 
+		                case b.expanded when '1' then 'true' when '0' then 'false' else null end as expanded,a.authorizelevel, if(length(b.icon)>1, b.icon, 'tab_blank.png
+') as icon
+		           FROM eausermenumap a, eamenu b
+		          WHERE a.authorizelevel = '1'
+		            AND a.menuid = b.menuid and a.userid = #{userid}
+		       ORDER BY b.sortno asc
+	</select>
+	
+	<!-- 查询部门信息 -->
+	<select id="getDepartmentInfo" parameterType="map" resultType="dto">
+		SELECT deptid, deptname from eadept a
+		  WHERE a.deptid = #{deptid} and a.enabled='1'
+	</select>
+	
+	<!-- 查询人员附加信息 -->
+	<select id="getEauserSubInfo" parameterType="map" resultType="dto">
+		SELECT theme FROM eausersubinfo WHERE userid = #{userid}
+	</select>
+	
+	<!-- 查询UI元素角色授权信息 -->
+	<select id="getUiRoleGrantInfo" parameterType="map" resultType="dto">
+		SELECT distinct a.cmpid,a.cmptype,b.partauthtype FROM eamenupart a, earolemenupart b 
+		  WHERE a.partid = b.partid and b.menuid = #{menuid} and b.roleid in (SELECT roleid FROM eauserauthorize WHERE userid = #{userid})
+	</select>
+	
+	<!-- 查询UI元素人员授权信息 -->
+	<select id="getUiUserGrantInfo" parameterType="map" resultType="dto">
+		SELECT a.cmpid,a.cmptype,b.partauthtype FROM eamenupart a, eausermenupart b 
+		  WHERE a.partid = b.partid and b.userid = #{userid} and b.menuid = #{menuid}
+	</select>
+</mapper>

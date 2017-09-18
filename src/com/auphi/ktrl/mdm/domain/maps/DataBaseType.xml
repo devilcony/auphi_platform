@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DataBaseType">
+
+	<resultMap type="DataBaseType" id="DataBaseType">
+		<result column="ID_DATABASE_TYPE" property="id_database_type"/>
+		<result column="CODE" property="code"/>
+		<result column="DESCRIPTION" property="description"/>
+	</resultMap>
+
+	<select id="queryAll" resultMap="DataBaseType">
+		select * from R_DATABASE_TYPE
+	</select>
+
+	
+
+
+</mapper>

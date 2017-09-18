@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FTP">
+
+	<insert id="insert">
+		insert into kdi_t_ftp(ID_FTP,NAME,HOST_NAME,PORT,USERNAME,PASSWORD,ORGANIZER_ID) values
+		 (#{id_ftp},#{name},#{host_name},#{port},#{username},#{password},#{organizer_id})
+	</insert>
+	
+
+	<update id="update">
+		update kdi_t_ftp
+		<set>
+			<if test="name != null and name != ''">
+				NAME=#{name}
+			</if>
+			<if test="host_name != null and host_name != ''">
+				,HOST_NAME=#{host_name}
+			</if>
+			<if test="port != null and port != ''">
+				,PORT=#{port}
+			</if>
+			<if test="username != null and username != ''">
+				,USERNAME=#{username}
+			</if>
+			<if test="password != null and password != ''">
+				,PASSWORD=#{password}
+			</if>
+		</set>
+		WHERE ID_FTP = #{id_ftp}
+	</update>
+
+	<resultMap type="FTP" id="FTP">
+		<result column="id_ftp" property="id_ftp"/>
+		<result column="name" property="name"/>
+		<result column="host_name" property="host_name"/>
+		<result column="port" property="port"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+		<result column="organizer_id" property="organizer_id"/>
+	</resultMap>
+	
+	<select id="queryAll" parameterType="map"  resultMap="FTP">
+		select * from kdi_t_ftp limit ${start},${end}
+	</select>
+
+	<select id="query" parameterType="map"  resultMap="FTP">
+		select * from kdi_t_ftp where ORGANIZER_ID=${organizer_id} limit ${start},${end}
+	</select>
+	
+	<select id="queryMaxId" parameterType="map"  resultType="java.lang.Integer">
+		SELECT MAX(ID_FTP) AS MAXID FROM KDI_T_FTP
+	</select>
+
+	<select id="queryById" resultMap="FTP">
+		select * from kdi_t_ftp where ID_FTP=#{id_ftp}
+	</select>
+
+	
+	<select id="queryCountAll" parameterType="map" resultType="java.lang.Integer">
+		select count(ID_FTP) from kdi_t_ftp
+	</select>
+	
+	<select id="queryCount" parameterType="map" resultType="java.lang.Integer">
+		select count(ID_FTP) from kdi_t_ftp where ORGANIZER_ID=${organizer_id}
+	</select>
+	
+	<delete id="delete">
+		delete from kdi_t_ftp  WHERE ID_FTP in (${ids}) 
+	</delete>
+
+</mapper>

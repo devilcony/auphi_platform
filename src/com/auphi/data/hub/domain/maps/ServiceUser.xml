@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--服务用户管理手工映射SQL语句 -->
+<mapper namespace="ServiceUser">
+
+	<insert id="insertServiceUser">
+        insert into T_INTERFACE_USER(USERNAME,PASSWORD,SYSTEM_NAME,
+        SYSTEM_IP,SYSTEM_DESC) 
+        values (
+        #{userName},
+        #{password},
+        #{systemName},
+        #{systemIp},
+        #{systemDesc}
+       )
+	</insert>
+	
+	<update id="updateServiceUser">
+		update T_INTERFACE_USER 
+		<set>
+			<if test="userName != null and userName != ''">
+				USERNAME=#{userName}
+			</if>
+			<if test="password != null and password != ''">
+				,PASSWORD=#{password}
+			</if>
+			<if test="systemName != null and systemName != ''">
+				,SYSTEM_NAME=#{systemName}
+			</if>
+			<if test="systemIp != null and systemIp != ''">
+				,SYSTEM_IP=#{systemIp}
+			</if>
+			<if test="systemDesc != null and systemDesc != ''">
+				,SYSTEM_DESC=#{systemDesc}
+			</if>
+		</set>
+		WHERE USER_ID = #{userId}
+	</update>
+	
+	<resultMap type="serviceUser" id="serviceUserMap">
+		<result column="USER_ID" property="userId"/>
+		<result column="USERNAME" property="userName"/>
+		<result column="PASSWORD" property="password"/>
+		<result column="SYSTEM_NAME" property="systemName"/>
+		<result column="SYSTEM_IP" property="systemIp"/>
+		<result column="SYSTEM_DESC" property="systemDesc"/>
+	</resultMap>
+
+	<select id="queryServiceUserList" parameterType="map"  resultMap="serviceUserMap">
+	    select * from 
+		(select USER_ID,USERNAME,PASSWORD,SYSTEM_NAME,SYSTEM_IP,SYSTEM_DESC from T_INTERFACE_USER
+		 <where>
+			<if test="queryParam != null and queryParam != ''">
+		  		 USERNAME like '%${queryParam}%' 
+			</if>
+		 </where>
+		  order by USER_ID desc) u limit ${start},${end}
+	</select>
+	
+	<select id="queryServiceUserListCount" parameterType="map" resultType="java.lang.Integer">
+		select count(*) from 
+		(select USER_ID,USERNAME,PASSWORD,SYSTEM_NAME,SYSTEM_IP,SYSTEM_DESC from T_INTERFACE_USER 
+		  <where>
+			<if test="queryParam != null and queryParam != ''">
+		  		USERNAME like '%${queryParam}%' 
+			</if>
+		  </where>	
+		  order by USER_ID desc) u
+	</select>
+	
+	<delete id="deleteServiceUserByIds">
+		delete from T_INTERFACE_USER  WHERE USER_ID in (${serviceUserIds})
+	</delete>
+	
+	<select id="queryServiceUser" parameterType="map" resultType="dto">
+		select USER_ID,USERNAME,PASSWORD,SYSTEM_NAME,SYSTEM_IP,SYSTEM_DESC from T_INTERFACE_USER 
+		  <where>
+			<if test="userName != null and userName != ''">
+		  		 USERNAME=#{userName} 
+			</if>
+			<if test="password != null and password != ''">
+		  		and PASSWORD=#{password} 
+			</if>
+			<if test="systemName != null and systemName != ''">
+		  		and SYSTEM_NAME=#{systemName} 
+			</if>
+		  </where>	
+	</select>
+	
+	<select id="getAllServiceUser" parameterType="map"  resultType="dto">
+		select USER_ID as userId,USERNAME as userName from T_INTERFACE_USER 
+	</select>
+
+</mapper>

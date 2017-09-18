@@ -1,0 +1,47 @@
+/*默认Style*/
+body {
+    font-size: 12px;
+    color: #336699;
+    scrollbar-face-color: #EBEEF1;
+    scrollbar-highlight-color: #ffffff;
+    scrollbar-shadow-color: #dee3e7;
+    scrollbar-3dlight-color: #d1d7dc;
+    scrollbar-arrow-color: #006699;
+    scrollbar-track-color: #efefef;
+    scrollbar-darkshadow-color: #98aab1;
+    scrollbar-base-color: #d5e1ee
+}
+
+form {
+    margin: 0px;
+}
+
+select {
+    border-width: 0px !important;
+}
+
+input[type="radio"], input[type="checkbox"] {
+    border: 0px;
+}
+
+input, textarea {
+    font-size: 12px;
+    color: #336699;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+}
+
+select {
+    border-width: 1px !important;
+}
+
+BUTTON, .submitButton {
+    height: 22px;
+    font-size: 12px;
+    border: 1px solid #2c59aa;
+    padding: 0px;
+    cursor: pointer;
+    color: black;
+    background-color: #ffffff;
+    FILTER: progid:DXImageTransform.Microsoft.gradient( GradientType = 0, startColorstr = #ffffff, endColorstr = #C3DAF5 )
+}
