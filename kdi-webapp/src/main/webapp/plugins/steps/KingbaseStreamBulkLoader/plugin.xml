@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="KBBLS"
+   iconfile="KBBL.png"
+   description="Kingbase bulk loader"
+   tooltip="Kingbase bulk loader"
+   category="Bulk"
+   classname="com.kingbase.kettle.trans.step.kingbaseStreambulkloader.KBStreamLoaderMeta">
+   <libraries>
+    <library name="KBBLS.jar"/>
+    </libraries>
+    
+   <localized_category>
+     <category locale="en_US">Bulk</category>
+     <category locale="zh_CN">批量加载</category>
+   </localized_category>
+   <localized_description>
+     <description locale="en_US">Kingbase Stream Bulk Loader</description>
+      <description locale="zh_CN">Kingbase 批量加载(数据流方式)</description>
+   </localized_description>
+   <localized_tooltip>
+     <tooltip locale="en_US">Kingbase Stream Bulk Loader</tooltip>
+     <tooltip locale="zh_CN">Kingbase 批量加载(数据流方式)</tooltip>
+   </localized_tooltip>
+   
+</plugin>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="excelUtil"
+   iconfile="EXU.png"
+   description="table incremental input"
+   tooltip="Excel Utility"
+   category="Output"
+   classname="com.xgn.kettleplugins.job.entries.excelutil.JobEntryExcelUtil">
+   <libraries>
+       <library name="excelUtil.jar"/>
+       <library name="jxl.jar"/>
+    </libraries>
+    
+   <localized_category>
+     <category locale="en_US">Utility</category>
+     <category locale="zh_CN">应用</category>
+   </localized_category>
+   <localized_description>
+     <description locale="en_US">Excel Utility</description>
+      <description locale="zh_CN">Excel Utility</description>
+   </localized_description>
+   <localized_tooltip>
+     <tooltip locale="en_US">Excel Utility</tooltip>
+     <tooltip locale="zh_CN">Excel Utility</tooltip>
+   </localized_tooltip>
+   
+</plugin>

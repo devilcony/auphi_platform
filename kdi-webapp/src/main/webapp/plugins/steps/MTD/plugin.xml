@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="MTD"
+   iconfile="MTD.png"
+   description="Period Sum"
+   tooltip="Period Sum"
+   category="Transform"
+   classname="com.xgn.ketl.trans.step.mtd.MTDMeta">
+   <libraries>
+    <library name="MTD.jar"/>
+    </libraries>
+    
+   <localized_category>
+     <category locale="en_US">Transform</category>
+     <category locale="zh_CN">转换</category>
+   </localized_category>
+   <localized_description>
+     <description locale="en_US">Period Sum</description>
+      <description locale="zh_CN">时间周期汇总</description>
+   </localized_description>
+   <localized_tooltip>
+     <tooltip locale="en_US">Period Sum</tooltip>
+     <tooltip locale="zh_CN">时间周期汇总</tooltip>
+   </localized_tooltip>
+   
+</plugin>

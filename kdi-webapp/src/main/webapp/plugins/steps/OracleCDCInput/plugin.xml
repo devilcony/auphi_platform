@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="OracleCDCInputPlugin"
+   iconfile="DPL.png"
+   description="OracleCDCInput Plugin"
+   tooltip="This is a oracle cdc input plugin step"
+   category="Transform"
+   classname="com.kingbase.ketl.plugins.oraclecdcinput.OracleCDCInputMeta">
+   <libraries>
+    <library name="oraclecdcinput.jar"/>
+    </libraries>
+    
+   <localized_category>
+     <category locale="en_US">Input</category>
+	 <category locale="zh_CN">输入</category>
+   </localized_category>
+   <localized_description>
+     <description locale="en_US">Oracle CDC Input plugin</description>
+	 <description locale="zh_CN">Oracle增量表输入</description>
+   </localized_description>
+   <localized_tooltip>
+     <tooltip locale="en_US">Oracle CDC Input plugin</tooltip>
+	 <tooltip locale="zh_CN">Oracle增量表输入</tooltip>
+   </localized_tooltip>
+   
+</plugin>

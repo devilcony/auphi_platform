@@ -5,5 +5,4 @@
 *.project
 *.class
 *.settings
-/target/
-/WebContent/plugins
+*/target/

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+
+
+    <mvc:annotation-driven />
+    <mvc:default-servlet-handler />
+    <context:component-scan base-package="com.auphi.webapp" />
+
+
+    <bean id="stringConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/plain;charset=UTF-8</value>
+            </list>
+        </property>
+
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <!-- 设置为true以忽略对Accept Header的支持 -->
+        <property name="ignoreAcceptHeader" value="true" />
+        <!-- 在没有扩展名时即: "/blog/1" 时的默认展现形式 -->
+        <property name="defaultContentType" value="text/html" />
+
+        <!-- 扩展名至mimeType的映射,即 /blog.json => application/json -->
+        <property name="mediaTypes">
+            <map>
+                <entry key="do" value="text/html" />
+                <entry key="pdf" value="application/pdf" />
+                <entry key="xsl" value="application/vnd.ms-excel" />
+                <entry key="xml" value="application/xml" />
+                <entry key="json" value="application/json" />
+            </map>
+        </property>
+
+        <property name="viewResolvers">
+            <list>
+                <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+                <bean
+                        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="viewClass"
+                              value="org.springframework.web.servlet.view.JstlView" />
+                    <property name="prefix" value="/WEB-INF/views/" />
+                    <property name="suffix" value=".jsp" />
+                </bean>
+            </list>
+        </property>
+
+        <property name="defaultViews">
+            <list>
+                <!-- for application/json -->
+                <bean
+                        class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+
+            </list>
+        </property>
+    </bean>
+
+
+
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">     
+         <property name="exceptionMappings">     
+             <props>     
+                 <prop key="java.lang.Exception">/exception.jsp</prop>     
+             </props>     
+         </property>     
+         <property name="statusCodes">     
+             <props>     
+                 <prop key="errors/error">500</prop>     
+                 <prop key="errors/404">404</prop>     
+             </props>     
+         </property>     
+         <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->     
+         <property name="warnLogCategory" value="WARN"></property>     
+         <!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->     
+         <property name="defaultErrorView" value="errors/error"></property>     
+         <!-- 默认HTTP状态码 -->     
+         <property name="defaultStatusCode" value="500"></property>     
+     </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <!-- 国际化信息所在的文件名 -->
+        <property name="basenames" >
+            <list>
+                <value>org.pentaho.di.trans.steps.textfileinput.messages.messages</value>
+                <value>org.pentaho.di.trans.steps.excelinput.messages.messages</value>
+                <value>com.auphi.ktrl.i18n.messages.messages</value>
+            </list>
+        </property>
+
+        <!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称  -->
+        <property name="useCodeAsDefaultMessage" value="true" />
+    </bean>
+
+
+    <mvc:interceptors>
+        <!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置 -->
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+    </mvc:interceptors>
+
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+
+
+    <import resource="classpath*:com/auphi/container-*.xml"/>
+</beans>

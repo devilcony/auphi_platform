@@ -1,0 +1,38 @@
+
+td.datetime-yms
+{
+	font: bold 12px "ËÎÌו";
+	overflow:hidden;
+	padding: 2 0;
+}
+
+.x-datetime-bottom 
+{
+	padding: 2;
+	height: 30px;
+	border-top: 1px solid;
+    background: repeat-x left top;
+    border-top-color:#a3bad9;
+    background-color:#dfecfb;
+    background-image:url(glass-bg.gif);
+}
+
+.x-hms-bg {
+	background-color: #555555;
+	font-size: 12px;
+	font-family: monospace courier sans-serif;
+	color: white;
+}
+
+.x-hms-bg td {
+	text-align: center;
+	padding: 2px;
+}
+
+.x-hour-mp, .x-minute-mp, .x-second-mp {
+	position:absolute;
+	display: none;
+}
+.x-hour-active {
+	background-color: #EEEEEE;
+}
