@@ -33,6 +33,7 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -71,6 +72,7 @@ public class ScheduleUtil {
 		ScheduleBean scheduleBean = new ScheduleBean();
 		
 		try {
+            scheduleBean.setUserId(String.valueOf(userBean.getUser_id()));
 			scheduleBean.setJobName(request.getParameter("jobname")==null?"":new String(request.getParameter("jobname").getBytes("ISO8859-1"), "UTF-8"));
 			scheduleBean.setJobGroup(String.valueOf(userBean.getOrgId()));
 			scheduleBean.setTriggerName(request.getParameter("jobname")==null?"":new String((request.getParameter("jobname") + "_trigger").getBytes("ISO8859-1"), "UTF-8"));
@@ -96,6 +98,9 @@ public class ScheduleUtil {
 		String startDate = request.getParameter("startdate")==null?"":request.getParameter("startdate");
 		String haveEndDate = request.getParameter("haveenddate")==null?"":request.getParameter("haveenddate");
 		String endDate = request.getParameter("enddate")==null?"":request.getParameter("enddate");
+		if(StringUtils.isEmpty(haveEndDate)){
+			haveEndDate = StringUtils.isEmpty(endDate)? "0" : "1";
+		}
 		String cyclenum = request.getParameter("cyclenum")==null?"":request.getParameter("cyclenum");
 		
 		scheduleBean.setCycle(cycle);
