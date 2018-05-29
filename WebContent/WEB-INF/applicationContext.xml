@@ -99,13 +99,14 @@
 		<constructor-arg name="connection" ref="databaseMeta" />
 		
 	</bean>
-	
+	 <bean class="com.auphi.ktrl.conn.bean.SwaggerConfig"/>
+
 	<context:annotation-config />
 	<context:component-scan base-package="com.auphi.data.hub.dao" />
 	<context:component-scan base-package="com.auphi.data.hub.service" />
 	<context:component-scan base-package="com.auphi.data.hub.core.idgenerator" />
 	<context:component-scan base-package="com.auphi.data.hub"/>
-	<context:component-scan base-package="com.auphi.ktrl.mdm.service" />
+	<context:component-scan base-package="com.auphi.ktrl" />
 	<context:component-scan base-package="com.auphi.ktrl.mdm" />
 	<context:component-scan base-package="com.auphi.ktrl.quality.*" />
 

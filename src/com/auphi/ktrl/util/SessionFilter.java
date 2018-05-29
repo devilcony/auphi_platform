@@ -23,21 +23,12 @@
  ******************************************************************************/
 package com.auphi.ktrl.util;
 
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 
-import com.auphi.ktrl.i18n.Messages;
-import com.auphi.ktrl.monitor.util.MonitorUtil;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
 
 /**
  * Servlet Filter implementation class SessionFilter
@@ -69,7 +60,7 @@ public class SessionFilter implements Filter {
 			HttpServletRequest httpRequest = (HttpServletRequest)request;
 			String servletPath = httpRequest.getServletPath();
 			String user_id = httpRequest.getSession().getAttribute("user_id")==null?"":httpRequest.getSession().getAttribute("user_id").toString();
-			if(!"".equals(user_id) || "/login.jsp".equals(servletPath) || "/register.jsp".equals(servletPath)){
+			if(!"".equals(user_id) || "/login.jsp".equals(servletPath) || "/register.jsp".equals(servletPath) || servletPath.startsWith("/api/")){
 				// pass the request along the filter chain
 				chain.doFilter(request, response);
 			}else {

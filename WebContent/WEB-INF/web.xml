@@ -193,6 +193,10 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>website</servlet-name>
+    <url-pattern>/v2/api-docs</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>website</servlet-name>
     <url-pattern>*.shtml</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

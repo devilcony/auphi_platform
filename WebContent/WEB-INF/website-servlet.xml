@@ -6,7 +6,13 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- 扫描类包，将标注Spring注解的类自动转化为Bean，同时完成Bean的注入 -->
+	<mvc:resources location="classpath:/META-INF/resources/" mapping="swagger-ui.html"/>
+	<mvc:resources location="classpath:/META-INF/resources/webjars/" mapping="/webjars/**"/>
 	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+
+
 	<bean
 		class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping">
 		<property name="caseSensitive" value="true" />
@@ -93,6 +99,7 @@
 	<context:component-scan base-package="com.auphi.ktrl.mdm.controller" />
 	<context:component-scan base-package="com.auphi.ktrl.quality.*.controller" />
 	<context:component-scan base-package="com.auphi.ktrl.schedule.controller" />
+
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />
 
