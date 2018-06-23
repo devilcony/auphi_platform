@@ -23,23 +23,9 @@
  ******************************************************************************/
 package com.auphi.data.hub.controller;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.auphi.data.hub.core.BaseMultiActionController;
 import com.auphi.data.hub.core.PaginationSupport;
+import com.auphi.data.hub.core.properties.PropertiesFactory;
 import com.auphi.data.hub.core.properties.PropertiesFile;
 import com.auphi.data.hub.core.properties.PropertiesHelper;
 import com.auphi.data.hub.core.struct.BaseDto;
@@ -49,17 +35,22 @@ import com.auphi.data.hub.core.util.JsonHelper;
 import com.auphi.data.hub.domain.Datasource;
 import com.auphi.data.hub.domain.Service;
 import com.auphi.data.hub.service.InterfaceService;
+import com.auphi.ktrl.conn.util.ConnectionPool;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
 
-import com.auphi.data.hub.core.properties.PropertiesFactory;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import com.auphi.ktrl.conn.util.ConnectionPool;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 
 /**
@@ -68,6 +59,7 @@ import com.auphi.ktrl.conn.util.ConnectionPool;
  * @author zhangjiafeng
  *
  */
+@ApiIgnore
 @Controller("service")
 public class ServiceController extends BaseMultiActionController {
 	

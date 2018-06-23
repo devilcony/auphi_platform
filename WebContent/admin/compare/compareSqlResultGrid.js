@@ -9,9 +9,8 @@ Ext.onReady(function(){
 
     var cm = new Ext.grid.ColumnModel( [sm, rownum,
         {
-            header : '主键',
+            header : 'ID',
             dataIndex : 'compareSqlColumn.compareSqlColumnId',
-            hidden : true
         },{
             header : '名称',
             sortable : true,

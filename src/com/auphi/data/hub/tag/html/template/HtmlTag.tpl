@@ -30,6 +30,8 @@
 #end
 <script type="text/javascript" src="${contextPath}/resource/commonjs/skyform.js"></script>
 <link rel="stylesheet" type="text/css" href="${contextPath}/resource/css/skyform.css"/>
+<script type="text/javascript" src="${contextPath}/resource/commonjs/KettleDialog.js"></script>
+<script type="text/javascript" src="${contextPath}/resource/extjs3.1/ux/ListBox.js"></script>
 #if(${uxEnabled} == "true")
 <script type="text/javascript" src="${contextPath}/resource/extjs3.1/ux/ux-all.js"></script>
 <link rel="stylesheet" type="text/css" href="${contextPath}/resource/extjs3.1/ux/css/ux-all.css"/>

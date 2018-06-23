@@ -23,12 +23,6 @@
  ******************************************************************************/
 package com.auphi.data.hub.controller;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.auphi.data.hub.core.BaseMultiActionController;
 import com.auphi.data.hub.core.PaginationSupport;
 import com.auphi.data.hub.core.struct.BaseDto;
@@ -36,13 +30,18 @@ import com.auphi.data.hub.core.struct.Dto;
 import com.auphi.data.hub.core.util.JsonHelper;
 import com.auphi.data.hub.domain.Param;
 import com.auphi.data.hub.service.ParamService;
+import com.auphi.data.hub.service.ResourceService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
 
-import com.auphi.data.hub.service.ResourceService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 全局参数维护
@@ -50,6 +49,7 @@ import com.auphi.data.hub.service.ResourceService;
  * @author zhangjiafeng
  *
  */
+@ApiIgnore
 @Controller("param")
 public class ParamController extends BaseMultiActionController {
 	

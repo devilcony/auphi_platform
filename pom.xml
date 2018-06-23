@@ -26,6 +26,16 @@
 
   <dependencies>
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>taglibs</groupId>
+      <artifactId>standard</artifactId>
+      <version>1.1.2</version>
+    </dependency>
+    <dependency>
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
       <version>1.1</version>
@@ -274,6 +284,14 @@
           <artifactId>jasper-runtime</artifactId>
           <groupId>tomcat</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>jsp-api</artifactId>
+          <groupId>javax.servlet.jsp</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>servlet-api</artifactId>
+          <groupId>javax.servlet</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -487,37 +505,32 @@
     <dependency>
       <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-core</artifactId>
-      <version>3.4.0</version>
+      <version>3.4.1</version>
       <classifier>auphi</classifier>
     </dependency>
     <dependency>
       <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-core</artifactId>
-      <version>3.4.0</version>
+      <version>3.4.1</version>
       <classifier>auphi</classifier>
     </dependency>
-    <dependency>
-      <groupId>org.pentaho.di</groupId>
-      <artifactId>kettle-core</artifactId>
-      <version>3.4.0</version>
-      <classifier>auphi</classifier>
-    </dependency>
+
     <dependency>
       <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-db</artifactId>
-      <version>3.4.0</version>
+      <version>3.4.1</version>
       <classifier>auphi</classifier>
     </dependency>
     <dependency>
       <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-dbdialog</artifactId>
-      <version>3.4.0</version>
+      <version>3.4.1</version>
       <classifier>auphi</classifier>
     </dependency>
     <dependency>
       <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-engine</artifactId>
-      <version>3.4.0</version>
+      <version>3.4.1</version>
       <classifier>auphi</classifier>
     </dependency>
     <dependency>
@@ -529,13 +542,13 @@
     <dependency>
       <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-test</artifactId>
-      <version>3.4.0</version>
+      <version>3.4.1</version>
       <classifier>auphi</classifier>
     </dependency>
     <dependency>
       <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-ui-swt</artifactId>
-      <version>3.4.0</version>
+      <version>3.4.1</version>
       <classifier>auphi</classifier>
     </dependency>
     <dependency>

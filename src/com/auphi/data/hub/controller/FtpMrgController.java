@@ -23,18 +23,6 @@
  ******************************************************************************/
 package com.auphi.data.hub.controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.auphi.ktrl.system.user.bean.UserBean;
-
 import com.auphi.data.hub.core.BaseMultiActionController;
 import com.auphi.data.hub.core.PaginationSupport;
 import com.auphi.data.hub.core.struct.BaseDto;
@@ -43,8 +31,18 @@ import com.auphi.data.hub.core.util.FTPUtil;
 import com.auphi.data.hub.core.util.JsonHelper;
 import com.auphi.data.hub.domain.FTP;
 import com.auphi.data.hub.service.FtpMrgService;
+import com.auphi.ktrl.system.user.bean.UserBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
 
+@ApiIgnore
 @Controller("ftpMrg")
 public class FtpMrgController extends BaseMultiActionController {
 

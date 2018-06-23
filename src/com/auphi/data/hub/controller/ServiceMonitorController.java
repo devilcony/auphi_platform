@@ -23,31 +23,31 @@
  ******************************************************************************/
 package com.auphi.data.hub.controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.auphi.data.hub.core.BaseMultiActionController;
 import com.auphi.data.hub.core.PaginationSupport;
 import com.auphi.data.hub.core.struct.BaseDto;
 import com.auphi.data.hub.core.struct.Dto;
 import com.auphi.data.hub.core.util.JsonHelper;
 import com.auphi.data.hub.service.InterfaceService;
-import com.auphi.data.hub.service.InterfaceServiceUser;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
+
 /**
  *服务接口监控控制器
  * 
  * @author yiyabo
  *
  */
+@ApiIgnore
 @Controller("serviceMonitor")
 public class ServiceMonitorController extends BaseMultiActionController {
 

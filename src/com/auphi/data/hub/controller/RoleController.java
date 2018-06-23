@@ -23,12 +23,6 @@
  ******************************************************************************/
 package com.auphi.data.hub.controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.auphi.data.hub.core.BaseMultiActionController;
 import com.auphi.data.hub.core.PaginationSupport;
 import com.auphi.data.hub.core.struct.BaseDto;
@@ -37,14 +31,19 @@ import com.auphi.data.hub.core.util.CloudConstants;
 import com.auphi.data.hub.core.util.CloudUtils;
 import com.auphi.data.hub.core.util.JsonHelper;
 import com.auphi.data.hub.core.util.WebUtils;
+import com.auphi.data.hub.domain.Role;
 import com.auphi.data.hub.domain.UserInfo;
 import com.auphi.data.hub.service.OrganizationService;
 import com.auphi.data.hub.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
 
-import com.auphi.data.hub.domain.Role;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * 角色与授权操作控制
@@ -52,6 +51,7 @@ import com.auphi.data.hub.domain.Role;
  * @author mac
  *
  */
+@ApiIgnore
 @Controller("role")
 public class RoleController extends BaseMultiActionController {
 	

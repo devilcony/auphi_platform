@@ -959,6 +959,9 @@
           text: 'MultiSelect.js',
           path: 'examples/ux/'
        },{
+           text: 'MultiComboBox.js',
+           path: 'examples/ux/'
+       },{
           text: 'PagingMemoryProxy.js',
           path: 'examples/ux/'
        },{

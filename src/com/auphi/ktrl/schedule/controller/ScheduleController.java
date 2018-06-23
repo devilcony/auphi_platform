@@ -26,6 +26,7 @@ package com.auphi.ktrl.schedule.controller;
 import com.auphi.data.hub.core.BaseMultiActionController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +37,7 @@ import javax.servlet.http.HttpServletResponse;
  * @auther Tony
  * @create 2017-05-02 20:35
  */
+@ApiIgnore
 @Controller("schedule")
 public class ScheduleController extends BaseMultiActionController {
 

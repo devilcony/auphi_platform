@@ -23,27 +23,25 @@
  ******************************************************************************/
 package com.auphi.data.hub.controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.auphi.data.hub.core.BaseMultiActionController;
 import com.auphi.data.hub.core.PaginationSupport;
 import com.auphi.data.hub.core.struct.BaseDto;
 import com.auphi.data.hub.core.struct.Dto;
 import com.auphi.data.hub.core.util.JsonHelper;
-import com.auphi.data.hub.domain.Service;
 import com.auphi.data.hub.domain.ServiceUser;
 import com.auphi.data.hub.service.InterfaceServiceUser;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * 服务用户管理控制器
@@ -51,6 +49,7 @@ import com.auphi.data.hub.service.InterfaceServiceUser;
  * @author yiyabo
  *
  **/
+@ApiIgnore
 @Controller("serviceUser")
 public class ServiceUserController extends BaseMultiActionController{
 	

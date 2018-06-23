@@ -23,6 +23,25 @@
  ******************************************************************************/
 package com.auphi.data.hub.controller;
 
+import com.auphi.data.hub.core.BaseMultiActionController;
+import com.auphi.data.hub.core.PaginationSupport;
+import com.auphi.data.hub.core.struct.BaseDto;
+import com.auphi.data.hub.core.struct.Dto;
+import com.auphi.data.hub.core.util.JsonHelper;
+import com.auphi.data.hub.domain.Repository;
+import com.auphi.data.hub.service.RepositoryService;
+import com.auphi.ktrl.conn.util.ConnectionPool;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.pentaho.di.core.database.Database;
+import org.pentaho.di.core.database.DatabaseMeta;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,33 +50,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.pentaho.di.core.database.Database;
-import org.pentaho.di.core.database.DatabaseMeta;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.auphi.ktrl.conn.util.ConnectionPool;
-
-import com.auphi.data.hub.core.BaseMultiActionController;
-import com.auphi.data.hub.core.PaginationSupport;
-import com.auphi.data.hub.core.struct.BaseDto;
-import com.auphi.data.hub.core.struct.Dto;
-import com.auphi.data.hub.core.util.JsonHelper;
-import com.auphi.data.hub.domain.Repository;
-import com.auphi.data.hub.service.RepositoryService;
-
 /**
  * 数据源配置控制器
  * 
  * @author renxn
  *
  */
+@ApiIgnore
 @Controller("repository")
 public class RepositoryController extends BaseMultiActionController {
 	

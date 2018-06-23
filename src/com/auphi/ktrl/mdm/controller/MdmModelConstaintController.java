@@ -23,6 +23,24 @@
  ******************************************************************************/
 package com.auphi.ktrl.mdm.controller;
 
+import com.auphi.data.hub.core.BaseMultiActionController;
+import com.auphi.data.hub.core.PaginationSupport;
+import com.auphi.data.hub.core.struct.BaseDto;
+import com.auphi.data.hub.core.struct.Dto;
+import com.auphi.data.hub.core.util.JsonHelper;
+import com.auphi.ktrl.mdm.domain.MdmModelAttribute;
+import com.auphi.ktrl.mdm.domain.MdmModelConstaint;
+import com.auphi.ktrl.mdm.domain.MdmRelConsAttr;
+import com.auphi.ktrl.mdm.service.MdmModelAttributeService;
+import com.auphi.ktrl.mdm.service.MdmModelConstaintService;
+import com.auphi.ktrl.mdm.service.MdmRelConsAttrService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -31,27 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.auphi.data.hub.core.BaseMultiActionController;
-import com.auphi.data.hub.core.PaginationSupport;
-import com.auphi.data.hub.core.struct.BaseDto;
-import com.auphi.data.hub.core.struct.Dto;
-import com.auphi.data.hub.core.util.JsonHelper;
-
-import com.auphi.ktrl.mdm.domain.MdmModelAttribute;
-import com.auphi.ktrl.mdm.domain.MdmModelConstaint;
-import com.auphi.ktrl.mdm.domain.MdmRelConsAttr;
-import com.auphi.ktrl.mdm.service.MdmModelAttributeService;
-import com.auphi.ktrl.mdm.service.MdmModelConstaintService;
-import com.auphi.ktrl.mdm.service.MdmRelConsAttrService;
-
-
+@ApiIgnore
 @Controller("mdmModelConstaint")
 public class MdmModelConstaintController extends BaseMultiActionController {
 

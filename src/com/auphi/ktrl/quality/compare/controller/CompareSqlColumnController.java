@@ -38,6 +38,7 @@ import org.pentaho.di.core.exception.KettleDatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -52,6 +53,7 @@ import java.util.List;
  * @create 2017-02-11 10:31
  */
 
+@ApiIgnore
 @Controller
 @RequestMapping(value = "compareSqlColumn")
 public class CompareSqlColumnController extends BaseMultiActionController {

@@ -24,7 +24,10 @@
 package com.auphi.ktrl.quality.compare.service;
 
 import com.auphi.data.hub.core.PaginationSupport;
+import com.auphi.ktrl.quality.compare.domain.CompareSql;
 import com.auphi.ktrl.quality.compare.domain.CompareSqlResult;
+
+import java.sql.SQLException;
 
 /**
  * ${DESCRIPTION}
@@ -37,4 +40,6 @@ public interface CompareSqlResultService {
     PaginationSupport<CompareSqlResult> findPage(CompareSqlResult sqlResult);
 
     void save(CompareSqlResult compareSqlResult);
+
+    void execCompareSql(CompareSql compareSql) throws SQLException;
 }

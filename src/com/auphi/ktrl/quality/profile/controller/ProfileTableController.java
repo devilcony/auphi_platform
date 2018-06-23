@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +46,7 @@ import java.util.Set;
  * @auther Tony
  * @create 2017-02-09 08:47
  */
+@ApiIgnore
 @Controller
 @RequestMapping(value = "profileTable")
 public class ProfileTableController extends BaseMultiActionController {

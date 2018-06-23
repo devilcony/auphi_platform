@@ -64,6 +64,14 @@ public class CompareSql extends BaseEntity{
 
     private List<CompareSqlColumn> compareSqlColumns = new ArrayList<CompareSqlColumn>();
 
+    public CompareSql(Integer id) {
+        this.compareSqlId = id;
+    }
+
+    public CompareSql() {
+
+    }
+
     public Integer getCompareSqlId() {
         return compareSqlId;
     }

@@ -31,6 +31,7 @@ import com.auphi.ktrl.quality.profile.service.ProfileTableGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +43,7 @@ import java.util.List;
  * @auther Tony
  * @create 2017-02-08 22:29
  */
+@ApiIgnore
 @Controller
 @RequestMapping(value = "profileTableGroup")
 public class ProfileTableGroupController extends BaseMultiActionController {
