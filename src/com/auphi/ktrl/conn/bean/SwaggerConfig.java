@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration    // 配置注解，自动在本类上下文加载一些环境变量信息
 @EnableSwagger2   // 使swagger2生效
 @EnableWebMvc
-@ComponentScan(basePackages="com.auphi.ktrl.api")
+@ComponentScan(basePackages="com.auphi.ktrl")
 public class SwaggerConfig {
 
 
@@ -29,8 +29,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 //.ignoredParameterTypes(ModelMap.class, HttpServletRequest.class,HttpServletResponse.class, BindingResult.class)
-                //.apis(RequestHandlerSelectors.any())
-                .apis(RequestHandlerSelectors.basePackage("com.auphi.ktrl.api"))
+                .apis(RequestHandlerSelectors.basePackage("com.auphi.ktrl"))
                 .build()
                 .apiInfo(apiInfo())
                 //.globalOperationParameters(setHeaderToken())

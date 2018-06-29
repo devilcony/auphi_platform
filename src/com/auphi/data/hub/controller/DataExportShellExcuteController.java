@@ -23,24 +23,23 @@
  ******************************************************************************/
 package com.auphi.data.hub.controller;
 
-import java.io.File;
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Controller;
-
 import com.auphi.data.hub.core.BaseMultiActionController;
 import com.auphi.data.hub.core.properties.PropertiesFactory;
 import com.auphi.data.hub.core.properties.PropertiesFile;
 import com.auphi.data.hub.core.properties.PropertiesHelper;
 import com.auphi.data.hub.export.GenerateShell;
 import com.auphi.data.hub.export.HttpRest;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Controller;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 数据导出shell远程执行
@@ -48,6 +47,7 @@ import com.auphi.data.hub.export.HttpRest;
  * @author anx
  *
  */
+@ApiIgnore
 @Controller("dataExportShellExcute")
 public class DataExportShellExcuteController extends BaseMultiActionController {
 	private static Log log = LogFactory.getLog(DataExportShellExcuteController.class);

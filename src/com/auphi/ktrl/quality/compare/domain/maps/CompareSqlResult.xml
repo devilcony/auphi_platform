@@ -58,6 +58,7 @@
 
         </where>
 
+        order by a.ID_COMPARE_SQL_RESULT desc
 
         <if test="start != null and limit != null ">
             limit ${start},${limit}

@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +53,7 @@ import java.util.Map;
  * @auther Tony
  * @create 2017-02-09 08:49
  */
+@ApiIgnore
 @Controller("profileTableColumn")
 public class ProfileTableColumnController extends BaseMultiActionController {
 

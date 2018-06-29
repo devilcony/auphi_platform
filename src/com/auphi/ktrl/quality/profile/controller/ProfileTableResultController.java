@@ -27,7 +27,6 @@ import com.auphi.data.hub.core.BaseMultiActionController;
 import com.auphi.data.hub.core.PaginationSupport;
 import com.auphi.data.hub.core.util.JsonHelper;
 import com.auphi.ktrl.quality.profile.domain.ProfileTable;
-import com.auphi.ktrl.quality.profile.domain.ProfileTable;
 import com.auphi.ktrl.quality.profile.domain.ProfileTableColumn;
 import com.auphi.ktrl.quality.profile.domain.ProfileTableResult;
 import com.auphi.ktrl.quality.profile.service.ProfileTableColumnService;
@@ -43,6 +42,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,6 +58,7 @@ import java.util.*;
  * @auther Tony
  * @create 2017-02-08 22:26
  */
+@ApiIgnore
 @Controller
 @RequestMapping(value = "profileTableResult")
 public class ProfileTableResultController extends BaseMultiActionController {

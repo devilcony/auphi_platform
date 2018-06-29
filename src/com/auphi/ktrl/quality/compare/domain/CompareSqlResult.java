@@ -58,6 +58,10 @@ public class CompareSqlResult extends BaseEntity {
         setCompareSqlColumn(compareSqlColumn);
     }
 
+    public CompareSqlResult(CompareSql compareSql) {
+        setCompareSql(compareSql);
+    }
+
 
     public Integer getCompareSqlResultId() {
         return compareSqlResultId;

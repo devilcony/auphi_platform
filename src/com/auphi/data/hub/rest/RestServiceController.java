@@ -23,31 +23,7 @@
  ******************************************************************************/
 package com.auphi.data.hub.rest;
 
-import java.io.IOException;
-import java.net.SocketException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.net.ftp.FTPClient;
-import org.pentaho.di.core.Result;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.alibaba.fastjson.JSONObject;
-
 import com.auphi.data.hub.core.properties.PropertiesFactory;
 import com.auphi.data.hub.core.properties.PropertiesFile;
 import com.auphi.data.hub.core.properties.PropertiesHelper;
@@ -55,13 +31,23 @@ import com.auphi.data.hub.core.struct.BaseDto;
 import com.auphi.data.hub.core.struct.Dto;
 import com.auphi.data.hub.core.util.JsonHelper;
 import com.auphi.data.hub.domain.Service;
-import com.auphi.data.hub.service.DataExportMonitorService;
-import com.auphi.data.hub.service.ExportOraTabService;
-import com.auphi.data.hub.service.ExportOraTabStruService;
-import com.auphi.data.hub.service.InterfaceService;
-import com.auphi.data.hub.service.InterfaceServiceAuth;
-import com.auphi.data.hub.service.InterfaceServiceUser;
+import com.auphi.data.hub.service.*;
+import org.apache.commons.net.ftp.FTPClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.SocketException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+@ApiIgnore
 @Controller
 @RequestMapping("/rest")
 public class RestServiceController {

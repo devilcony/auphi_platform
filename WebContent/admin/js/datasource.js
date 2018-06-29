@@ -14,19 +14,9 @@ Ext.onReady(function() {
 				width : 220
 			},{
 				header : '数据源类型',
-				dataIndex : 'sourceType',
-				width :200,
-				renderer : function(v) {
-					if (v == 32) {
-						return "MySQL";
-					} else if (v ==30) {
-						return "MS SQL Server";
-					} else if(v == 35){
-						return "Oracle";
-					}else if(v == 15){
-						return "Hadoop Hive 2";
-					}
-				}
+				dataIndex : 'sourceTypeName',
+				width :200
+
 			}, {
 				header : '主机IP',
 				dataIndex : 'sourceIp',
@@ -57,7 +47,9 @@ Ext.onReady(function() {
 							root : 'rows'
 						}, [ {
 									name : 'sourceType'
-								}, {
+								},{
+                   					 name : 'sourceTypeName'
+                				}, {
 									name : 'sourceId'
 								}, {
 									name : 'sourceName'
@@ -159,6 +151,34 @@ Ext.onReady(function() {
 			}
 		});
 	});
+
+    var onDatabaseCreate = function(dialog) {
+        Ext.Ajax.request({
+            url:'create.shtml',
+            method: 'POST',
+            params: {databaseInfo: Ext.encode(dialog.getValue()),repId:rep_combo.getValue()},
+            success: function(response) {
+                var json = Ext.decode(response.responseText);
+                if(!json.success) {
+                    Ext.Msg.alert('系统提示', json.message);
+
+                } else {
+                    dialog.close();
+
+                    Ext.Msg.alert('系统提示', '操作成功！');
+                    store.reload({
+                        params : {
+                            start : 0,
+                            limit : bbar.pageSize,
+                            repId : rep_combo.getValue()
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+
 	
 	var grid = new Ext.grid.GridPanel({
 				title : '<span class="commoncss">数据源管理</span>',
@@ -179,13 +199,16 @@ Ext.onReady(function() {
 							text : '新增',
 							iconCls : 'page_addIcon',
 							handler : function() {
-								addInit();
+
+								addInit()
+
 							}
-						}, '-', {
+						},  '-', {
 							text : '修改',
 							iconCls : 'page_edit_1Icon',
 							handler : function() {
 								editInit();
+
 							}
 						}, '-', {
 							text : '删除',
@@ -398,21 +421,29 @@ Ext.onReady(function() {
 	 * 新增参数初始化
 	 */
 	function addInit() {
-		sourceCombox.store.reload({
-			params : {
-				repId : rep_combo.getValue()
-			}
-		});
-		Ext.getCmp('btnReset').hide();
-		var flag = Ext.getCmp('windowmode').getValue();
-		if (typeof(flag) != 'undefined') {
-			addParamFormPanel.form.getEl().dom.reset();
-		} else {
-			clearForm(addParamFormPanel.getForm());
-		}
-		addParamWindow.show();
-		addParamWindow.setTitle('<span class="commoncss">新增数据源信息</span>');
-		Ext.getCmp('windowmode').setValue('add');
+
+        var databaseDialog = new DatabaseDialog();
+        databaseDialog.on('create', onDatabaseCreate);
+        databaseDialog.show(null, function() {
+            databaseDialog.initReposityDatabase(null,rep_combo.getValue());
+        });
+
+
+		// sourceCombox.store.reload({
+		// 	params : {
+		// 		repId : rep_combo.getValue()
+		// 	}
+		// });
+		// Ext.getCmp('btnReset').hide();
+		// var flag = Ext.getCmp('windowmode').getValue();
+		// if (typeof(flag) != 'undefined') {
+		// 	addParamFormPanel.form.getEl().dom.reset();
+		// } else {
+		// 	clearForm(addParamFormPanel.getForm());
+		// }
+		// addParamWindow.show();
+		// addParamWindow.setTitle('<span class="commoncss">新增数据源信息</span>');
+		// Ext.getCmp('windowmode').setValue('add');
 	}
 
 	/**
@@ -450,11 +481,18 @@ Ext.onReady(function() {
 			Ext.MessageBox.alert('提示', '请先选中要修改的数据源');
 			return;
 		}
-		addParamFormPanel.getForm().loadRecord(record);
-		addParamWindow.show();
-		addParamWindow.setTitle('<span class="commoncss">修改数据源信息</span>');
-		Ext.getCmp('windowmode').setValue('edit');
-		Ext.getCmp('btnReset').hide();
+
+        var databaseDialog = new DatabaseDialog();
+        databaseDialog.on('create', onDatabaseCreate);
+        databaseDialog.show(null, function() {
+            databaseDialog.initReposityDatabase(record.get("sourceName"),rep_combo.getValue());
+        });
+
+		// addParamFormPanel.getForm().loadRecord(record);
+		// addParamWindow.show();
+		// addParamWindow.setTitle('<span class="commoncss">修改数据源信息</span>');
+		// Ext.getCmp('windowmode').setValue('edit');
+		// Ext.getCmp('btnReset').hide();
 	}
 
 	/**
@@ -506,7 +544,7 @@ Ext.onReady(function() {
 			Ext.Msg.alert('提示', '请先选中要删除的项目!');
 			return;
 		}
-		var strChecked = jsArray2JsString(rows,'sourceId');
+		var strChecked = jsArray2JsString(rows,'sourceName');
 		Ext.Msg.confirm('请确认', '确认删除选中的数据源吗?', function(btn, text) {
 			if(btn == 'yes'){
 				Ext.Ajax.request({
@@ -520,11 +558,11 @@ Ext.onReady(function() {
 								repId : rep_combo.getValue()
 							}
 						});
-						Ext.Msg.alert('提示', resultArray.msg);
+						Ext.Msg.alert('提示', resultArray.message);
 					},
 					failure : function(response) {
 						var resultArray = Ext.util.JSON.decode(response.responseText);
-						Ext.Msg.alert('提示', resultArray.msg);
+						Ext.Msg.alert('提示', resultArray.message);
 					},
 					params : {
 						strChecked : strChecked
