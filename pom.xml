@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.auphi</groupId>
   <artifactId>etl_platform</artifactId>
-  <version>3.4.0</version>
+  <version>3.5.0_kettle9</version>
   <packaging>war</packaging>
   <name>auphi_platform</name>
   <properties>  
