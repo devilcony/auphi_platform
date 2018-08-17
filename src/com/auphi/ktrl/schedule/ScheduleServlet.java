@@ -75,7 +75,8 @@ public class ScheduleServlet extends HttpServlet {
 		String user_id = request.getSession().getAttribute("user_id")==null?"":request.getSession().getAttribute("user_id").toString();
 		UserBean userBean = request.getSession().getAttribute("userBean")==null?null:(UserBean)request.getSession().getAttribute("userBean");
 		String order= request.getParameter("order")==null?"DESC":request.getParameter("order");
-		String orderby= request.getParameter("orderby")==null?"NEXT_FIRE_TIME":request.getParameter("orderby");
+		//String orderby= request.getParameter("orderby")==null?"NEXT_FIRE_TIME":request.getParameter("orderby");
+		String orderby= request.getParameter("orderby")==null?"JOB_NAME":request.getParameter("orderby");
 		String search_text = request.getParameter("search_text")==null?"":request.getParameter("search_text");
 		String trigger_state=request.getParameter("trigger_state")==null?"":request.getParameter("trigger_state");
 

@@ -854,7 +854,8 @@ public class KettleEngineImpl4_3 implements KettleEngine {
         try{
             String logMessage = "";
             //get running logs
-            Class<?> centralLogStoreClass = Class.forName("org.pentaho.di.core.logging.CentralLogStore", true, classLoaderUtil);
+     //       Class<?> centralLogStoreClass = Class.forName("org.pentaho.di.core.logging.CentralLogStore", true, classLoaderUtil);
+            Class<?> centralLogStoreClass = Class.forName("org.pentaho.di.core.logging.KettleLogStore", true, classLoaderUtil);
             Method getAppender = centralLogStoreClass.getDeclaredMethod("getAppender");
             Object appender = getAppender.invoke(centralLogStoreClass);
 

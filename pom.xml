@@ -25,11 +25,36 @@
   </repositories>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-vfs2</artifactId>
+      <version>2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pentaho.metastore</groupId>
+      <artifactId>metastore</artifactId>
+      <version>9.0.0.0</version>
+      <classifier>auphi</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.pentaho.platform</groupId>
+      <artifactId>pentaho-platform-core</artifactId>
+      <version>9.0.0.0</version>
+      <classifier>auphi</classifier>
+    </dependency>
+
     <dependency>
       <groupId>javax.servlet</groupId>
-      <artifactId>jstl</artifactId>
-      <version>1.2</version>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
     </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.1</version>
+    </dependency>
+
     <dependency>
       <groupId>taglibs</groupId>
       <artifactId>standard</artifactId>
@@ -444,11 +469,13 @@
       <artifactId>jettison</artifactId>
       <version>1.0-RC1</version>
     </dependency>
+    <!--
     <dependency>
       <groupId>rhino</groupId>
       <artifactId>rhino</artifactId>
       <version>1.7R3</version>
     </dependency>
+    -->
     <dependency>
       <groupId>com.jcraft</groupId>
       <artifactId>jsch</artifactId>
@@ -502,55 +529,93 @@
       <artifactId>jxl</artifactId>
       <version>2.6.10</version>
     </dependency>
+
+
+    <!--<dependency>-->
+      <!--<groupId>org.pentaho.di</groupId>-->
+      <!--<artifactId>kettle-core</artifactId>-->
+      <!--<version>3.4.1</version>-->
+      <!--<classifier>auphi</classifier>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>org.pentaho.di</groupId>-->
+      <!--<artifactId>kettle-core</artifactId>-->
+      <!--<version>3.4.1</version>-->
+      <!--<classifier>auphi</classifier>-->
+    <!--</dependency>-->
+
+    <!--<dependency>-->
+      <!--<groupId>org.pentaho.di</groupId>-->
+      <!--<artifactId>kettle-db</artifactId>-->
+      <!--<version>3.4.1</version>-->
+      <!--<classifier>auphi</classifier>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>org.pentaho.di</groupId>-->
+      <!--<artifactId>kettle-dbdialog</artifactId>-->
+      <!--<version>3.4.1</version>-->
+      <!--<classifier>auphi</classifier>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>org.pentaho.di</groupId>-->
+      <!--<artifactId>kettle-engine</artifactId>-->
+      <!--<version>3.4.1</version>-->
+      <!--<classifier>auphi</classifier>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>org.pentaho.di</groupId>-->
+      <!--<artifactId>kettle-jdbc</artifactId>-->
+      <!--<version>3.4.0</version>-->
+      <!--<classifier>auphi</classifier>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>org.pentaho.di</groupId>-->
+      <!--<artifactId>kettle-test</artifactId>-->
+      <!--<version>3.4.1</version>-->
+      <!--<classifier>auphi</classifier>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>org.pentaho.di</groupId>-->
+      <!--<artifactId>kettle-ui-swt</artifactId>-->
+      <!--<version>3.4.1</version>-->
+      <!--<classifier>auphi</classifier>-->
+    <!--</dependency>-->
+
     <dependency>
       <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-core</artifactId>
-      <version>3.4.1</version>
-      <classifier>auphi</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.pentaho.di</groupId>
-      <artifactId>kettle-core</artifactId>
-      <version>3.4.1</version>
+      <version>9.0.0.0</version>
       <classifier>auphi</classifier>
     </dependency>
 
     <dependency>
       <groupId>org.pentaho.di</groupId>
-      <artifactId>kettle-db</artifactId>
-      <version>3.4.1</version>
-      <classifier>auphi</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-dbdialog</artifactId>
-      <version>3.4.1</version>
+      <version>9.0.0.0</version>
       <classifier>auphi</classifier>
     </dependency>
+
     <dependency>
       <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-engine</artifactId>
-      <version>3.4.1</version>
+      <version>9.0.0.0</version>
       <classifier>auphi</classifier>
     </dependency>
+
     <dependency>
       <groupId>org.pentaho.di</groupId>
-      <artifactId>kettle-jdbc</artifactId>
-      <version>3.4.0</version>
+      <artifactId>kettle-log4j-core</artifactId>
+      <version>9.0.0.0</version>
       <classifier>auphi</classifier>
     </dependency>
-    <dependency>
-      <groupId>org.pentaho.di</groupId>
-      <artifactId>kettle-test</artifactId>
-      <version>3.4.1</version>
-      <classifier>auphi</classifier>
-    </dependency>
+
     <dependency>
       <groupId>org.pentaho.di</groupId>
       <artifactId>kettle-ui-swt</artifactId>
-      <version>3.4.1</version>
+      <version>9.0.0.0</version>
       <classifier>auphi</classifier>
     </dependency>
+
     <dependency>
       <groupId>com.kingbase</groupId>
       <artifactId>kingbasejdbc4</artifactId>
@@ -635,8 +700,8 @@
     </dependency>
     <dependency>
       <groupId>com.oracle</groupId>
-      <artifactId>ojdbc14</artifactId>
-      <version>10.2.0</version>
+      <artifactId>ojdbc5</artifactId>
+      <version>11.2.0.3</version>
     </dependency>
     <dependency>
       <groupId>org.olap4j</groupId>
@@ -993,7 +1058,7 @@
             <configuration>    
               <includeGroupIds>org.pentaho</includeGroupIds>
               <includeArtifactIds>pentaho-big-data-plugin</includeArtifactIds>
-              <version>5.0.1</version>
+              <!-- <version>5.0.1</version>  -->
               <type>zip</type>
               <outputDirectory>${project.basedir}/WebContent/plugins</outputDirectory>    
               <includes>*/**</includes>    

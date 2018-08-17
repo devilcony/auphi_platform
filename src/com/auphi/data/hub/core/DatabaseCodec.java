@@ -37,9 +37,9 @@ public class DatabaseCodec {
             jsonObject.put("sqlServerInstance", databaseMeta.getSQLServerInstance());
         if (databaseMeta.isUsingDoubleDecimalAsSchemaTableSeparator())
             jsonObject.put("usingDoubleDecimalAsSchemaTableSeparator", databaseMeta.isUsingDoubleDecimalAsSchemaTableSeparator());
-        jsonObject.put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_LANGUAGE, databaseMeta.getAttributes().getProperty(SAPR3DatabaseMeta.ATTRIBUTE_SAP_LANGUAGE));
-        jsonObject.put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_SYSTEM_NUMBER, databaseMeta.getAttributes().getProperty(SAPR3DatabaseMeta.ATTRIBUTE_SAP_SYSTEM_NUMBER));
-        jsonObject.put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_CLIENT, databaseMeta.getAttributes().getProperty(SAPR3DatabaseMeta.ATTRIBUTE_SAP_CLIENT));
+//        jsonObject.put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_LANGUAGE, databaseMeta.getAttributes().getProperty(SAPR3DatabaseMeta.ATTRIBUTE_SAP_LANGUAGE));
+//        jsonObject.put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_SYSTEM_NUMBER, databaseMeta.getAttributes().getProperty(SAPR3DatabaseMeta.ATTRIBUTE_SAP_SYSTEM_NUMBER));
+//        jsonObject.put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_CLIENT, databaseMeta.getAttributes().getProperty(SAPR3DatabaseMeta.ATTRIBUTE_SAP_CLIENT));
 
         jsonObject.put(GenericDatabaseMeta.ATRRIBUTE_CUSTOM_URL, databaseMeta.getAttributes().getProperty(GenericDatabaseMeta.ATRRIBUTE_CUSTOM_URL));
         jsonObject.put(GenericDatabaseMeta.ATRRIBUTE_CUSTOM_DRIVER_CLASS, databaseMeta.getAttributes().getProperty(GenericDatabaseMeta.ATRRIBUTE_CUSTOM_DRIVER_CLASS));
@@ -165,15 +165,15 @@ public class DatabaseCodec {
             databaseMeta.setUsingDoubleDecimalAsSchemaTableSeparator(jsonObject.optBoolean("usingDoubleDecimalAsSchemaTableSeparator"));
 
         // SAP Attributes...
-        if (jsonObject.containsKey(SAPR3DatabaseMeta.ATTRIBUTE_SAP_LANGUAGE)) {
-            databaseMeta.getAttributes().put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_LANGUAGE, jsonObject.optString(SAPR3DatabaseMeta.ATTRIBUTE_SAP_LANGUAGE));
-        }
-        if (jsonObject.containsKey(SAPR3DatabaseMeta.ATTRIBUTE_SAP_SYSTEM_NUMBER)) {
-            databaseMeta.getAttributes().put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_SYSTEM_NUMBER, jsonObject.optString(SAPR3DatabaseMeta.ATTRIBUTE_SAP_SYSTEM_NUMBER));
-        }
-        if (jsonObject.containsKey(SAPR3DatabaseMeta.ATTRIBUTE_SAP_CLIENT)) {
-            databaseMeta.getAttributes().put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_CLIENT, jsonObject.optString(SAPR3DatabaseMeta.ATTRIBUTE_SAP_CLIENT));
-        }
+//        if (jsonObject.containsKey(SAPR3DatabaseMeta.ATTRIBUTE_SAP_LANGUAGE)) {
+//            databaseMeta.getAttributes().put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_LANGUAGE, jsonObject.optString(SAPR3DatabaseMeta.ATTRIBUTE_SAP_LANGUAGE));
+//        }
+//        if (jsonObject.containsKey(SAPR3DatabaseMeta.ATTRIBUTE_SAP_SYSTEM_NUMBER)) {
+//            databaseMeta.getAttributes().put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_SYSTEM_NUMBER, jsonObject.optString(SAPR3DatabaseMeta.ATTRIBUTE_SAP_SYSTEM_NUMBER));
+//        }
+//        if (jsonObject.containsKey(SAPR3DatabaseMeta.ATTRIBUTE_SAP_CLIENT)) {
+//            databaseMeta.getAttributes().put(SAPR3DatabaseMeta.ATTRIBUTE_SAP_CLIENT, jsonObject.optString(SAPR3DatabaseMeta.ATTRIBUTE_SAP_CLIENT));
+//        }
 
         // Generic settings...
         if (jsonObject.containsKey(GenericDatabaseMeta.ATRRIBUTE_CUSTOM_URL)) {
