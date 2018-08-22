@@ -141,8 +141,10 @@ public class UserUtil
         {
             conn = ConnectionPool.getConnection() ;
             stt = conn.createStatement() ;
-            
-            rs = stt.executeQuery(query_sql_prefix+userName+"'") ;
+            String sql = query_sql_prefix+userName+"'";
+            logger.info(sql);
+            //System.out.println(sql);
+            rs = stt.executeQuery(sql) ;
             
             if(rs.next())
                 getUserBean(rs,userBean) ;

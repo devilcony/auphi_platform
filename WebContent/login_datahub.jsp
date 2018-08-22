@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ include file="/common/include/taglib.jsp"%>
-<skyform:html title="汕头移动数据枢纽系统" showLoading="false" exportParams="true"
+<skyform:html title="xxx数据枢纽系统" showLoading="false" exportParams="true"
 	isSubPage="false">
 <skyform:import src="/admin/js/login.js" />
 <skyform:body>
