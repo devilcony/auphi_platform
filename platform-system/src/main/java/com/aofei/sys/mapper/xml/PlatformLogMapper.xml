@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.PlatformLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.PlatformLog">
+        <id column="LOG_ID" property="logId" />
+        <result column="USERNAME" property="username" />
+        <result column="MODULE" property="module" />
+        <result column="OPERATION" property="operation" />
+        <result column="METHOD" property="method" />
+        <result column="PARAMS" property="params" />
+        <result column="IP" property="ip" />
+        <result column="CREATE_DATE" property="createDate" />
+        <result column="DEL_FLAG" property="delFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          LOG_ID AS logId
+        , USERNAME AS username
+        , MODULE   AS module
+        , OPERATION AS operation
+        , METHOD AS method
+        , PARAMS AS params
+        , IP AS ip
+        , CREATE_DATE AS createDate
+        , DEL_FLAG AS delFlag
+    </sql>
+
+
+    <select id="findList"  resultType="com.aofei.sys.entity.PlatformLog">
+        select
+        <include refid="Base_Column_List"/>
+        from KDI_SYS_PLATFORM_LOG a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="startCreateTime !=null ">
+                AND  DATE_FORMAT(a.CREATE_DATE,'%Y%m%d') <![CDATA[ >= ]]> DATE_FORMAT(#{startCreateTime},'%Y%m%d')
+            </if>
+            <if test="endCreateTime !=null ">
+                AND   DATE_FORMAT(a.CREATE_DATE,'%Y%m%d') <![CDATA[ <= ]]> DATE_FORMAT(#{endCreateTime},'%Y%m%d')
+            </if>
+        </where>
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.RepositoryDatabaseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.RepositoryDatabase">
+        <id column="REPOSITORY_DATABASE_ID" property="repositoryDatabaseId" />
+        <result column="REPOSITORY_DATABASE_NAME" property="repositoryDatabaseName" />
+        <result column="DATABASE_TYPE_ID" property="databaseTypeId" />
+        <result column="DATABASE_CONTYPE_ID" property="databaseContypeId" />
+        <result column="HOST_NAME" property="hostName" />
+        <result column="DATABASE_NAME" property="databaseName" />
+        <result column="PORT" property="port" />
+        <result column="USERNAME" property="username" />
+        <result column="PASSWORD" property="password" />
+        <result column="SERVERNAME" property="servername" />
+        <result column="DATA_TBS" property="dataTbs" />
+        <result column="INDEX_TBS" property="indexTbs" />
+        <result column="CREATE_USER_ID" property="createUserId" />
+        <result column="UPDATE_USER_ID" property="updateUserId" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="DEL_FLAG" property="delFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        REPOSITORY_DATABASE_ID AS repositoryDatabaseId, REPOSITORY_DATABASE_NAME AS repositoryDatabaseName, DATABASE_TYPE_ID AS databaseTypeId, DATABASE_CONTYPE_ID AS databaseContypeId, HOST_NAME AS hostName, DATABASE_NAME AS databaseName, PORT AS port, USERNAME AS username, PASSWORD AS password, SERVERNAME AS servername, DATA_TBS AS dataTbs, INDEX_TBS AS indexTbs, CREATE_USER_ID AS createUserId, UPDATE_USER_ID AS updateUserId, CREATE_TIME AS createTime, UPDATE_TIME AS updateTime, DEL_FLAG AS delFlag
+    </sql>
+
+</mapper>

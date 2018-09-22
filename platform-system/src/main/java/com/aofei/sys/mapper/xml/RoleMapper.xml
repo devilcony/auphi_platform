@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.RoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.Role">
+        <id column="ROLE_ID" property="roleId" />
+        <result column="ROLE_NAME" property="roleName" />
+        <result column="REMARK" property="remark" />
+        <result column="DEPT_ID" property="deptId" />
+        <result column="CREATE_USER_ID" property="createUserId" />
+        <result column="UPDATE_USER_ID" property="updateUserId" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="DEL_FLAG" property="delFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          ROLE_ID AS roleId
+        , ROLE_NAME AS roleName
+        , REMARK AS remark
+        , DEPT_ID AS deptId
+        , dept.NAME AS deptName
+        , CREATE_USER_ID AS createUserId
+        , UPDATE_USER_ID AS updateUserId
+        , CREATE_TIME AS createTime
+        , UPDATE_TIME AS updateTime
+        , DEL_FLAG AS delFlag
+
+    </sql>
+
+    <sql id="Base_Joins">
+       LEFT JOIN KDI_SYS_DEPT dept ON dept.DEPT_ID = a.DEPT_ID
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.sys.entity.Role">
+        select
+        <include refid="Base_Column_List"/>
+        from KDI_SYS_ROLE a
+        <include refid="Base_Joins"/>
+        <where>
+            a.DEL_FLAG = 0
+            <if test="deptId !=null ">
+                AND  a.DEPT_ID  = #{deptId}
+            </if>
+            <if test="roleName !=null and roleName!=''">
+                <bind name="pattern" value="'%' + _parameter.roleName + '%'" />
+                AND  a.ROLE_NAME like #{pattern}
+            </if>
+        </where>
+    </select>
+
+    <select id="findRoleByUserId"  resultType="com.aofei.sys.entity.Role">
+        select
+        <include refid="Base_Column_List"/>
+        from KDI_SYS_ROLE a
+        <include refid="Base_Joins"/>
+        left join KDI_SYS_USER_ROLE ur on ur.ROLE_ID= a.ROLE_ID
+        left join KDI_SYS_USER u on ur.USER_ID = u.USER_ID
+        where a.DEL_FLAG = 0 and u.USER_ID = #{userId}
+
+    </select>
+
+    <update id="deleteById">
+        update KDI_SYS_ROLE a set a.DEL_FLAG = 1  where a.ROLE_ID = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.MenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.Menu">
+        <id column="MENU_ID" property="menuId" />
+        <result column="PARENT_ID" property="parentId" />
+        <result column="NAME" property="name" />
+        <result column="URL" property="url" />
+        <result column="PERMS" property="perms" />
+        <result column="TYPE" property="type" />
+        <result column="ICON" property="icon" />
+        <result column="ORDER_NUM" property="orderNum" />
+        <result column="STATUS" property="status" />
+        <result column="CREATE_USER_ID" property="createUserId" />
+        <result column="UPDATE_USER_ID" property="updateUserId" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="DEL_FLAG" property="delFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          MENU_ID AS menuId
+        , PARENT_ID AS parentId
+        , NAME AS name
+        , URL AS url
+        , PERMS AS perms
+        , TYPE AS type
+        , ICON AS icon
+        , ORDER_NUM AS orderNum
+        , STATUS AS status
+        , CREATE_USER_ID AS createUserId
+        , UPDATE_USER_ID AS updateUserId
+        , CREATE_TIME AS createTime
+        , UPDATE_TIME AS updateTime
+        , DEL_FLAG AS delFlag
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.sys.entity.Dept">
+        select
+        <include refid="Base_Column_List"/>
+        from KDI_SYS_MENU a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="parentId !=null ">
+                AND  a.PARENT_ID  = #{parentId}
+            </if>
+            <if test="name != null and name != ''">
+                AND a.NAME LIKE '%#{name}%'
+            </if>
+        </where>
+    </select>
+
+
+
+
+    <update id="deleteById">
+        update KDI_SYS_MENU a set a.DEL_FLAG = 1  where a.USER_ID = #{id}
+    </update>
+</mapper>

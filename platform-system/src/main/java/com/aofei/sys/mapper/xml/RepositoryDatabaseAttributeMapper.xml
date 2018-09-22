@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.RepositoryDatabaseAttributeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.RepositoryDatabaseAttribute">
+        <id column="REPOSITORY_DATABASE_ATTRIBUTE_ID" property="repositoryDatabaseAttributeId" />
+        <result column="REPOSITORY_DATABASE_ID" property="repositoryDatabaseId" />
+        <result column="CODE" property="code" />
+        <result column="VALUE_STR" property="valueStr" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        REPOSITORY_DATABASE_ATTRIBUTE_ID AS repositoryDatabaseAttributeId, REPOSITORY_DATABASE_ID AS repositoryDatabaseId, CODE AS code, VALUE_STR AS valueStr
+    </sql>
+
+</mapper>

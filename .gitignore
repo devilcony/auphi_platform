@@ -1,9 +1,8 @@
 .idea/
-.DS_Store
 *.DS_Store
 *.classpath
 *.project
 *.class
 *.settings
-/target/
+*/target/
 /WebContent/plugins
