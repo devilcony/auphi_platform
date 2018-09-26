@@ -7,12 +7,10 @@ import com.aofei.base.model.vo.DataGrid;
 import com.aofei.log.annotation.Log;
 import com.aofei.sys.model.request.RepositoryRequest;
 import com.aofei.sys.model.response.RepositoryResponse;
+import com.aofei.sys.service.IRepositoryDatabaseService;
 import com.aofei.sys.service.IRepositoryService;
 import com.baomidou.mybatisplus.plugins.Page;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +34,9 @@ public class RepositoryController extends BaseController {
 
     @Autowired
     IRepositoryService repositoryService;
+
+    @Autowired
+    IRepositoryDatabaseService repositoryDatabaseService;
 
     /**
      * 资源库列表(分页查询)
@@ -76,6 +77,9 @@ public class RepositoryController extends BaseController {
      * @return
      */
     @Log(module = "资源库管理",description = "新建资源库")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200009, message = "数据库连接验证失败"),
+            @ApiResponse(code = 200, message = "success")})
     @ApiOperation(value = "新建资源库", notes = "新建资源库", httpMethod = "POST")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Response<RepositoryResponse> add(
@@ -99,14 +103,14 @@ public class RepositoryController extends BaseController {
 
     /**
      * 删除资源库
-     * @param id
+     * @param repositoryName
      * @return
      */
     @ApiOperation(value = "删除资源库", notes = "删除资源库", httpMethod = "DELETE")
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{repositoryName}/delete", method = RequestMethod.DELETE)
     public Response<Integer> del(
-            @PathVariable Long id)  {
-        return Response.ok(repositoryService.del(id)) ;
+            @PathVariable String repositoryName)  {
+        return Response.ok(repositoryService.del(repositoryName)) ;
     }
 
     /**

@@ -17,17 +17,16 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          ROLE_ID AS roleId
-        , ROLE_NAME AS roleName
-        , REMARK AS remark
-        , DEPT_ID AS deptId
+          a.ROLE_ID AS roleId
+        , a.ROLE_NAME AS roleName
+        , a.REMARK AS remark
+        , a.DEPT_ID AS deptId
+        , a.CREATE_USER_ID AS createUserId
+        , a.UPDATE_USER_ID AS updateUserId
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
         , dept.NAME AS deptName
-        , CREATE_USER_ID AS createUserId
-        , UPDATE_USER_ID AS updateUserId
-        , CREATE_TIME AS createTime
-        , UPDATE_TIME AS updateTime
-        , DEL_FLAG AS delFlag
-
     </sql>
 
     <sql id="Base_Joins">

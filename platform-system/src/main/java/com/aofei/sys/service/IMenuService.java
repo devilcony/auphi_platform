@@ -59,5 +59,10 @@ public interface IMenuService extends IService<Menu> {
      */
     int del(Long menuId);
 
-
+    /**
+     * 获取用户菜单
+     * @param userId
+     * @return
+     */
+    List<MenuResponse> getMenusByUser(Long userId);
 }

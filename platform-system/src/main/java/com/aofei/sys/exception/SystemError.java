@@ -21,7 +21,9 @@ public enum SystemError {
     PHONE_NUMBER_EXIST(200005, "the phone number is exist"),//手机号被占用
     PERMISSION_DENIED(200006, "Permission Denied"),
     NATIONCODE_EMPTY(200007, "Permission Denied"),
-    STATUS_DISABLED(200008, "user was disabled")
+    STATUS_DISABLED(200008, "user was disabled"),
+    CHECK_DATABASE_FAILURE(200009, "数据库连接验证失败"),
+    DATABASE_EXIST(200010, "数据量连接已存在")
     ;
 
     /*状态码*/

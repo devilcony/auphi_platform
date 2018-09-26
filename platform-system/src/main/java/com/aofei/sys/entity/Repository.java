@@ -35,14 +35,20 @@ public class Repository extends DataEntity<Repository> {
     /**
      * 资源数据库链接ID
      */
-    @TableField("REPOSITORY_DATABASE_ID")
-    private Long repositoryDatabaseId;
+    @TableField("REPOSITORY_CONNECTION_ID")
+    private Long repositoryConnectionId;
 
     /**
      * 资源数据库链接名称
      */
     @TableField(exist = false)
-    private String repositoryDatabaseName;
+    private String repositoryConnectionName;
+
+    /**
+     * 描述
+     */
+    @TableField("DESCRIPTION")
+    private String description;
 
 
     /**
@@ -68,6 +74,18 @@ public class Repository extends DataEntity<Repository> {
      */
     @TableField("IS_DEFAULT")
     private Integer isDefault;
+
+    /**
+     * 资源库用户名
+     */
+    @TableField(exist = false)
+    private String username;
+
+    /**
+     * 资源库密码
+     */
+    @TableField(exist = false)
+    private String password;
 
 
 

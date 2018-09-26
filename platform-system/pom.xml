@@ -25,21 +25,14 @@
             <groupId>com.aofei</groupId>
             <artifactId>platform-log</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.aofei</groupId>
             <artifactId>platform-auth</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.aofei</groupId>
-            <artifactId>platform-kettle</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
+
 
     </dependencies>
 

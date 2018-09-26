@@ -17,15 +17,15 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          LOG_ID AS logId
-        , USERNAME AS username
-        , MODULE   AS module
-        , OPERATION AS operation
-        , METHOD AS method
-        , PARAMS AS params
-        , IP AS ip
-        , CREATE_DATE AS createDate
-        , DEL_FLAG AS delFlag
+          a.LOG_ID AS logId
+        , a.USERNAME AS username
+        , a.MODULE   AS module
+        , a.OPERATION AS operation
+        , a.METHOD AS method
+        , a.PARAMS AS params
+        , a.IP AS ip
+        , a.CREATE_DATE AS createDate
+        , a.DEL_FLAG AS delFlag
     </sql>
 
 

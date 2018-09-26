@@ -1,21 +1,30 @@
-package com.aofei.kettle.core.database;
+package com.aofei.sys.utils;
 
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.aofei.base.exception.ApplicationException;
 import com.aofei.kettle.utils.StringEscapeHelper;
+import com.aofei.sys.exception.SystemError;
+import com.aofei.sys.model.request.RepositoryDatabaseAttributeRequest;
+import com.aofei.sys.model.request.RepositoryDatabaseRequest;
+import com.aofei.sys.model.response.RepositoryDatabaseAttributeResponse;
+import com.aofei.sys.model.response.RepositoryDatabaseResponse;
+import com.google.common.collect.Lists;
+import org.pentaho.di.core.Const;
 import org.pentaho.di.core.database.*;
 import org.pentaho.di.core.database.sap.SAPR3DatabaseMeta;
 import org.pentaho.di.core.encryption.Encr;
 import org.pentaho.di.core.exception.KettleDatabaseException;
+import org.pentaho.ui.database.Messages;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class DatabaseCodec {
+
+
+
 	
 	public static JSONObject encode(DatabaseMeta databaseMeta) {
 		JSONObject jsonObject = new JSONObject();
@@ -139,6 +148,7 @@ public class DatabaseCodec {
 	public static DatabaseMeta decode(JSONObject jsonObject) throws KettleDatabaseException {
 
 		DatabaseMeta databaseMeta = new DatabaseMeta();
+
 
 		databaseMeta.setName(jsonObject.getString("name"));
 		databaseMeta.setDisplayName(databaseMeta.getName());
@@ -316,10 +326,116 @@ public class DatabaseCodec {
 	    	}
 	    }
 
-
-
 		databaseMeta.setReadOnly(jsonObject.getBooleanValue("read_only"));
 		return databaseMeta;
 	}
-	
+
+	public static DatabaseMeta decode(RepositoryDatabaseResponse databaseResponse) throws KettleDatabaseException {
+		DatabaseMeta databaseMeta = null;
+		if(databaseResponse !=null){
+			databaseMeta = new DatabaseMeta();
+
+			databaseMeta.setDatabaseInterface(DatabaseMeta.getDatabaseInterface(databaseResponse.getDatabaseType()));
+			databaseMeta.setAttributes(new Properties()); // new attributes
+
+			databaseMeta.setName( databaseResponse.getRepositoryConnectionName() );
+
+			databaseMeta.setAccessType( databaseResponse.getDatabaseContype());
+
+
+			databaseMeta.setHostname( Const.NVL(databaseResponse.getHostName(), ""));
+			databaseMeta.setDBName(Const.NVL(databaseResponse.getDatabaseName(), ""));
+			databaseMeta.setDBPort( Const.NVL(databaseResponse.getPort(), "") );
+			databaseMeta.setUsername( Const.NVL(databaseResponse.getUsername(), "") );
+			databaseMeta.setPassword( Encr.decryptPasswordOptionallyEncrypted( Const.NVL(databaseResponse.getPassword(), "") ) );
+			databaseMeta.setServername( Const.NVL(databaseResponse.getServername(), ""));
+			databaseMeta.setDataTablespace(Const.NVL(databaseResponse.getDataTbs(), "") );
+			databaseMeta.setIndexTablespace( Const.NVL(databaseResponse.getIndexTbs(), "") );
+
+			// Also, load all the properties we can find...
+			List<RepositoryDatabaseAttributeResponse> attrs = databaseResponse.getAttrs();
+			for (RepositoryDatabaseAttributeResponse row : attrs)
+			{
+				String code = Const.NVL(row.getCode(), "");
+				String attribute = Const.NVL(row.getValueStr(), "");
+				// System.out.println("Attributes: "+(getAttributes()!=null)+", code: "+(code!=null)+", attribute: "+(attribute!=null));
+				databaseMeta.getAttributes().put(code, Const.NVL(attribute, ""));
+			}
+		}
+
+		return databaseMeta;
+	}
+
+	public static RepositoryDatabaseRequest decode(DatabaseMeta databaseMeta) throws KettleDatabaseException {
+		RepositoryDatabaseRequest databaseRequest = null;
+		if(databaseMeta !=null){
+			databaseRequest = new RepositoryDatabaseRequest();
+			databaseRequest.setDatabaseType(databaseMeta.getDatabaseInterface().getPluginId());
+			databaseRequest.setRepositoryConnectionName(databaseMeta.getName());
+			databaseRequest.setDatabaseContype(databaseMeta.getAccessType());
+			databaseRequest.setHostName(databaseMeta.getHostname());
+			databaseRequest.setDatabaseName(databaseMeta.getDatabaseName());
+			databaseRequest.setPort(databaseMeta.getDatabaseInterface().getDatabasePortNumberString());
+			databaseRequest.setUsername(databaseMeta.getUsername() );
+			databaseRequest.setPassword( Encr.encryptPasswordIfNotUsingVariables( databaseMeta.getPassword()) );
+			databaseRequest.setServername( databaseMeta.getServername());
+			databaseRequest.setDataTbs(databaseMeta.getDataTablespace() );
+			databaseRequest.setIndexTbs( databaseMeta.getIndexTablespace() );
+
+			List<RepositoryDatabaseAttributeRequest> attrs = Lists.newArrayList();
+			Map<String, String> connectionExtraOptions = databaseMeta.getExtraOptions();
+			for(String key : connectionExtraOptions.keySet()){
+				attrs.add(new RepositoryDatabaseAttributeRequest(key,connectionExtraOptions.get(key)));
+			}
+			databaseRequest.setAttrs(attrs);
+
+		}
+
+		return databaseRequest;
+	}
+
+
+	public static DatabaseMeta checkParameters(JSONObject jsonObject) throws KettleDatabaseException {
+
+		DatabaseMeta database = decode(jsonObject);
+
+		if(database.isUsingConnectionPool()) {
+			String parameters = "";
+			JSONArray pool_params = jsonObject.getJSONArray("pool_params");
+			if(pool_params != null) {
+				for(int i=0; i<pool_params.size(); i++) {
+					JSONObject jsonObject2 = pool_params.getJSONObject(i);
+					Boolean enabled = jsonObject2.getBoolean("enabled");
+					String parameter = jsonObject2.getString("name");
+					String value = jsonObject2.getString("defValue");
+
+					if (!enabled) {
+						continue;
+					}
+
+					if(!StringUtils.hasText(value) ) {
+						parameters = parameters.concat( parameter ).concat( System.getProperty( "line.separator" ) );
+					}
+				}
+
+			}
+
+			if(parameters.length() > 0) {
+				String message = Messages.getString( "DataHandler.USER_INVALID_PARAMETERS" ).concat( parameters );
+				throw new ApplicationException(SystemError.CHECK_DATABASE_FAILURE.getCode(),message);
+			}
+		}
+
+		String[] remarks = database.checkParameters();
+		String message = "";
+
+		if ( remarks.length != 0 ) {
+			for (int i = 0; i < remarks.length; i++) {
+				message = message.concat("* ").concat(remarks[i]).concat(System.getProperty("line.separator"));
+			}
+			throw new ApplicationException(SystemError.CHECK_DATABASE_FAILURE.getCode(),message);
+		}
+
+		return database;
+	}
 }

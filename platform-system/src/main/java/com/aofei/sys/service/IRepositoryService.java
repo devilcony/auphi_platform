@@ -61,4 +61,10 @@ public interface IRepositoryService extends IService<Repository> {
      * @return
      */
     RepositoryResponse get(Long repositoryId);
+    /**
+     * 删除
+     * @param repositoryName
+     * @return
+     */
+    int del(String repositoryName);
 }

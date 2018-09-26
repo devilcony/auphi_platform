@@ -22,23 +22,23 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          MENU_ID AS menuId
-        , PARENT_ID AS parentId
-        , NAME AS name
-        , URL AS url
-        , PERMS AS perms
-        , TYPE AS type
-        , ICON AS icon
-        , ORDER_NUM AS orderNum
-        , STATUS AS status
-        , CREATE_USER_ID AS createUserId
-        , UPDATE_USER_ID AS updateUserId
-        , CREATE_TIME AS createTime
-        , UPDATE_TIME AS updateTime
-        , DEL_FLAG AS delFlag
+          a.MENU_ID AS menuId
+        , a.PARENT_ID AS parentId
+        , a.NAME AS name
+        , a.URL AS url
+        , a.PERMS AS perms
+        , a.TYPE AS type
+        , a.ICON AS icon
+        , a.ORDER_NUM AS orderNum
+        , a.STATUS AS status
+        , a.CREATE_USER_ID AS createUserId
+        , a.UPDATE_USER_ID AS updateUserId
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
     </sql>
 
-    <select id="findList"  resultType="com.aofei.sys.entity.Dept">
+    <select id="findList"  resultType="com.aofei.sys.entity.Menu">
         select
         <include refid="Base_Column_List"/>
         from KDI_SYS_MENU a
@@ -53,6 +53,15 @@
         </where>
     </select>
 
+    <select id="findMenusByUser" resultType="com.aofei.sys.entity.Menu">
+        select
+        <include refid="Base_Column_List"/>
+
+        from KDI_SYS_MENU a
+        JOIN KDI_SYS_ROLE_MENU rm on rm.MENU_ID = a.MENU_ID
+        JOIN KDI_SYS_USER_ROLE ur on ur.ROLE_ID = rm.ROLE_ID
+        where ur.USER_ID = #{userId} and a.DEL_FLAG = 0
+    </select>
 
 
 

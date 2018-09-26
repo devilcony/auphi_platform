@@ -30,27 +30,29 @@ public class RepositoryDatabase extends DataEntity<RepositoryDatabase> {
     /**
      * 资源数据库链接ID
      */
-    @TableId(value = "REPOSITORY_DATABASE_ID", type = IdType.ID_WORKER)
-    private Long repositoryDatabaseId;
+    @TableId(value = "REPOSITORY_CONNECTION_ID", type = IdType.ID_WORKER)
+    private Long repositoryConnectionId;
     /**
      * 资源数据库链接名称
      */
-    @TableField("REPOSITORY_DATABASE_NAME")
-    private String repositoryDatabaseName;
+    @TableField("REPOSITORY_CONNECTION_NAME")
+    private String repositoryConnectionName;
 
     /**
      * 数据库类型
      */
-    @TableField("DATABASE_TYPE_ID")
-    private Integer databaseTypeId;
-
+    @TableField("DATABASE_TYPE")
+    private String databaseType;
 
 
     /**
      * 数据库连接方式
      */
-    @TableField("DATABASE_CONTYPE_ID")
-    private Integer databaseContypeId;
+    @TableField("DATABASE_CONTYPE")
+    private Integer databaseContype;
+
+
+
     /**
      * 主机名
      */
@@ -65,7 +67,7 @@ public class RepositoryDatabase extends DataEntity<RepositoryDatabase> {
      * 端口
      */
     @TableField("PORT")
-    private Integer port;
+    private String port;
     /**
      * 用户名
      */
@@ -96,7 +98,7 @@ public class RepositoryDatabase extends DataEntity<RepositoryDatabase> {
 
     @Override
     protected Serializable pkVal() {
-        return this.repositoryDatabaseId;
+        return this.repositoryConnectionId;
     }
 
 }

@@ -5,14 +5,39 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.aofei.sys.entity.RepositoryDatabaseAttribute">
         <id column="REPOSITORY_DATABASE_ATTRIBUTE_ID" property="repositoryDatabaseAttributeId" />
-        <result column="REPOSITORY_DATABASE_ID" property="repositoryDatabaseId" />
+        <result column="REPOSITORY_CONNECTION_ID" property="repositoryConnectionId" />
         <result column="CODE" property="code" />
         <result column="VALUE_STR" property="valueStr" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        REPOSITORY_DATABASE_ATTRIBUTE_ID AS repositoryDatabaseAttributeId, REPOSITORY_DATABASE_ID AS repositoryDatabaseId, CODE AS code, VALUE_STR AS valueStr
+          a.REPOSITORY_DATABASE_ATTRIBUTE_ID AS repositoryDatabaseAttributeId
+        , a.REPOSITORY_CONNECTION_ID AS repositoryConnectionId
+        , a.CODE AS code
+        , a.VALUE_STR AS valueStr
     </sql>
+
+    <sql id="Base_Joins">
+
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.sys.entity.RepositoryDatabaseAttribute">
+        select
+        <include refid="Base_Column_List"/>
+        from KDI_SYS_REPOSITORY_DATABASE_ATTRIBUTE a
+        <include refid="Base_Joins"/>
+        <where>
+            <if test="repositoryConnectionId !=null ">
+                AND  a.REPOSITORY_CONNECTION_ID  = #{repositoryConnectionId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByDatabaseId">
+        delete from KDI_SYS_REPOSITORY_DATABASE_ATTRIBUTE where REPOSITORY_CONNECTION_ID = #{repositoryConnectionId}
+    </delete>
+
+
 
 </mapper>

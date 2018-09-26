@@ -100,7 +100,11 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
 
     @Override
     public Page<UserResponse> getPage(Page<User> page, UserRequest request) {
-        return null;
+
+        List<User> list = baseMapper.findList(page,request);
+
+        page.setRecords(list);
+        return convert(page, UserResponse.class);
     }
 
     @Override

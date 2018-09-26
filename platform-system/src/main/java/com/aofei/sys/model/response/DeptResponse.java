@@ -1,6 +1,7 @@
 package com.aofei.sys.model.response;
 
 import com.aofei.base.model.response.BaseResponse;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ApiModel(value = "部门相应体")
 public class DeptResponse extends BaseResponse {
 
 

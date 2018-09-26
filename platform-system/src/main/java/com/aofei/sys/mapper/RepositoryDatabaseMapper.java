@@ -3,6 +3,7 @@ package com.aofei.sys.mapper;
 import com.aofei.base.annotation.MyBatisMapper;
 import com.aofei.base.mapper.BaseMapper;
 import com.aofei.sys.entity.RepositoryDatabase;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -15,4 +16,10 @@ import com.aofei.sys.entity.RepositoryDatabase;
 @MyBatisMapper
 public interface RepositoryDatabaseMapper extends BaseMapper<RepositoryDatabase> {
 
+    /**
+     * 根据数据量连接的名字查询
+     * @param connectionName
+     * @return
+     */
+    RepositoryDatabase findByConnectionName(@Param("connectionName")String connectionName);
 }

@@ -65,7 +65,7 @@ public interface IRoleService extends IService<Role> {
      * @param userId
      * @return
      */
-    List<RoleResponse> getRolesByUser(String userId);
+    List<RoleResponse> getRolesByUser(Long userId);
 
 
 }

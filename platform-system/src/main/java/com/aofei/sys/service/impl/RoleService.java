@@ -94,7 +94,7 @@ public class RoleService extends BaseService<RoleMapper, Role> implements IRoleS
     }
 
     @Override
-    public List<RoleResponse> getRolesByUser(String userId) {
+    public List<RoleResponse> getRolesByUser(Long userId) {
         List<Role> roles = baseMapper.findRoleByUserId(userId);
         List<RoleResponse> responses = BeanCopier.copy(roles, RoleResponse.class);
         return responses;

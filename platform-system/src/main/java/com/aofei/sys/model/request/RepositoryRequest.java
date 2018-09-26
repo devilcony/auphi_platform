@@ -25,13 +25,19 @@ public class RepositoryRequest extends BaseRequest<Repository> {
      * 资源数据库链接ID
      */
     @ApiModelProperty(value = "资源数据库链接ID")
-    private Long repositoryDatabaseId;
+    private Long repositoryConnectionId;
 
     /**
      * 资源库名称
      */
     @ApiModelProperty(value = "资源库名称")
     private String repositoryName;
+
+    /**
+     * 描述
+     */
+    @ApiModelProperty(value = "描述")
+    private String description;
 
     /**
      * 是否默认资源库 0:否 1:是

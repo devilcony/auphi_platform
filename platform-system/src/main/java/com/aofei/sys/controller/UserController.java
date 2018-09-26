@@ -5,8 +5,10 @@ package com.aofei.sys.controller;
  * @create 2018-09-13 13:38
  */
 
+import com.aofei.base.annotation.CurrentUser;
 import com.aofei.base.controller.BaseController;
 import com.aofei.base.model.request.PageRequest;
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
 import com.aofei.base.model.vo.DataGrid;
 import com.aofei.log.annotation.Log;
@@ -17,6 +19,8 @@ import com.aofei.sys.service.IUserService;
 import com.baomidou.mybatisplus.plugins.Page;
 import io.swagger.annotations.*;
 import lombok.extern.log4j.Log4j;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -39,6 +43,18 @@ public class UserController extends BaseController {
     @Autowired
     IUserRoleService userRoleService;
 
+
+    /**
+     * 用户列表(分页查询)
+     * @return
+     */
+    @ApiOperation(value = "当前登录用户信息", notes = "当前登录用户信息", httpMethod = "GET")
+    @RequestMapping(value = "/my", method = RequestMethod.GET)
+    public Response<UserResponse> my(
+            @ApiIgnore @CurrentUser CurrentUserResponse user)  {
+        return Response.ok(userService.get(user.getUserId()));
+    }
+
     /**
      * 用户列表(分页查询)
      * @param request
@@ -49,6 +65,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "page", value = "当前页码(默认1)", paramType = "query", dataType = "Integer"),
             @ApiImplicitParam(name = "rows", value = "每页数量(默认10)", paramType = "query", dataType = "Integer")})
     @RequestMapping(value = "/listPage", method = RequestMethod.GET)
+    @RequiresPermissions(logical = Logical.AND, value = {"view", "edit"})
     public Response<DataGrid<UserResponse>> page(@ApiIgnore UserRequest request)  {
         Page<UserResponse> page = userService.getPage(getPagination(request), request);
         return Response.ok(buildDataGrid(page)) ;

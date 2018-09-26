@@ -3,6 +3,7 @@ package com.aofei.sys.mapper;
 import com.aofei.base.annotation.MyBatisMapper;
 import com.aofei.sys.entity.RepositoryDatabaseAttribute;
 import com.aofei.base.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -15,4 +16,5 @@ import com.aofei.base.mapper.BaseMapper;
 @MyBatisMapper
 public interface RepositoryDatabaseAttributeMapper extends BaseMapper<RepositoryDatabaseAttribute> {
 
+    int deleteByDatabaseId(@Param("repositoryConnectionId") Long repositoryConnectionId);
 }

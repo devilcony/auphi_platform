@@ -35,8 +35,8 @@ public class RepositoryDatabaseAttribute extends Model<RepositoryDatabaseAttribu
     /**
      * 资源库ID
      */
-    @TableField("REPOSITORY_DATABASE_ID")
-    private Long repositoryDatabaseId;
+    @TableField("REPOSITORY_CONNECTION_ID")
+    private Long repositoryConnectionId;
     /**
      * 属性名
      */

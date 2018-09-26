@@ -1,15 +1,16 @@
 package com.aofei.sys.controller;
 
+import com.aofei.base.annotation.CurrentUser;
 import com.aofei.base.controller.BaseController;
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
 import com.aofei.log.annotation.Log;
 import com.aofei.sys.model.request.MenuRequest;
 import com.aofei.sys.model.response.MenuResponse;
+import com.aofei.sys.model.response.UserResponse;
 import com.aofei.sys.service.IMenuService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import com.aofei.sys.service.IUserService;
+import io.swagger.annotations.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,8 @@ public class MenuController extends BaseController {
     @Autowired
     IMenuService menuService;
 
-
+    @Autowired
+    IUserService userService;
     /**
      * 菜单列表
      * @param request
@@ -86,7 +88,7 @@ public class MenuController extends BaseController {
     @ApiOperation(value = "删除菜单", notes = "删除菜单", httpMethod = "DELETE")
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
     public Response<Integer> del(
-            @PathVariable Long id)  {
+            @ApiParam(value = "菜单ID", required = true) @PathVariable Long id)  {
 
         return Response.ok(menuService.del(id)) ;
     }
@@ -99,7 +101,45 @@ public class MenuController extends BaseController {
     @ApiOperation(value = "根据Id查询菜单", notes = "根据Id查询菜单", httpMethod = "GET")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Response<MenuResponse> get(
-            @PathVariable Long id)  {
+            @ApiParam(value = "菜单ID", required = true)  @PathVariable Long id)  {
         return Response.ok(menuService.get(id)) ;
+    }
+
+    /**
+     * 查询菜单列表
+     */
+    @ApiOperation(value = "当前登录用户的菜单列表", notes = "当前登录用户的菜单列表", httpMethod = "GET")
+    @RequestMapping(value = "/menus/my", method = RequestMethod.GET)
+    public Response<List<MenuResponse>> getMenus(
+            @ApiIgnore @CurrentUser CurrentUserResponse user) {
+
+        //查询我的菜单
+        UserResponse userResponse = userService.get(user.getUserId());
+        List<MenuResponse> list = null;
+        if(userResponse.getUserId() ==1){
+            list = menuService.getMenus(new MenuRequest());
+        }else{
+            list =  menuService.getMenusByUser(userResponse.getUserId());
+        }
+        return Response.ok(list);
+    }
+
+    /**
+     * 查询菜单列表
+     */
+    @ApiOperation(value = "指定用户ID的菜单", notes = "指定用户ID的菜单", httpMethod = "GET")
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    public Response<List<MenuResponse>> getMenus(
+            @ApiParam(value = "用户ID", required = true)  @PathVariable("userId") String userId) {
+
+        //查询我的菜单
+        UserResponse userResponse = userService.get(userId);
+        List<MenuResponse> list = null;
+        if(userResponse.getUserId() ==1){
+            list = menuService.getMenus(new MenuRequest());
+        }else{
+            list =  menuService.getMenusByUser(userResponse.getUserId());
+        }
+        return Response.ok(list);
     }
 }

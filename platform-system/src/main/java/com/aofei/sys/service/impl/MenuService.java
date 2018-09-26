@@ -103,4 +103,10 @@ public class MenuService extends BaseService<MenuMapper, Menu> implements IMenuS
             throw new ApplicationException(StatusCode.NOT_FOUND.getCode(), StatusCode.NOT_FOUND.getMessage());
         }
     }
+
+    @Override
+    public List<MenuResponse> getMenusByUser(Long userId) {
+        List<Menu> list = baseMapper.findMenusByUser(userId);
+        return BeanCopier.copy(list,MenuResponse.class);
+    }
 }

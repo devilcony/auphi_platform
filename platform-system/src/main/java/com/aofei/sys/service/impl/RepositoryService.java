@@ -12,6 +12,7 @@ import com.aofei.sys.service.IRepositoryService;
 import com.aofei.utils.BeanCopier;
 import com.aofei.utils.StringUtils;
 import com.baomidou.mybatisplus.plugins.Page;
+import org.pentaho.ui.database.Messages;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,12 +61,16 @@ public class RepositoryService extends BaseService<RepositoryMapper, Repository>
     public RepositoryResponse save(RepositoryRequest request){
         Repository existing = baseMapper.findByRepositoryName(request.getRepositoryName());
         if(existing != null){
-            throw new ApplicationException(StatusCode.CONFLICT.getCode(), StringUtils.getMessage("System.Error.RepositorynameExist"));
+            throw new ApplicationException(StatusCode.CONFLICT.getCode(), Messages.getString("RepositoryDialog.Dialog.ErrorIdExist.Message",request.getRepositoryName()));
         }
         Repository repository = BeanCopier.copy(request, Repository.class);
         if(existing.getIsDefault()==null){
             existing.setIsDefault(Const.NO);
         }
+        if(existing.getIsDefault() == Const.YES){
+            baseMapper.cancelAllDefault();
+        }
+
         repository.preInsert();
         super.insert(repository);
         return BeanCopier.copy(repository, RepositoryResponse.class);
@@ -77,32 +82,32 @@ public class RepositoryService extends BaseService<RepositoryMapper, Repository>
      * @return
      */
     @Override
-    public RepositoryResponse update(RepositoryRequest request){
+    public RepositoryResponse update(RepositoryRequest request) {
         Repository existing = baseMapper.selectById(request.getRepositoryId());
         if (existing != null) {
             Repository repository = baseMapper.findByRepositoryName(request.getRepositoryName());
 
-            if(repository != null && !existing.getRepositoryId().equals(request.getRepositoryId())){
+            if (repository != null && !existing.getRepositoryId().equals(request.getRepositoryId())) {
                 throw new ApplicationException(StatusCode.CONFLICT.getCode(), StringUtils.getMessage("System.Error.RepositorynameExist"));
             }
-            existing.setRepositoryDatabaseId(request.getRepositoryDatabaseId());
+            existing.setRepositoryConnectionId(request.getRepositoryConnectionId());
             existing.setRepositoryName(request.getRepositoryName());
             existing.setIsDefault(request.getIsDefault());
-            if(existing.getIsDefault()==null){
+            existing.setDescription(request.getDescription());
+            if (existing.getIsDefault() == null) {
                 existing.setIsDefault(Const.NO);
             }
             if(existing.getIsDefault() == Const.YES){
                 baseMapper.cancelAllDefault();
             }
-            baseMapper.updateById(existing);
+
             return BeanCopier.copy(existing,RepositoryResponse.class);
-        }else{
+
+        } else {
             //资源库不存在
             throw new ApplicationException(StatusCode.NOT_FOUND.getCode(), StatusCode.NOT_FOUND.getMessage());
         }
-
     }
-
 
     /**
      * 根据ID删除资源库信息
@@ -112,6 +117,16 @@ public class RepositoryService extends BaseService<RepositoryMapper, Repository>
     @Override
     public int del(Long repositoryId){
         return baseMapper.deleteById(repositoryId);
+    }
+
+
+    @Override
+    public int del(String repositoryName) {
+        Repository existing = baseMapper.findByRepositoryName(repositoryName);
+        if(existing!=null){
+            return baseMapper.deleteById(existing.getRepositoryId());
+        }
+        return 0;
     }
 
     /**
@@ -129,4 +144,6 @@ public class RepositoryService extends BaseService<RepositoryMapper, Repository>
             throw new ApplicationException(StatusCode.NOT_FOUND.getCode(), StatusCode.NOT_FOUND.getMessage());
         }
     }
+
+
 }

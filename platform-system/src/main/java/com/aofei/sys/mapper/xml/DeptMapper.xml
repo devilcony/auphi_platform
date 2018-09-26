@@ -17,15 +17,15 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          DEPT_ID AS deptId
-        , PARENT_ID AS parentId
-        , NAME AS name
-        , ORDER_NUM AS orderNum
-        , CREATE_USER_ID AS createUserId
-        , UPDATE_USER_ID AS updateUserId
-        , CREATE_TIME AS createTime
-        , UPDATE_TIME AS updateTime
-        , DEL_FLAG AS delFlag
+          a.DEPT_ID AS deptId
+        , a.PARENT_ID AS parentId
+        , a.NAME AS name
+        , a.ORDER_NUM AS orderNum
+        , a.CREATE_USER_ID AS createUserId
+        , a.UPDATE_USER_ID AS updateUserId
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
     </sql>
 
     <select id="findList"  resultType="com.aofei.sys.entity.Dept">

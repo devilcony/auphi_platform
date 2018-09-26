@@ -21,11 +21,8 @@ public class UserResponse {
      */
     @ApiModelProperty(value = "用户名")
     private String username;
-    /**
-     * 密码
-     */
-    @ApiModelProperty(value = "密码")
-    private String password;
+
+
     /**
      * 邮箱
      */

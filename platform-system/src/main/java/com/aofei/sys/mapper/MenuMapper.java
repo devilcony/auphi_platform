@@ -3,6 +3,9 @@ package com.aofei.sys.mapper;
 import com.aofei.base.annotation.MyBatisMapper;
 import com.aofei.base.mapper.BaseMapper;
 import com.aofei.sys.entity.Menu;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +18,5 @@ import com.aofei.sys.entity.Menu;
 @MyBatisMapper
 public interface MenuMapper extends BaseMapper<Menu> {
 
+    List<Menu> findMenusByUser(@Param("userId")Long userId);
 }

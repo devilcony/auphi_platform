@@ -105,7 +105,7 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "删除角色", notes = "删除角色", httpMethod = "DELETE")
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
     public Response<Integer> del(
-            @PathVariable Long id)  {
+            @ApiParam(value = "角色ID", required = true) @PathVariable Long id)  {
         return Response.ok(roleService.del(id)) ;
     }
 
@@ -117,7 +117,7 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "根据Id查询角色", notes = "根据Id查询角色", httpMethod = "GET")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Response<RoleResponse> get(
-            @PathVariable Long id)  {
+            @ApiParam(value = "角色ID", required = true) @PathVariable Long id)  {
 
         return Response.ok(roleService.get(id)) ;
     }
@@ -130,7 +130,7 @@ public class RoleController extends BaseController {
      */
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     public List<RoleResponse> getRoleByUsername(
-            @ApiParam(value = "用户ID", required = true) @PathVariable("userId") String userId) {
+            @ApiParam(value = "用户ID", required = true) @PathVariable("userId") Long userId) {
         List<RoleResponse> roles = roleService.getRolesByUser(userId);
         return roles;
     }

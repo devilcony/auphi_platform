@@ -34,13 +34,13 @@ public class RepositoryResponse  {
      * 资源数据库链接ID
      */
     @ApiModelProperty(value = "资源数据库链接ID")
-    private Long repositoryDatabaseId;
+    private Long repositoryConnectionId;
 
     /**
      * 资源数据库链接名称
      */
     @ApiModelProperty(value = "资源数据库链接名称")
-    private String repositoryDatabaseName;
+    private String repositoryConnectionName;
 
     /**
      * 主机名

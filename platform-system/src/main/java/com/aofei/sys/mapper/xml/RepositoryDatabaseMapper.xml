@@ -4,9 +4,9 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.aofei.sys.entity.RepositoryDatabase">
-        <id column="REPOSITORY_DATABASE_ID" property="repositoryDatabaseId" />
-        <result column="REPOSITORY_DATABASE_NAME" property="repositoryDatabaseName" />
-        <result column="DATABASE_TYPE_ID" property="databaseTypeId" />
+        <id column="REPOSITORY_CONNECTION_ID" property="repositoryConnectionId" />
+        <result column="REPOSITORY_CONNECTION_NAME" property="repositoryConnectionName" />
+        <result column="DATABASE_TYPE" property="databaseType" />
         <result column="DATABASE_CONTYPE_ID" property="databaseContypeId" />
         <result column="HOST_NAME" property="hostName" />
         <result column="DATABASE_NAME" property="databaseName" />
@@ -25,7 +25,100 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        REPOSITORY_DATABASE_ID AS repositoryDatabaseId, REPOSITORY_DATABASE_NAME AS repositoryDatabaseName, DATABASE_TYPE_ID AS databaseTypeId, DATABASE_CONTYPE_ID AS databaseContypeId, HOST_NAME AS hostName, DATABASE_NAME AS databaseName, PORT AS port, USERNAME AS username, PASSWORD AS password, SERVERNAME AS servername, DATA_TBS AS dataTbs, INDEX_TBS AS indexTbs, CREATE_USER_ID AS createUserId, UPDATE_USER_ID AS updateUserId, CREATE_TIME AS createTime, UPDATE_TIME AS updateTime, DEL_FLAG AS delFlag
+          a.REPOSITORY_CONNECTION_ID AS repositoryConnectionId
+        , a.REPOSITORY_CONNECTION_NAME AS repositoryConnectionName
+        , a.DATABASE_TYPE AS databaseType
+        , a.DATABASE_CONTYPE AS databaseContype
+        , a.HOST_NAME AS hostName
+        , a.DATABASE_NAME AS databaseName
+        , a.PORT AS port
+        , a.USERNAME AS username
+        , a.PASSWORD AS password
+        , a.SERVERNAME AS servername
+        , a.DATA_TBS AS dataTbs
+        , a.INDEX_TBS AS indexTbs
+        , a.CREATE_USER_ID AS createUserId
+        , a.UPDATE_USER_ID AS updateUserId
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
     </sql>
+    <sql id="Base_Joins">
+
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.sys.entity.RepositoryDatabase">
+        select
+        <include refid="Base_Column_List"/>
+        from KDI_SYS_REPOSITORY_DATABASE a
+        <include refid="Base_Joins"/>
+        <where>
+            a.DEL_FLAG = 0
+            <if test="databaseType !=null and  databaseType!='' ">
+                AND  a.DATABASE_TYPE  = #{databaseType}
+            </if>
+            <if test="databaseContype !=null and databaseContype != '' ">
+                AND  a.DATABASE_CONTYPE = #{databaseContype}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="com.aofei.sys.entity.RepositoryDatabase">
+        select
+        <include refid="Base_Column_List"/>
+        from KDI_SYS_REPOSITORY_DATABASE a
+        <include refid="Base_Joins"/>
+        where  a.REPOSITORY_CONNECTION_ID = #{id} and a.DEL_FLAG = 0
+    </select>
+
+    <select id="findByConnectionName" resultType="com.aofei.sys.entity.RepositoryDatabase">
+        select
+        <include refid="Base_Column_List"/>
+        from KDI_SYS_REPOSITORY_DATABASE a
+        <include refid="Base_Joins"/>
+        where  a.REPOSITORY_CONNECTION_NAME = #{connectionName} and a.DEL_FLAG = 0
+    </select>
+
+    <insert id="insert">
+        insert into KDI_SYS_REPOSITORY_DATABASE (
+              REPOSITORY_CONNECTION_ID
+            , REPOSITORY_CONNECTION_NAME
+            , DATABASE_TYPE
+            , DATABASE_CONTYPE
+            , HOST_NAME
+            , DATABASE_NAME
+            , PORT
+            , USERNAME
+            , PASSWORD
+            , SERVERNAME
+            , DATA_TBS
+            , INDEX_TBS
+            , CREATE_USER_ID
+            , UPDATE_USER_ID
+            , CREATE_TIME
+            , UPDATE_TIME
+            , DEL_FLAG
+        )values(
+              #{repositoryConnectionId}
+            , #{repositoryConnectionName}
+            , #{databaseType}
+            , #{databaseContype}
+            , #{hostName}
+            , #{databaseName}
+            , #{port}
+            , #{username}
+            , #{password}
+            , #{servername}
+            , #{dataTbs}
+            , #{indexTbs}
+            , #{createUserId}
+            , #{updateUserId}
+            , #{createTime}
+            , #{updateTime}
+            , #{delFlag}
+        )
+    </insert>
+
+
 
 </mapper>
