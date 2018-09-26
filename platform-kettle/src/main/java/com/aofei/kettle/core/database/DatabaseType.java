@@ -102,6 +102,6 @@ public class DatabaseType implements PluginTypeListener {
 		pluginRemoved(serviceObject);
 		pluginAdded(serviceObject);
 	}
-	
-	
+
+
 }

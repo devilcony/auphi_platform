@@ -18,6 +18,7 @@
         <pentaho-reporting.version>9.0.0.0-SNAPSHOT</pentaho-reporting.version>
         <pentaho-hadoop-shims-api.version>9.0.0.0-SNAPSHOT</pentaho-hadoop-shims-api.version>
         <mondrian.version>9.0.0.0-SNAPSHOT</mondrian.version>
+        <encoder.version>1.2</encoder.version>
     </properties>
 
     <dependencies>
@@ -244,16 +245,6 @@
         <!-- pentaho end-->
 
 
-
-        <dependency>
-            <groupId>com.aofei</groupId>
-            <artifactId>platform-common</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-
-
         <!-- fastjson begin-->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -261,7 +252,17 @@
         </dependency>
         <!-- fastjson end-->
 
-
+        <dependency>
+            <groupId>org.owasp.encoder</groupId>
+            <artifactId>encoder</artifactId>
+            <version>${encoder.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
     </dependencies>
 

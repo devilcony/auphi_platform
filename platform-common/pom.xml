@@ -25,6 +25,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-kettle</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
@@ -139,6 +145,7 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-ehcache</artifactId>
         </dependency>
+
         <!-- shiro end-->
 
         <dependency>

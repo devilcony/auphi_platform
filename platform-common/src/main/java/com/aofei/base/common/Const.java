@@ -25,42 +25,15 @@ public class Const {
     /** session中存放的用户key*/
     public final static String SESSION_USER = "user";
 
-    public static final String PUSH_TAG_USER = "USER_";
+    public final static String REPOSITORY_USERNAME = "admin";
 
-    public static final String PUSH_TAG_USER_TYPE = "USER_TYPE_";
+    public final static String REPOSITORY_PASSWORD = "admin";
 
-    public static final String PUSH_TAG_CLASS = "CLASS_";
-
-    /**未付款**/
-    public static final int ORDER_STATUS_PAY_NO = 0;
-    /**已付款**/
-    public static final int ORDER_STATUS_PAID = 1;
-    /**申请退款**/
-    public static final int ORDER_STATUS_REFUND = 2;
-    /**退款中**/
-    public static final int ORDER_STATUS_REFUNDING = 3;
-    /**已退款**/
-    public static final int ORDER_STATUS_REFUNDED = 4;
-    /**取消交易**/
-    public static final int ORDER_STATUS_CANCELLED = 5;
-
-    /**
-     * 直播状态 0：未直播
-     */
-    public static final  Integer LIVE_STATUS_NO_ING = 0;
-
-    public static final String SMS_CAPTCHA_SESSION_KEY = "SMS_CAPTCHA_SESSION_KEY";
-
-    /**
-     * 直播状态 0：直播中
-     */
-    public static final  Integer LIVE_STATUS_ING = 1;
 
     public static final  int YES = 1;
 
     public static final  int NO = 0;
 
-    public static final  String USER_SIG = "userSig";
 
     /**
      * 获取配置

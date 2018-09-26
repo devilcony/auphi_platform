@@ -36,8 +36,7 @@
     <jdk.version>1.8</jdk.version>
 
 
-
-    <servlet-version>3.1.0</servlet-version>
+    <servlet-version>3.0.1</servlet-version>
 
     <version.jackson>2.5.0</version.jackson>
 
@@ -140,12 +139,16 @@
       <url>http://mvnrepository.com/</url>
     </repository>
 
-
     <repository>
       <id>auphi</id>
       <url>http://101.37.17.102:8081/nexus/content/groups/public/</url>
     </repository>
   </repositories>
+
+
+  
+
+
   <dependencyManagement>
   <dependencies>
 
