@@ -2,27 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aofei.sys.mapper.RepositoryMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.Repository">
-        <id column="REPOSITORY_ID" property="repositoryId" />
-        <result column="REPOSITORY_CONNECTION_ID" property="repositoryConnectionId" />
-        <result column="REPOSITORY_NAME" property="repositoryName" />
-        <result column="IS_DEFAULT" property="isDefault" />
-        <result column="CREATE_USER_ID" property="createUserId" />
-        <result column="UPDATE_USER_ID" property="updateUserId" />
-        <result column="CREATE_TIME" property="createTime" />
-        <result column="UPDATE_TIME" property="updateTime" />
-        <result column="DEL_FLAG" property="delFlag" />
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          a.REPOSITORY_ID AS repositoryId
-        , a.REPOSITORY_CONNECTION_ID AS repositoryConnectionId
+          a.ID_REPOSITORY AS repositoryId
+        , a.ID_REPOSITORY_CONNECTION AS repositoryConnectionId
         , a.REPOSITORY_NAME AS repositoryName
         , a.IS_DEFAULT AS isDefault
-        , a.CREATE_USER_ID AS createUserId
-        , a.UPDATE_USER_ID AS updateUserId
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
         , a.CREATE_TIME AS createTime
         , a.UPDATE_TIME AS updateTime
         , a.DEL_FLAG AS delFlag
@@ -32,7 +20,7 @@
     </sql>
 
     <sql id="Base_Joins">
-        LEFT JOIN KDI_SYS_REPOSITORY_DATABASE rd ON rd.REPOSITORY_CONNECTION_ID = a.REPOSITORY_CONNECTION_ID
+        LEFT JOIN KDI_SYS_REPOSITORY_DATABASE rd ON rd.ID_REPOSITORY_CONNECTION = a.ID_REPOSITORY_CONNECTION
     </sql>
 
 
@@ -50,7 +38,7 @@
         <include refid="Base_Column_List"/>
         from KDI_SYS_REPOSITORY a
         <include refid="Base_Joins"/>
-        where  a.REPOSITORY_ID = #{id} and a.DEL_FLAG = 0
+        where  a.ID_REPOSITORY = #{id} and a.DEL_FLAG = 0
     </select>
 
 
@@ -62,7 +50,7 @@
         <where>
             a.DEL_FLAG = 0
             <if test="repositoryId !=null ">
-                and  a.REPOSITORY_ID  = #{repositoryId}
+                and  a.ID_REPOSITORY  = #{repositoryId}
             </if>
             <if test="repositoryName !=null and repositoryName != '' ">
                 and  a.REPOSITORY_NAME  like '%${repositoryName}%'

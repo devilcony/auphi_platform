@@ -28,12 +28,12 @@ public class UserRole extends Model<UserRole> {
     /**
      * 用户ID
      */
-    @TableField(value = "USER_ID")
+    @TableField(value = "ID_USER")
     private Long userId;
     /**
      * 角色ID
      */
-    @TableField("ROLE_ID")
+    @TableField("ID_ROLE")
     private Long roleId;
 
 

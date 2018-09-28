@@ -28,7 +28,7 @@ public class PlatformLog extends Model<PlatformLog> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "LOG_ID", type = IdType.ID_WORKER)
+    @TableId(value = "ID_SYS_LOG", type = IdType.ID_WORKER)
     private Long logId;
     /**
      * 用户名

@@ -27,12 +27,12 @@ public class Menu extends DataEntity<Menu> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "MENU_ID", type = IdType.ID_WORKER)
+    @TableId(value = "ID_MENU", type = IdType.ID_WORKER)
     private Long menuId;
     /**
      * 父菜单ID，一级菜单为0
      */
-    @TableField("PARENT_ID")
+    @TableField("ID_MENU_PARENT")
     private Long parentId;
     /**
      * 菜单名称

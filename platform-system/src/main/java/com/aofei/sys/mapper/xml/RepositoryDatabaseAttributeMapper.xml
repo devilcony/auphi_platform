@@ -2,18 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aofei.sys.mapper.RepositoryDatabaseAttributeMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.RepositoryDatabaseAttribute">
-        <id column="REPOSITORY_DATABASE_ATTRIBUTE_ID" property="repositoryDatabaseAttributeId" />
-        <result column="REPOSITORY_CONNECTION_ID" property="repositoryConnectionId" />
-        <result column="CODE" property="code" />
-        <result column="VALUE_STR" property="valueStr" />
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          a.REPOSITORY_DATABASE_ATTRIBUTE_ID AS repositoryDatabaseAttributeId
-        , a.REPOSITORY_CONNECTION_ID AS repositoryConnectionId
+          a.ID_REPOSITORY_DATABASE_ATTRIBUTE AS repositoryDatabaseAttributeId
+        , a.ID_REPOSITORY_CONNECTION AS repositoryConnectionId
         , a.CODE AS code
         , a.VALUE_STR AS valueStr
     </sql>
@@ -29,13 +22,13 @@
         <include refid="Base_Joins"/>
         <where>
             <if test="repositoryConnectionId !=null ">
-                AND  a.REPOSITORY_CONNECTION_ID  = #{repositoryConnectionId}
+                AND  a.ID_REPOSITORY_CONNECTION  = #{repositoryConnectionId}
             </if>
         </where>
     </select>
 
     <delete id="deleteByDatabaseId">
-        delete from KDI_SYS_REPOSITORY_DATABASE_ATTRIBUTE where REPOSITORY_CONNECTION_ID = #{repositoryConnectionId}
+        delete from KDI_SYS_REPOSITORY_DATABASE_ATTRIBUTE where ID_REPOSITORY_CONNECTION = #{repositoryConnectionId}
     </delete>
 
 

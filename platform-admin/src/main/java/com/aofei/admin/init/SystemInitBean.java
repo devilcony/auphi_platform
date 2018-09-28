@@ -41,16 +41,12 @@ public class SystemInitBean implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         long start = System.currentTimeMillis();
-        StringBuffer startInfo = new StringBuffer();
-
-        startInfo.append(System.getProperty("line.separator"))
-                .append("********************************************").append(System.getProperty("line.separator"))
-                .append("********北京傲飞商智软件有限公司****************").append(System.getProperty("line.separator"))
-                .append("********傲飞数据整合平台***********************").append(System.getProperty("line.separator"))
-                .append("********系统开始启动字典装载程序****************").append(System.getProperty("line.separator"))
-                .append("********开始加载资源库*************************").append(System.getProperty("line.separator"))
-                .append("********************************************").append(System.getProperty("line.separator"));
-        logger.info(startInfo.toString());
+        logger.info("********************************************");
+        logger.info("********北京傲飞商智软件有限公司****************");
+        logger.info("********傲飞数据整合平台***********************");
+        logger.info("********系统开始启动字典装载程序****************");
+        logger.info("********开始加载资源库*************************");
+        logger.info("********************************************");
         KettleLogStore.init( 5000, 720 );
         KettleEnvironment.init();
 

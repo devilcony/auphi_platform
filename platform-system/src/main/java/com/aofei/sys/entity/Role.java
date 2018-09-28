@@ -27,7 +27,7 @@ public class Role extends DataEntity<Role> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "ROLE_ID", type = IdType.ID_WORKER)
+    @TableId(value = "ID_ROLE", type = IdType.ID_WORKER)
     private Long roleId;
     /**
      * 角色名称
@@ -42,7 +42,7 @@ public class Role extends DataEntity<Role> {
     /**
      * 部门ID
      */
-    @TableField("DEPT_ID")
+    @TableField("ID_DEPT")
     private Long deptId;
 
     /**

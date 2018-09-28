@@ -2,16 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aofei.sys.mapper.UserRoleMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.UserRole">
-        <id column="USER_ID" property="userId" />
-        <result column="ROLE_ID" property="roleId" />
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          USER_ID AS userId
-        , ROLE_ID AS roleId
+          ID_USER AS userId
+        , ID_ROLE AS roleId
     </sql>
 
 </mapper>

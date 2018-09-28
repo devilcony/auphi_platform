@@ -1,12 +1,14 @@
 package com.aofei.authorization.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.aofei.base.annotation.Authorization;
 import com.aofei.authorization.manager.TokenManager;
 import com.aofei.authorization.manager.TokenValidator;
+import com.aofei.base.annotation.Authorization;
 import com.aofei.base.exception.StatusCode;
 import com.aofei.base.model.response.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -69,10 +71,21 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     }
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //对跨域提供支持
+        response.setHeader("Access-control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
+        response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
+        // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
+        if (request.getMethod().equals(RequestMethod.OPTIONS.name())) {
+            response.setStatus(HttpStatus.OK.value());
+            return false;
+        }
         //如果不是映射到方法直接通过
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
+
+
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         //从header中得到token

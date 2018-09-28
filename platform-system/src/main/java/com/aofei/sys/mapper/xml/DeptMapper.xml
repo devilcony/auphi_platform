@@ -2,27 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aofei.sys.mapper.DeptMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.Dept">
-        <id column="DEPT_ID" property="deptId" />
-        <result column="PARENT_ID" property="parentId" />
-        <result column="NAME" property="name" />
-        <result column="ORDER_NUM" property="orderNum" />
-        <result column="CREATE_USER_ID" property="createUserId" />
-        <result column="UPDATE_USER_ID" property="updateUserId" />
-        <result column="CREATE_TIME" property="createTime" />
-        <result column="UPDATE_TIME" property="updateTime" />
-        <result column="DEL_FLAG" property="delFlag" />
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          a.DEPT_ID AS deptId
-        , a.PARENT_ID AS parentId
+          a.ID_DEPT AS deptId
+        , a.ID_DEPT_PARENT AS parentId
         , a.NAME AS name
         , a.ORDER_NUM AS orderNum
-        , a.CREATE_USER_ID AS createUserId
-        , a.UPDATE_USER_ID AS updateUserId
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
         , a.CREATE_TIME AS createTime
         , a.UPDATE_TIME AS updateTime
         , a.DEL_FLAG AS delFlag
@@ -35,7 +23,7 @@
         <where>
             a.DEL_FLAG = 0
             <if test="parentId !=null ">
-                AND  a.PARENT_ID  = #{parentId}
+                AND  a.ID_DEPT_PARENT  = #{parentId}
             </if>
             <if test="name != null and name != ''">
                 AND a.NAME LIKE '%#{name}%'
@@ -45,7 +33,7 @@
 
 
     <update id="deleteById">
-        update KDI_SYS_DEPT a set a.DEL_FLAG = 1  where a.USER_ID = #{id}
+        update KDI_SYS_DEPT a set a.DEL_FLAG = 1  where a.ID_DEPT = #{id}
     </update>
 
 </mapper>

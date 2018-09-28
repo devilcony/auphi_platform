@@ -1,36 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aofei.sys.mapper.UserMapper">
+
     <!-- 开启二级缓存 -->
     <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.User">
-        <id column="USER_ID" property="userId" />
-        <result column="USERNAME" property="username" />
-        <result column="PASSWORD" property="password" />
-        <result column="EMAIL" property="email" />
-        <result column="MOBILE" property="mobile" />
-        <result column="STATUS" property="status" />
-        <result column="DEPT_ID" property="deptId" />
-        <result column="CREATE_USER_ID" property="createUserId" />
-        <result column="UPDATE_USER_ID" property="updateUserId" />
-        <result column="CREATE_TIME" property="createTime" />
-        <result column="UPDATE_TIME" property="updateTime" />
-        <result column="DEL_FLAG" property="delFlag" />
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          a.USER_ID AS userId
+          a.ID_USER AS userId
         , a.USERNAME AS username
         , a.PASSWORD AS password
         , a.EMAIL AS email
         , a.MOBILE AS mobile
         , a.STATUS AS status
-        , a.DEPT_ID AS deptId
-        , a.CREATE_USER_ID AS createUserId
-        , a.UPDATE_USER_ID AS updateUserId
+        , a.ID_DEPT AS deptId
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
         , a.CREATE_TIME AS createTime
         , a.UPDATE_TIME AS updateTime
         , a.DEL_FLAG AS delFlag
@@ -39,20 +25,20 @@
         , dept.NAME AS deptName
     </sql>
     <sql id="Base_Joins">
-        LEFT JOIN KDI_SYS_DEPT dept ON dept.DEPT_ID = a.DEPT_ID
+        LEFT JOIN KDI_SYS_DEPT dept ON dept.ID_DEPT = a.ID_DEPT
     </sql>
 
     <insert id="insert">
         insert into KDI_SYS_USER (
-              USER_ID
+              ID_USER
             , USERNAME
             , PASSWORD
             , EMAIL
             , MOBILE
             , STATUS
-            , DEPT_ID
-            , CREATE_USER_ID
-            , UPDATE_USER_ID
+            , ID_DEPT
+            , CREATE_USER
+            , UPDATE_USER
             , CREATE_TIME
             , UPDATE_TIME
             , DEL_FLAG
@@ -64,8 +50,8 @@
             , #{mobile}
             , #{status}
             , #{deptId}
-            , #{createUserId}
-            , #{updateUserId}
+            , #{createUser}
+            , #{updateUser}
             , #{createTime}
             , #{updateTime}
             , #{delFlag}
@@ -80,7 +66,7 @@
         <where>
             a.DEL_FLAG = 0
             <if test="deptId !=null ">
-                AND  a.DEPT_ID  = #{deptId}
+                AND  a.ID_DEPT  = #{deptId}
             </if>
         </where>
     </select>
@@ -98,7 +84,7 @@
         <include refid="Base_Column_List"/>
         from KDI_SYS_USER a
         <include refid="Base_Joins"/>
-        left join KDI_SYS_USER_ROLE ur on ur.USER_ID= a.USER_ID
+        left join KDI_SYS_USER_ROLE ur on ur.ID_USER= a.ID_USER
         left join KDI_SYS_ROLE r on ur.ROLE_ID = r.ROLE_ID
         where a.DEL_FLAG = 0 and r.ROLE_ID = #{roleId}
     </select>
@@ -108,35 +94,35 @@
         <include refid="Base_Column_List"/>
         from KDI_SYS_USER a
         <include refid="Base_Joins"/>
-        where  a.USER_ID = #{id} and a.DEL_FLAG = 0
+        where  a.ID_USER = #{id} and a.DEL_FLAG = 0
     </select>
 
     <update id="updateById">
         update KDI_SYS_USER a
         <set>
-              a.USER_ID = #{userId}
+              a.ID_USER = #{userId}
             , a.USERNAME = #{username}
             , a.PASSWORD = #{password}
             , a.EMAIL = #{email}
             , a.MOBILE = #{mobile}
             , a.STATUS = #{status}
-            , a.DEPT_ID = #{deptId}
-            , a.UPDATE_USER_ID = #{updateUserId}
+            , a.ID_DEPT = #{deptId}
+            , a.UPDATE_USER = #{updateUser}
             , a.UPDATE_TIME = #{updateTime}
             , a.DEL_FLAG = #{delFlag}
         </set>
-        where a.USER_ID = #{et.id}
+        where a.ID_USER = #{et.id}
     </update>
 
     <update id="updateLoginInfo">
         UPDATE KDI_SYS_USER SET
         LOGIN_IP = #{loginIp},
         LOGIN_TIME = #{loginTime}
-        WHERE USER_ID = #{userId}
+        WHERE ID_USER = #{userId}
     </update>
 
     <update id="deleteById">
-        update KDI_SYS_USER a set a.DEL_FLAG = 1  where a.USER_ID = #{id}
+        update KDI_SYS_USER a set a.DEL_FLAG = 1  where a.ID_USER = #{id}
     </update>
 
 

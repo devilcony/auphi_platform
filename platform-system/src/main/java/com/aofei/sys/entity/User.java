@@ -34,7 +34,7 @@ public class User extends DataEntity<User> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "USER_ID", type = IdType.ID_WORKER)
+    @TableId(value = "ID_USER", type = IdType.ID_WORKER)
     private Long userId;
     /**
      * 用户名
@@ -64,7 +64,7 @@ public class User extends DataEntity<User> {
     /**
      * 部门ID
      */
-    @TableField(value = "DEPT_ID")
+    @TableField(value = "ID_DEPT")
     private Long deptId;
 
     /**

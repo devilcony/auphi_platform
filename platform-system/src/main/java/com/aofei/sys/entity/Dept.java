@@ -27,12 +27,12 @@ public class Dept extends DataEntity<Dept> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "DEPT_ID", type = IdType.ID_WORKER)
+    @TableId(value = "ID_DEPT", type = IdType.ID_WORKER)
     private Long deptId;
     /**
      * 上级部门ID，一级部门为0
      */
-    @TableField("PARENT_ID")
+    @TableField("ID_DEPT_PARENT")
     private Long parentId;
     /**
      * 部门名称
@@ -44,7 +44,6 @@ public class Dept extends DataEntity<Dept> {
      */
     @TableField("ORDER_NUM")
     private Integer orderNum;
-
 
 
     @Override

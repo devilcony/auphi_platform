@@ -28,12 +28,12 @@ public class RoleMenu extends Model<RoleMenu> {
     /**
      * 角色ID
      */
-    @TableField(value = "ROLE_ID")
+    @TableField(value = "ID_ROLE")
     private Long roleId;
     /**
      * 菜单ID
      */
-    @TableField("MENU_ID")
+    @TableField("ID_MENU")
     private Long menuId;
 
 

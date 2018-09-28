@@ -20,20 +20,20 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
     /**
      * 创建者ID
      */
-    @TableField("CREATE_USER_ID")
-    private Long createUserId;
+    @TableField("CREATE_USER")
+    private String createUser;
     /**
      * 创建者ID
      */
-    @TableField("UPDATE_USER_ID")
-    private Long updateUserId;
+    @TableField("UPDATE_USER")
+    private String updateUser;
 
 
     public   void preInsert() {
         super.preInsert();
         if(getCurrentUser()!=null){
-            setUpdateUserId(getCurrentUser().getUserId());
-            setCreateUserId(getUpdateUserId());
+            setCreateUser(getCurrentUser().getUsername());
+            setUpdateUser(getCreateUser());
         }
     }
 
@@ -51,7 +51,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 
         super.preUpdate();
         if(getCurrentUser()!=null){
-            setUpdateUserId(getCurrentUser().getUserId());
+            setUpdateUser(getCurrentUser().getUsername());
 
         }
     }

@@ -30,12 +30,12 @@ public class RepositoryDatabaseAttribute extends Model<RepositoryDatabaseAttribu
     /**
      * 资源库属性ID
      */
-    @TableId(value = "REPOSITORY_DATABASE_ATTRIBUTE_ID", type = IdType.ID_WORKER)
+    @TableId(value = "ID_REPOSITORY_DATABASE_ATTRIBUTE", type = IdType.ID_WORKER)
     private Long repositoryDatabaseAttributeId;
     /**
      * 资源库ID
      */
-    @TableField("REPOSITORY_CONNECTION_ID")
+    @TableField("ID_REPOSITORY_CONNECTION")
     private Long repositoryConnectionId;
     /**
      * 属性名

@@ -2,28 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aofei.sys.mapper.MenuMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.Menu">
-        <id column="MENU_ID" property="menuId" />
-        <result column="PARENT_ID" property="parentId" />
-        <result column="NAME" property="name" />
-        <result column="URL" property="url" />
-        <result column="PERMS" property="perms" />
-        <result column="TYPE" property="type" />
-        <result column="ICON" property="icon" />
-        <result column="ORDER_NUM" property="orderNum" />
-        <result column="STATUS" property="status" />
-        <result column="CREATE_USER_ID" property="createUserId" />
-        <result column="UPDATE_USER_ID" property="updateUserId" />
-        <result column="CREATE_TIME" property="createTime" />
-        <result column="UPDATE_TIME" property="updateTime" />
-        <result column="DEL_FLAG" property="delFlag" />
-    </resultMap>
+
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          a.MENU_ID AS menuId
-        , a.PARENT_ID AS parentId
+          a.ID_MENU AS menuId
+        , a.ID_MENU_PARENT AS parentId
         , a.NAME AS name
         , a.URL AS url
         , a.PERMS AS perms
@@ -31,8 +15,8 @@
         , a.ICON AS icon
         , a.ORDER_NUM AS orderNum
         , a.STATUS AS status
-        , a.CREATE_USER_ID AS createUserId
-        , a.UPDATE_USER_ID AS updateUserId
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_ID_USER AS updateUser
         , a.CREATE_TIME AS createTime
         , a.UPDATE_TIME AS updateTime
         , a.DEL_FLAG AS delFlag
@@ -45,7 +29,7 @@
         <where>
             a.DEL_FLAG = 0
             <if test="parentId !=null ">
-                AND  a.PARENT_ID  = #{parentId}
+                AND  a.ID_MENU_PARENT  = #{parentId}
             </if>
             <if test="name != null and name != ''">
                 AND a.NAME LIKE '%#{name}%'
@@ -58,14 +42,14 @@
         <include refid="Base_Column_List"/>
 
         from KDI_SYS_MENU a
-        JOIN KDI_SYS_ROLE_MENU rm on rm.MENU_ID = a.MENU_ID
-        JOIN KDI_SYS_USER_ROLE ur on ur.ROLE_ID = rm.ROLE_ID
-        where ur.USER_ID = #{userId} and a.DEL_FLAG = 0
+        JOIN KDI_SYS_ROLE_MENU rm on rm.ID_MENU = a.ID_MENU
+        JOIN KDI_SYS_USER_ROLE ur on ur.ID_ROLE = rm.ID_ROLE
+        where ur.ID_USER = #{userId} and a.DEL_FLAG = 0
     </select>
 
 
 
     <update id="deleteById">
-        update KDI_SYS_MENU a set a.DEL_FLAG = 1  where a.USER_ID = #{id}
+        update KDI_SYS_MENU a set a.DEL_FLAG = 1  where a.ID_MENU = #{id}
     </update>
 </mapper>

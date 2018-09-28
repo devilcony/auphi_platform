@@ -30,7 +30,7 @@ public class RepositoryDatabase extends DataEntity<RepositoryDatabase> {
     /**
      * 资源数据库链接ID
      */
-    @TableId(value = "REPOSITORY_CONNECTION_ID", type = IdType.ID_WORKER)
+    @TableId(value = "ID_REPOSITORY_CONNECTION", type = IdType.ID_WORKER)
     private Long repositoryConnectionId;
     /**
      * 资源数据库链接名称

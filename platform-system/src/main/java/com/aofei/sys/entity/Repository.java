@@ -30,12 +30,12 @@ public class Repository extends DataEntity<Repository> {
     /**
      * 资源库ID
      */
-    @TableId(value = "REPOSITORY_ID", type = IdType.ID_WORKER)
+    @TableId(value = "ID_REPOSITORY", type = IdType.ID_WORKER)
     private Long repositoryId;
     /**
      * 资源数据库链接ID
      */
-    @TableField("REPOSITORY_CONNECTION_ID")
+    @TableField("ID_REPOSITORY_CONNECTION")
     private Long repositoryConnectionId;
 
     /**
