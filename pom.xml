@@ -17,6 +17,7 @@
     <module>platfrom-quality</module>
     <module>platform-datasource</module>
     <module>platfrom-cluster</module>
+    <module>platform-system-priviledge</module>
   </modules>
   <packaging>pom</packaging>
   <name>auphi_platform_v3.9.0</name>
@@ -41,7 +42,7 @@
     <version.jackson>2.5.0</version.jackson>
 
     <junit.version>3.8.1</junit.version>
-    <spring.version>4.3.6.RELEASE</spring.version>
+    <spring.version>4.3.7.RELEASE</spring.version>
     <mysql.driver.version>5.1.38</mysql.driver.version>
     <slf4j.version>1.7.21</slf4j.version>
     <log4j.version>1.2.17</log4j.version>
@@ -116,6 +117,7 @@
     <lombok.version>1.16.18</lombok.version>
     <swagger.version>2.5.0</swagger.version>
     <fasterxml.jackson.core.version>2.9.2</fasterxml.jackson.core.version>
+    <jwt.version></jwt.version>
   </properties>  
   
   <repositories>
@@ -317,6 +319,12 @@
       </exclusions>
     </dependency>
     <!-- shiro end-->
+
+    <dependency>
+      <groupId>com.auth0</groupId>
+      <artifactId>java-jwt</artifactId>
+      <version>3.3.0</version>
+    </dependency>
 
 
     <!-- servlet/jsp/jstl/taglibs for web begin-->
@@ -1169,14 +1177,6 @@
       <version>2.6.0</version>
     </dependency>-->
 
-    <!--todo-->
-    <dependency>
-      <groupId>org.quartz</groupId>
-      <artifactId>quartz</artifactId>
-      <version>1.5.2</version>
-    </dependency>
-
-
 
     <!--<dependency>
       <groupId>regexp</groupId>
@@ -1500,18 +1500,13 @@
   </dependencies>
   </dependencyManagement>
 
+
   <!--build begin-->
   <build>
-    <finalName>etl_platform</finalName>
+    <finalName>platform</finalName>
     <defaultGoal>compile</defaultGoal>
 
     <plugins>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.0</version>
-      </plugin>
       <!-- maven compiler -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -1536,7 +1531,6 @@
           <archive>
             <addMavenDescriptor>false</addMavenDescriptor>
           </archive>
-          <failOnMissingWebXml>false</failOnMissingWebXml>
           <!--<warName>app</warName>-->
           <webResources>
             <resource>
@@ -1547,17 +1541,8 @@
           </webResources>
         </configuration>
       </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-          <encoding>UTF-8</encoding>
-        </configuration>
-      </plugin>
-
     </plugins>
+
 
     <resources>
       <resource>

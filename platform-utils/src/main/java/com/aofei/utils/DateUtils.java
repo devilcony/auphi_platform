@@ -70,6 +70,10 @@ public class DateUtils {
         return format(dateTime, YYYY_MM_DD_HH_MM);
     }
 
+    public static String toYmdHms(Date dateTime) {
+        return format(dateTime, YYYY_MM_DD_HH_MM_SS);
+    }
+
     public static Date startOfDay(Date value) {
         DateTime dateTime = new DateTime(value);
         dateTime = new DateTime(dateTime.getYear(), dateTime.getMonthOfYear(), dateTime.getDayOfMonth(), 00, 00, 00);

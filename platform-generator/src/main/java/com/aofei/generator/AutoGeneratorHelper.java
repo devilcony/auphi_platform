@@ -64,7 +64,7 @@ public class AutoGeneratorHelper {
 		// 策略配置
 		StrategyConfig strategy = new StrategyConfig();
 
-		strategy.setTablePrefix(new String[] { "KDI_SYS_" });// 此处可以修改为您的表前缀
+		strategy.setTablePrefix(new String[] { "KDI_QRTZ_" });// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
 		strategy.setSuperEntityClass("com.aofei.base.entity.DataEntity");
 		strategy.setSuperServiceImplClass("com.aofei.base.service.impl.BaseService");
@@ -84,13 +84,14 @@ public class AutoGeneratorHelper {
 				,"KDI_SYS_ROLE_MENU"
 				,"KDI_SYS_USER"
 				,"KDI_SYS_USER_ROLE" });
-		//strategy.setInclude(new String[] { "R_DATABASE" });
+
+		strategy.setInclude(new String[] { "KDI_QRTZ_GROUP" });
 
 		mpg.setStrategy(strategy);
 
 		// 包配置
 		PackageConfig pc = new PackageConfig();
-		pc.setModuleName("sys");
+		pc.setModuleName("schedule");
 
 		pc.setParent("com.aofei");// 自定义包路径
 		pc.setController("controller");// 这里是控制器包名，默认 web

@@ -1,9 +1,33 @@
+/*******************************************************************************
+ *
+ * Auphi Data Integration PlatformKettle Platform
+ * Copyright C 2011-2018 by Auphi BI : http://www.doetl.com
+
+ * Support：support@pentahochina.com
+ *
+ *******************************************************************************
+ *
+ * Licensed under the LGPL License, Version 3.0 the "License";
+ * you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ *    https://opensource.org/licenses/LGPL-3.0
+
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************/
 package com.aofei.admin.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.aofei.admin.authorization.Token;
 import com.aofei.admin.authorization.jwt.JwtConfig;
 import com.aofei.admin.authorization.jwt.JwtTokenBuilder;
+import com.aofei.base.common.Const;
 import com.aofei.base.common.UserUtil;
 import com.aofei.base.controller.BaseController;
 import com.aofei.base.exception.ApplicationException;
@@ -46,7 +70,6 @@ public class AccountController extends BaseController {
     @Autowired
     private JwtTokenBuilder jwtTokenBuilder;
 
-
     /**
      * 登录
      *
@@ -82,7 +105,7 @@ public class AccountController extends BaseController {
             userService.updateLogin(userRequest);
 
             Map map = new HashMap();
-            map.put("username", user.getUsername());
+            map.put(Const.TOKEN_KEY, user.getUsername());
             String subject = JwtTokenBuilder.buildSubject(map);
 
             String accessToken = jwtTokenBuilder.buildToken(subject, jwtConfig.getExpiresSecond(), jwtConfig.getBase64Secret());

@@ -26,4 +26,14 @@ public class CurrentUserResponse {
      * 手机号
      */
     private String mobile;
+
+    /**
+     * 部门ID
+     */
+    private Long deptId;
+
+    /**
+     * 部门名称
+     */
+    private String deptName;
 }

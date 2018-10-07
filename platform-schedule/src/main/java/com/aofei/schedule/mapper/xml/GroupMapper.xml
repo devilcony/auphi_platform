@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.schedule.mapper.GroupMapper">
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.schedule.entity.Group">
+        <id column="ID_GROUP" property="groupId" />
+        <result column="GROUP_NAME" property="groupName" />
+        <result column="DESCRIPTION" property="description" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          ID_GROUP AS groupId
+        , GROUP_NAME AS groupName
+        , DESCRIPTION AS description
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.sys.entity.Dept">
+        select
+        <include refid="Base_Column_List"/>
+        from KDI_QRTZ_GROUP a
+        <where>
+            <if test="groupName != null and groupName != ''">
+                AND a.GROUP_NAME LIKE '%#{groupName}%'
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

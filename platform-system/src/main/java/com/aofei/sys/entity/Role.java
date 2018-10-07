@@ -46,6 +46,18 @@ public class Role extends DataEntity<Role> {
     private Long deptId;
 
     /**
+     * 设计器权限
+     */
+    @TableField("PRIVILEDGES")
+    private Long priviledges;
+
+    /**
+     * 是否是系统权限
+     */
+    @TableField("IS_SYSTEM_ROLE")
+    private Integer isSystemRole;
+
+    /**
      * 部门名称
      */
     @TableField(exist = false)

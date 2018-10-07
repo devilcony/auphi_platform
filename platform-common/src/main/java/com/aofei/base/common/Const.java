@@ -3,6 +3,7 @@ package com.aofei.base.common;
 import com.aofei.utils.PropertiesLoader;
 import com.aofei.utils.StringUtils;
 import com.google.common.collect.Maps;
+import org.pentaho.di.repository.Repository;
 
 import java.util.Map;
 
@@ -11,6 +12,16 @@ import java.util.Map;
  * Created by Hao on 2017-03-24.
  */
 public class Const {
+
+    /**
+     * 保存全局属性值
+     */
+    public static Repository repository ;
+
+    /**
+     * 保存全局属性值
+     */
+    public static Map<String, Repository> repositorys = Maps.newHashMap();
 
     /**
      * 保存全局属性值
@@ -24,6 +35,8 @@ public class Const {
 
     /** session中存放的用户key*/
     public final static String SESSION_USER = "user";
+
+    public final static String TOKEN_KEY = "token_key";
 
     public final static String REPOSITORY_USERNAME = "admin";
 
@@ -47,7 +60,6 @@ public class Const {
         }
         return value;
     }
-
 
 
 

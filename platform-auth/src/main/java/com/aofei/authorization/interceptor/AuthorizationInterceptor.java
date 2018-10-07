@@ -1,3 +1,26 @@
+/*******************************************************************************
+ *
+ * Auphi Data Integration PlatformKettle Platform
+ * Copyright C 2011-2018 by Auphi BI : http://www.doetl.com
+
+ * Support：support@pentahochina.com
+ *
+ *******************************************************************************
+ *
+ * Licensed under the LGPL License, Version 3.0 the "License";
+ * you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ *    https://opensource.org/licenses/LGPL-3.0
+
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************/
 package com.aofei.authorization.interceptor;
 
 import com.alibaba.fastjson.JSON;
@@ -93,8 +116,8 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         if (token != null && token.startsWith(httpHeaderPrefix) && token.length() > 0) {
             token = token.substring(httpHeaderPrefix.length());
             //验证token
-            String key = manager.getKey(token);
-            if (validator.validate(token) && key != null) {
+            String key = validator.getKey(token);
+            if (validator.validate(token) && key!=null) {
                 //如果token验证成功，将token对应的用户id存在request中，便于之后注入
                 request.setAttribute(REQUEST_CURRENT_KEY, key);
                 return true;

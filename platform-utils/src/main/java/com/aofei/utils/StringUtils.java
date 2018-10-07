@@ -113,5 +113,8 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
         }
     }
 
+    public static String defaultString(Integer str) {
+        return str == null ? "" : String.valueOf(str);
+    }
 
 }

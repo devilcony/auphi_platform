@@ -1,6 +1,7 @@
 package com.aofei.admin.authorization.jwt;
 
 import com.alibaba.fastjson.JSON;
+import com.aofei.utils.StringUtils;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 
@@ -78,6 +79,6 @@ public class JwtTokenBuilder {
     }
 
     public static Map<String,String> decodeSubject(String subject) {
-        return JSON.parseObject(subject, Map.class);
+        return !StringUtils.isEmpty(subject) ? JSON.parseObject(subject, Map.class) : null;
     }
 }
