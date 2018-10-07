@@ -3,12 +3,13 @@ package com.aofei.schedule.job;
 
 import com.alibaba.fastjson.JSONObject;
 import com.aofei.base.common.Const;
+import com.aofei.kettle.core.job.JobExecutionConfigurationCodec;
+import com.aofei.kettle.executor.JobExecutor;
 import com.aofei.kettle.utils.StringEscapeHelper;
 import org.pentaho.di.job.JobExecutionConfiguration;
 import org.pentaho.di.job.JobMeta;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.repository.RepositoryDirectoryInterface;
-import org.pentaho.di.trans.steps.jobexecutor.JobExecutor;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
@@ -29,10 +30,10 @@ public class JobRunner extends QuartzJobBean {
 			
 			JobMeta jobMeta = repository.loadJob(name, directory, null, null);
 			
-			JSONObject jsonObject = JSONObject.fromObject(context.getMergedJobDataMap().getString("executionConfiguration"));
+			JSONObject jsonObject = JSONObject.parseObject(context.getMergedJobDataMap().getString("executionConfiguration"));
 			JobExecutionConfiguration jobExecutionConfiguration = JobExecutionConfigurationCodec.decode(jsonObject, jobMeta);
 		    
-		    JobExecutor jobExecutor = JobExecutor.initExecutor(jobExecutionConfiguration, jobMeta);
+		    JobExecutor jobExecutor = JobExecutor.initExecutor(repository,jobExecutionConfiguration, jobMeta);
 		    Thread tr = new Thread(jobExecutor, "JobExecutor_" + jobExecutor.getExecutionId());
 		    tr.start();
 		    
