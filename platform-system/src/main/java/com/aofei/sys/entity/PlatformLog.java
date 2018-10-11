@@ -18,30 +18,28 @@ import java.util.Date;
  * </p>
  *
  * @author Tony
- * @since 2018-09-15
+ * @since 2018-10-09
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("KDI_SYS_PLATFORM_LOG")
+@TableName("SYS_PLATFORM_LOG")
 public class PlatformLog extends Model<PlatformLog> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "ID_SYS_LOG", type = IdType.ID_WORKER)
-    private Long logId;
+    @TableId(value = "PLATFORM_LOG_ID", type = IdType.ID_WORKER)
+    private Long platformLogId;
     /**
      * 用户名
      */
     @TableField("USERNAME")
     private String username;
-
     /**
      * 模块
      */
     @TableField("MODULE")
     private String module;
-
     /**
      * 用户操作
      */
@@ -76,7 +74,7 @@ public class PlatformLog extends Model<PlatformLog> {
 
     @Override
     protected Serializable pkVal() {
-        return this.logId;
+        return this.platformLogId;
     }
 
 }

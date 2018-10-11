@@ -11,31 +11,31 @@
  Target Server Version : 100307
  File Encoding         : 65001
 
- Date: 07/10/2018 20:03:45
+ Date: 11/10/2018 22:52:42
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_BLOB_TRIGGERS
+-- Table structure for QRTZ_BLOB_TRIGGERS
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_BLOB_TRIGGERS`;
-CREATE TABLE `KDI_QRTZ_BLOB_TRIGGERS` (
+DROP TABLE IF EXISTS `QRTZ_BLOB_TRIGGERS`;
+CREATE TABLE `QRTZ_BLOB_TRIGGERS` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_NAME` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_GROUP` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `BLOB_DATA` blob DEFAULT NULL,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
   KEY `SCHED_NAME` (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `kdi_qrtz_blob_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
+  CONSTRAINT `qrtz_blob_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_CALENDARS
+-- Table structure for QRTZ_CALENDARS
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_CALENDARS`;
-CREATE TABLE `KDI_QRTZ_CALENDARS` (
+DROP TABLE IF EXISTS `QRTZ_CALENDARS`;
+CREATE TABLE `QRTZ_CALENDARS` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `CALENDAR_NAME` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `CALENDAR` blob NOT NULL,
@@ -43,24 +43,24 @@ CREATE TABLE `KDI_QRTZ_CALENDARS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_CRON_TRIGGERS
+-- Table structure for QRTZ_CRON_TRIGGERS
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_CRON_TRIGGERS`;
-CREATE TABLE `KDI_QRTZ_CRON_TRIGGERS` (
+DROP TABLE IF EXISTS `QRTZ_CRON_TRIGGERS`;
+CREATE TABLE `QRTZ_CRON_TRIGGERS` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_NAME` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_GROUP` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `CRON_EXPRESSION` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `TIME_ZONE_ID` varchar(80) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `kdi_qrtz_cron_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
+  CONSTRAINT `qrtz_cron_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_FIRED_TRIGGERS
+-- Table structure for QRTZ_FIRED_TRIGGERS
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_FIRED_TRIGGERS`;
-CREATE TABLE `KDI_QRTZ_FIRED_TRIGGERS` (
+DROP TABLE IF EXISTS `QRTZ_FIRED_TRIGGERS`;
+CREATE TABLE `QRTZ_FIRED_TRIGGERS` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `ENTRY_ID` varchar(95) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_NAME` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
@@ -84,10 +84,10 @@ CREATE TABLE `KDI_QRTZ_FIRED_TRIGGERS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_GROUP
+-- Table structure for QRTZ_GROUP
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_GROUP`;
-CREATE TABLE `KDI_QRTZ_GROUP` (
+DROP TABLE IF EXISTS `QRTZ_GROUP`;
+CREATE TABLE `QRTZ_GROUP` (
   `ID_GROUP` bigint(64) NOT NULL COMMENT '分组ID',
   `GROUP_NAME` varchar(64) NOT NULL COMMENT '分组名称',
   `DESCRIPTION` varchar(128) DEFAULT NULL COMMENT '分组描述',
@@ -95,10 +95,10 @@ CREATE TABLE `KDI_QRTZ_GROUP` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='调度分组';
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_JOB_DETAILS
+-- Table structure for QRTZ_JOB_DETAILS
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_JOB_DETAILS`;
-CREATE TABLE `KDI_QRTZ_JOB_DETAILS` (
+DROP TABLE IF EXISTS `QRTZ_JOB_DETAILS`;
+CREATE TABLE `QRTZ_JOB_DETAILS` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `JOB_NAME` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `JOB_GROUP` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
@@ -115,37 +115,37 @@ CREATE TABLE `KDI_QRTZ_JOB_DETAILS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_LOCKS
+-- Table structure for QRTZ_LOCKS
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_LOCKS`;
-CREATE TABLE `KDI_QRTZ_LOCKS` (
+DROP TABLE IF EXISTS `QRTZ_LOCKS`;
+CREATE TABLE `QRTZ_LOCKS` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `LOCK_NAME` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`SCHED_NAME`,`LOCK_NAME`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Records of KDI_QRTZ_LOCKS
+-- Records of QRTZ_LOCKS
 -- ----------------------------
 BEGIN;
-INSERT INTO `KDI_QRTZ_LOCKS` VALUES ('quartzScheduler', 'TRIGGER_ACCESS');
+INSERT INTO `QRTZ_LOCKS` VALUES ('quartzScheduler', 'TRIGGER_ACCESS');
 COMMIT;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_PAUSED_TRIGGER_GRPS
+-- Table structure for QRTZ_PAUSED_TRIGGER_GRPS
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_PAUSED_TRIGGER_GRPS`;
-CREATE TABLE `KDI_QRTZ_PAUSED_TRIGGER_GRPS` (
+DROP TABLE IF EXISTS `QRTZ_PAUSED_TRIGGER_GRPS`;
+CREATE TABLE `QRTZ_PAUSED_TRIGGER_GRPS` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_GROUP` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_SCHEDULER_STATE
+-- Table structure for QRTZ_SCHEDULER_STATE
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_SCHEDULER_STATE`;
-CREATE TABLE `KDI_QRTZ_SCHEDULER_STATE` (
+DROP TABLE IF EXISTS `QRTZ_SCHEDULER_STATE`;
+CREATE TABLE `QRTZ_SCHEDULER_STATE` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `INSTANCE_NAME` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `LAST_CHECKIN_TIME` bigint(13) NOT NULL,
@@ -154,10 +154,10 @@ CREATE TABLE `KDI_QRTZ_SCHEDULER_STATE` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_SIMPLE_TRIGGERS
+-- Table structure for QRTZ_SIMPLE_TRIGGERS
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_SIMPLE_TRIGGERS`;
-CREATE TABLE `KDI_QRTZ_SIMPLE_TRIGGERS` (
+DROP TABLE IF EXISTS `QRTZ_SIMPLE_TRIGGERS`;
+CREATE TABLE `QRTZ_SIMPLE_TRIGGERS` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_NAME` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_GROUP` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
@@ -165,14 +165,14 @@ CREATE TABLE `KDI_QRTZ_SIMPLE_TRIGGERS` (
   `REPEAT_INTERVAL` bigint(12) NOT NULL,
   `TIMES_TRIGGERED` bigint(10) NOT NULL,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `kdi_qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
+  CONSTRAINT `qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_SIMPROP_TRIGGERS
+-- Table structure for QRTZ_SIMPROP_TRIGGERS
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_SIMPROP_TRIGGERS`;
-CREATE TABLE `KDI_QRTZ_SIMPROP_TRIGGERS` (
+DROP TABLE IF EXISTS `QRTZ_SIMPROP_TRIGGERS`;
+CREATE TABLE `QRTZ_SIMPROP_TRIGGERS` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_NAME` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_GROUP` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
@@ -188,14 +188,14 @@ CREATE TABLE `KDI_QRTZ_SIMPROP_TRIGGERS` (
   `BOOL_PROP_1` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
   `BOOL_PROP_2` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `kdi_qrtz_simprop_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
+  CONSTRAINT `qrtz_simprop_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Table structure for KDI_QRTZ_TRIGGERS
+-- Table structure for QRTZ_TRIGGERS
 -- ----------------------------
-DROP TABLE IF EXISTS `KDI_QRTZ_TRIGGERS`;
-CREATE TABLE `KDI_QRTZ_TRIGGERS` (
+DROP TABLE IF EXISTS `QRTZ_TRIGGERS`;
+CREATE TABLE `QRTZ_TRIGGERS` (
   `SCHED_NAME` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_NAME` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `TRIGGER_GROUP` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
@@ -225,298 +225,8 @@ CREATE TABLE `KDI_QRTZ_TRIGGERS` (
   KEY `IDX_QRTZ_T_NFT_MISFIRE` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`),
   KEY `IDX_QRTZ_T_NFT_ST_MISFIRE` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`,`TRIGGER_STATE`),
   KEY `IDX_QRTZ_T_NFT_ST_MISFIRE_GRP` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`,`TRIGGER_GROUP`,`TRIGGER_STATE`),
-  CONSTRAINT `kdi_qrtz_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `QRTZ_JOB_DETAILS` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`)
+  CONSTRAINT `qrtz_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `QRTZ_JOB_DETAILS` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- ----------------------------
--- Table structure for KDI_SYS_DEPT
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_DEPT`;
-CREATE TABLE `KDI_SYS_DEPT` (
-  `ID_DEPT` bigint(64) NOT NULL,
-  `ID_DEPT_PARENT` bigint(64) DEFAULT NULL COMMENT '上级部门ID，一级部门为0',
-  `NAME` varchar(50) DEFAULT NULL COMMENT '部门名称',
-  `ORDER_NUM` int(11) DEFAULT NULL COMMENT '排序',
-  `CREATE_USER` varchar(64) DEFAULT NULL COMMENT '创建用户',
-  `UPDATE_USER` varchar(64) DEFAULT NULL COMMENT '最后修改用户',
-  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
-  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
-  PRIMARY KEY (`ID_DEPT`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='部门管理';
-
--- ----------------------------
--- Records of KDI_SYS_DEPT
--- ----------------------------
-BEGIN;
-INSERT INTO `KDI_SYS_DEPT` VALUES (1, 0, '北京傲飞商智软件有限公司', 0, '1', '1', '2018-09-18 11:48:05', '2018-09-18 11:48:09', 0);
-COMMIT;
-
--- ----------------------------
--- Table structure for KDI_SYS_MENU
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_MENU`;
-CREATE TABLE `KDI_SYS_MENU` (
-  `ID_MENU` bigint(64) NOT NULL,
-  `ID_MENU_PARENT` bigint(64) DEFAULT NULL COMMENT '父菜单ID，一级菜单为0',
-  `NAME` varchar(50) DEFAULT NULL COMMENT '菜单名称',
-  `URL` varchar(200) DEFAULT NULL COMMENT '菜单URL',
-  `PERMS` varchar(500) DEFAULT NULL COMMENT '授权(多个用逗号分隔，如：user:list,user:create)',
-  `TYPE` int(11) DEFAULT NULL COMMENT '类型   0：目录   1：菜单   2：按钮',
-  `ICON` varchar(100) DEFAULT 'NULL' COMMENT '菜单图标',
-  `ORDER_NUM` int(11) DEFAULT NULL COMMENT '排序',
-  `STATUS` int(1) DEFAULT NULL COMMENT '状态  0：正常   1：禁用\n',
-  `CREATE_USER` varchar(64) DEFAULT NULL COMMENT '创建用户',
-  `UPDATE_USER` varchar(64) DEFAULT NULL COMMENT '最后修改用户',
-  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
-  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
-  PRIMARY KEY (`ID_MENU`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单管理';
-
--- ----------------------------
--- Table structure for KDI_SYS_PLATFORM_LOG
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_PLATFORM_LOG`;
-CREATE TABLE `KDI_SYS_PLATFORM_LOG` (
-  `ID_SYS_LOG` bigint(64) NOT NULL,
-  `USERNAME` varchar(50) DEFAULT NULL COMMENT '用户名',
-  `MODULE` varchar(100) DEFAULT NULL COMMENT '模块',
-  `OPERATION` varchar(50) DEFAULT NULL COMMENT '用户操作',
-  `METHOD` varchar(200) DEFAULT NULL COMMENT '请求方法',
-  `PARAMS` varchar(5000) DEFAULT NULL COMMENT '请求参数',
-  `IP` varchar(64) DEFAULT NULL COMMENT 'IP地址',
-  `CREATE_DATE` datetime DEFAULT NULL COMMENT '创建时间',
-  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
-  PRIMARY KEY (`ID_SYS_LOG`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统日志';
-
--- ----------------------------
--- Records of KDI_SYS_PLATFORM_LOG
--- ----------------------------
-BEGIN;
-INSERT INTO `KDI_SYS_PLATFORM_LOG` VALUES (1047126820316602370, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538489463255,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-02 22:11:03', 0);
-INSERT INTO `KDI_SYS_PLATFORM_LOG` VALUES (1047130982085398529, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538490455479,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-02 22:27:35', 0);
-INSERT INTO `KDI_SYS_PLATFORM_LOG` VALUES (1047134021630382082, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538491180186,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-02 22:39:40', 0);
-INSERT INTO `KDI_SYS_PLATFORM_LOG` VALUES (1047310300077948930, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538533208239,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-03 10:20:08', 0);
-INSERT INTO `KDI_SYS_PLATFORM_LOG` VALUES (1047316902172463105, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538534782303,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-03 10:46:22', 0);
-INSERT INTO `KDI_SYS_PLATFORM_LOG` VALUES (1047422932600512513, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538560061928,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-03 17:47:41', 0);
-INSERT INTO `KDI_SYS_PLATFORM_LOG` VALUES (1047425141744648193, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538560588628,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-03 17:56:28', 0);
-COMMIT;
-
--- ----------------------------
--- Table structure for KDI_SYS_REPOSITORY
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_REPOSITORY`;
-CREATE TABLE `KDI_SYS_REPOSITORY` (
-  `ID_REPOSITORY` bigint(64) NOT NULL COMMENT '资源库ID',
-  `ID_REPOSITORY_CONNECTION` bigint(64) NOT NULL COMMENT '资源数据库链接ID',
-  `REPOSITORY_NAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '资源库名称',
-  `IS_DEFAULT` int(11) DEFAULT NULL COMMENT '是否默认资源库 0:否 1:是',
-  `CREATE_USER` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '创建用户',
-  `UPDATE_USER` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最后修改用户',
-  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
-  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
-  PRIMARY KEY (`ID_REPOSITORY`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='资源库管理';
-
--- ----------------------------
--- Table structure for KDI_SYS_REPOSITORY_DATABASE
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_REPOSITORY_DATABASE`;
-CREATE TABLE `KDI_SYS_REPOSITORY_DATABASE` (
-  `ID_REPOSITORY_CONNECTION` bigint(64) NOT NULL COMMENT '资源数据库链接ID',
-  `REPOSITORY_CONNECTION_NAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '资源数据库链接名称',
-  `DATABASE_TYPE` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '数据库类型',
-  `DATABASE_CONTYPE` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '数据库连接方式',
-  `HOST_NAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '主机名',
-  `DATABASE_NAME` mediumtext COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '数据库名',
-  `PORT` int(11) DEFAULT NULL COMMENT '端口',
-  `USERNAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '用户名',
-  `PASSWORD` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '密码',
-  `SERVERNAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '服务器名',
-  `DATA_TBS` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '数据表空间',
-  `INDEX_TBS` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '索引表空间',
-  `CREATE_USER` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '创建用户',
-  `UPDATE_USER` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最后修改用户',
-  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
-  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
-  PRIMARY KEY (`ID_REPOSITORY_CONNECTION`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='资源库';
-
--- ----------------------------
--- Records of KDI_SYS_REPOSITORY_DATABASE
--- ----------------------------
-BEGIN;
-INSERT INTO `KDI_SYS_REPOSITORY_DATABASE` VALUES (1043540675649384450, '123.206.52.213', 'MYSQL', '0', '123.206.52.213', 'test', 7581, 'test', 'Encrypted 2be98afc86aa7f2e4cb79ff228dc6fa8c', NULL, NULL, NULL, NULL, NULL, '2018-09-23 00:40:59', '2018-09-23 00:40:59', 0);
-COMMIT;
-
--- ----------------------------
--- Table structure for KDI_SYS_REPOSITORY_DATABASE_ATTRIBUTE
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_REPOSITORY_DATABASE_ATTRIBUTE`;
-CREATE TABLE `KDI_SYS_REPOSITORY_DATABASE_ATTRIBUTE` (
-  `ID_REPOSITORY_DATABASE_ATTRIBUTE` bigint(64) NOT NULL COMMENT '资源库属性ID',
-  `ID_REPOSITORY_CONNECTION` bigint(64) NOT NULL COMMENT '资源库ID',
-  `CODE` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '属性名',
-  `VALUE_STR` mediumtext COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '属性值',
-  PRIMARY KEY (`ID_REPOSITORY_DATABASE_ATTRIBUTE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='资源库链接属性';
-
--- ----------------------------
--- Table structure for KDI_SYS_ROLE
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_ROLE`;
-CREATE TABLE `KDI_SYS_ROLE` (
-  `ID_ROLE` bigint(64) NOT NULL,
-  `ROLE_NAME` varchar(100) DEFAULT NULL COMMENT '角色名称',
-  `REMARK` varchar(100) DEFAULT NULL COMMENT '备注',
-  `ID_DEPT` bigint(64) DEFAULT NULL COMMENT '部门ID',
-  `PRIVILEDGES` bigint(20) DEFAULT NULL COMMENT '设计器权限',
-  `ISSYSTEMROLE` int(11) DEFAULT NULL COMMENT '是否是系统保留权限',
-  `CREATE_USER` varchar(64) DEFAULT NULL COMMENT '创建用户',
-  `UPDATE_USER` varchar(64) DEFAULT NULL COMMENT '最后修改用户',
-  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
-  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
-  PRIMARY KEY (`ID_ROLE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色';
-
--- ----------------------------
--- Records of KDI_SYS_ROLE
--- ----------------------------
-BEGIN;
-INSERT INTO `KDI_SYS_ROLE` VALUES (1, 'Administrator', '系统管理员角色,拥有所有的权限', -1, -1, 1, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `KDI_SYS_ROLE` VALUES (2, 'Developer', '系统开发者角色,对目录、文件具有新建、执行、修改、删除权限', -1, 29491, 1, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `KDI_SYS_ROLE` VALUES (3, 'Operator', '系统执行者角色,对目录、文件具有浏览、执行权限', -1, 28672, 1, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `KDI_SYS_ROLE` VALUES (4, 'Guest', '系统访客角色,对目录、文件具有浏览权限', -1, 98304, 1, NULL, NULL, NULL, NULL, 0);
-COMMIT;
-
--- ----------------------------
--- Table structure for KDI_SYS_ROLE_MENU
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_ROLE_MENU`;
-CREATE TABLE `KDI_SYS_ROLE_MENU` (
-  `ID_ROLE` bigint(64) NOT NULL COMMENT '角色ID',
-  `ID_MENU` bigint(64) NOT NULL COMMENT '菜单ID',
-  PRIMARY KEY (`ID_ROLE`,`ID_MENU`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色与菜单对应关系';
-
--- ----------------------------
--- Table structure for KDI_SYS_ROLE_OPERATION
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_ROLE_OPERATION`;
-CREATE TABLE `KDI_SYS_ROLE_OPERATION` (
-  `ID_OPERATION` bigint(64) NOT NULL COMMENT '操作ID',
-  `OPERATION_NAME` varchar(32) DEFAULT NULL COMMENT '操作名称',
-  PRIMARY KEY (`ID_OPERATION`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设计器操作';
-
--- ----------------------------
--- Records of KDI_SYS_ROLE_OPERATION
--- ----------------------------
-BEGIN;
-INSERT INTO `KDI_SYS_ROLE_OPERATION` VALUES (1, '新建');
-INSERT INTO `KDI_SYS_ROLE_OPERATION` VALUES (2, '删除');
-INSERT INTO `KDI_SYS_ROLE_OPERATION` VALUES (4, '修改');
-INSERT INTO `KDI_SYS_ROLE_OPERATION` VALUES (8, '执行');
-INSERT INTO `KDI_SYS_ROLE_OPERATION` VALUES (16, '浏览');
-COMMIT;
-
--- ----------------------------
--- Table structure for KDI_SYS_ROLE_PRIVILEDGE
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_ROLE_PRIVILEDGE`;
-CREATE TABLE `KDI_SYS_ROLE_PRIVILEDGE` (
-  `ID_PRIVILEDGE` bigint(64) NOT NULL COMMENT '权限ID',
-  `ID_RESOURCE_TYPE` bigint(64) NOT NULL COMMENT '类型ID',
-  `ID_OPERATION` bigint(64) NOT NULL COMMENT '操作ID',
-  PRIMARY KEY (`ID_PRIVILEDGE`,`ID_RESOURCE_TYPE`,`ID_OPERATION`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设计器权限';
-
--- ----------------------------
--- Records of KDI_SYS_ROLE_PRIVILEDGE
--- ----------------------------
-BEGIN;
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (1, 1, 1);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (2, 1, 4);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (4, 1, 2);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (8, 1, 16);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (16, 1, 8);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (32, 2, 1);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (64, 2, 4);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (128, 2, 2);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (256, 2, 16);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (512, 4, 1);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (1024, 4, 4);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (2048, 4, 2);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (4096, 8, 1);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (8192, 8, 4);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (16384, 8, 2);
-INSERT INTO `KDI_SYS_ROLE_PRIVILEDGE` VALUES (32768, 8, 16);
-COMMIT;
-
--- ----------------------------
--- Table structure for KDI_SYS_ROLE_RESOURCE_TYPE
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_ROLE_RESOURCE_TYPE`;
-CREATE TABLE `KDI_SYS_ROLE_RESOURCE_TYPE` (
-  `ID_RESOURCE_TYPE` bigint(64) NOT NULL COMMENT '设计器资源ID',
-  `RESOURCE_TYPE_NAME` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '设计器资源名称(文件 数据库连接等)',
-  PRIMARY KEY (`ID_RESOURCE_TYPE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='设计器权限类型';
-
--- ----------------------------
--- Records of KDI_SYS_ROLE_RESOURCE_TYPE
--- ----------------------------
-BEGIN;
-INSERT INTO `KDI_SYS_ROLE_RESOURCE_TYPE` VALUES (1, '文件');
-INSERT INTO `KDI_SYS_ROLE_RESOURCE_TYPE` VALUES (2, '目录');
-INSERT INTO `KDI_SYS_ROLE_RESOURCE_TYPE` VALUES (4, '集群');
-INSERT INTO `KDI_SYS_ROLE_RESOURCE_TYPE` VALUES (8, '数据源');
-COMMIT;
-
--- ----------------------------
--- Table structure for KDI_SYS_USER
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_USER`;
-CREATE TABLE `KDI_SYS_USER` (
-  `ID_USER` bigint(64) NOT NULL,
-  `USERNAME` varchar(64) NOT NULL COMMENT '用户名',
-  `PASSWORD` varchar(100) DEFAULT NULL COMMENT '密码',
-  `EMAIL` varchar(100) DEFAULT NULL COMMENT '邮箱',
-  `MOBILE` varchar(100) DEFAULT NULL COMMENT '手机号',
-  `STATUS` tinyint(4) DEFAULT NULL COMMENT '状态  0：正常   1：禁用\n',
-  `ID_DEPT` bigint(64) DEFAULT NULL COMMENT '部门ID',
-  `CREATE_USER` varchar(64) DEFAULT NULL COMMENT '创建用户',
-  `UPDATE_USER` varchar(64) DEFAULT NULL COMMENT '最后修改用户',
-  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
-  `LOGIN_TIME` datetime DEFAULT NULL COMMENT '最后登录时间',
-  `LOGIN_IP` varchar(20) DEFAULT NULL COMMENT '最后登录IP地址',
-  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
-  PRIMARY KEY (`ID_USER`),
-  UNIQUE KEY `USERNAME` (`USERNAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统用户';
-
--- ----------------------------
--- Records of KDI_SYS_USER
--- ----------------------------
-BEGIN;
-INSERT INTO `KDI_SYS_USER` VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'longyli@163.com', '13614019065', 0, 1, '1', '1', '2018-09-18 03:45:57', '2018-09-18 11:48:22', '2018-10-03 17:56:28', '0:0:0:0:0:0:0:1', 0);
-COMMIT;
-
--- ----------------------------
--- Table structure for KDI_SYS_USER_ROLE
--- ----------------------------
-DROP TABLE IF EXISTS `KDI_SYS_USER_ROLE`;
-CREATE TABLE `KDI_SYS_USER_ROLE` (
-  `ID_USER` bigint(64) NOT NULL COMMENT '用户ID',
-  `ID_ROLE` bigint(64) NOT NULL COMMENT '角色ID',
-  PRIMARY KEY (`ID_USER`,`ID_ROLE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户与角色对应关系';
 
 -- ----------------------------
 -- Table structure for R_CLUSTER
@@ -1889,5 +1599,286 @@ CREATE TABLE `R_VERSION` (
 BEGIN;
 INSERT INTO `R_VERSION` VALUES (1, 5, 0, '2018-08-21 16:48:35', 0);
 COMMIT;
+
+-- ----------------------------
+-- Table structure for SYS_MENU
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_MENU`;
+CREATE TABLE `SYS_MENU` (
+  `MENU_ID` bigint(64) NOT NULL,
+  `PARENT_ID` bigint(64) DEFAULT NULL COMMENT '父菜单ID，一级菜单为0',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '菜单名称',
+  `URL` varchar(200) DEFAULT NULL COMMENT '菜单URL',
+  `PERMS` varchar(500) DEFAULT NULL COMMENT '授权(多个用逗号分隔，如：user:list,user:create)',
+  `TYPE` int(11) DEFAULT NULL COMMENT '类型   0：目录   1：菜单   2：按钮',
+  `ICON` varchar(100) DEFAULT 'NULL' COMMENT '菜单图标',
+  `ORDER_NUM` int(11) DEFAULT NULL COMMENT '排序',
+  `STATUS` int(1) DEFAULT NULL COMMENT '状态  0：正常   1：禁用\n',
+  `CREATE_USER` varchar(64) DEFAULT NULL COMMENT '创建用户',
+  `UPDATE_USER` varchar(64) DEFAULT NULL COMMENT '最后修改用户',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
+  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
+  PRIMARY KEY (`MENU_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单管理';
+
+-- ----------------------------
+-- Table structure for SYS_ORGANIZER
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_ORGANIZER`;
+CREATE TABLE `SYS_ORGANIZER` (
+  `ORGANIZER_ID` bigint(64) NOT NULL AUTO_INCREMENT COMMENT '组织ID',
+  `ORGANIZER_NAME` varchar(100) DEFAULT NULL COMMENT '组织名称',
+  `ORGANIZER_CONTACT` varchar(255) DEFAULT NULL,
+  `ORGANIZER_EMAIL` varchar(255) DEFAULT NULL,
+  `ORGANIZER_TELPHONE` varchar(255) DEFAULT NULL,
+  `ORGANIZER_MOBILE` varchar(255) DEFAULT NULL,
+  `ORGANIZER_ADDRESS` varchar(500) DEFAULT NULL,
+  `ORGANIZER_VERIFY_CODE` varchar(255) DEFAULT NULL,
+  `ORGANIZER_STATUS` int(11) DEFAULT 0 COMMENT '0 已注册未验证通过，1已注册并验证通过， 2 注销',
+  `CREATE_USER` varchar(64) DEFAULT NULL COMMENT '创建用户',
+  `UPDATE_USER` varchar(64) DEFAULT NULL COMMENT '最后修改用户',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
+  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
+  PRIMARY KEY (`ORGANIZER_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='组织信息';
+
+-- ----------------------------
+-- Table structure for SYS_PLATFORM_LOG
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_PLATFORM_LOG`;
+CREATE TABLE `SYS_PLATFORM_LOG` (
+  `PLATFORM_LOG_ID` bigint(64) NOT NULL,
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '用户名',
+  `MODULE` varchar(100) DEFAULT NULL COMMENT '模块',
+  `OPERATION` varchar(50) DEFAULT NULL COMMENT '用户操作',
+  `METHOD` varchar(200) DEFAULT NULL COMMENT '请求方法',
+  `PARAMS` varchar(5000) DEFAULT NULL COMMENT '请求参数',
+  `IP` varchar(64) DEFAULT NULL COMMENT 'IP地址',
+  `CREATE_DATE` datetime DEFAULT NULL COMMENT '创建时间',
+  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
+  PRIMARY KEY (`PLATFORM_LOG_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统日志';
+
+-- ----------------------------
+-- Records of SYS_PLATFORM_LOG
+-- ----------------------------
+BEGIN;
+INSERT INTO `SYS_PLATFORM_LOG` VALUES (1047126820316602370, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538489463255,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-02 22:11:03', 0);
+INSERT INTO `SYS_PLATFORM_LOG` VALUES (1047130982085398529, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538490455479,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-02 22:27:35', 0);
+INSERT INTO `SYS_PLATFORM_LOG` VALUES (1047134021630382082, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538491180186,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-02 22:39:40', 0);
+INSERT INTO `SYS_PLATFORM_LOG` VALUES (1047310300077948930, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538533208239,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-03 10:20:08', 0);
+INSERT INTO `SYS_PLATFORM_LOG` VALUES (1047316902172463105, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538534782303,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-03 10:46:22', 0);
+INSERT INTO `SYS_PLATFORM_LOG` VALUES (1047422932600512513, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538560061928,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-03 17:47:41', 0);
+INSERT INTO `SYS_PLATFORM_LOG` VALUES (1047425141744648193, 'admin', '系统用户', '用户登录', 'updateLogin', '{\"loginIp\":\"0:0:0:0:0:0:0:1\",\"loginTime\":1538560588628,\"page\":1,\"rows\":15,\"userId\":1}', '0:0:0:0:0:0:0:1', '2018-10-03 17:56:28', 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for SYS_REPOSITORY
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_REPOSITORY`;
+CREATE TABLE `SYS_REPOSITORY` (
+  `ID_REPOSITORY` bigint(64) NOT NULL COMMENT '资源库ID',
+  `ID_REPOSITORY_CONNECTION` bigint(64) NOT NULL COMMENT '资源数据库链接ID',
+  `REPOSITORY_NAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '资源库名称',
+  `IS_DEFAULT` int(11) DEFAULT NULL COMMENT '是否默认资源库 0:否 1:是',
+  `ORGANIZER_ID` bigint(64) DEFAULT NULL,
+  `CREATE_USER` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '创建用户',
+  `UPDATE_USER` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最后修改用户',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
+  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
+  PRIMARY KEY (`ID_REPOSITORY`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='资源库管理';
+
+-- ----------------------------
+-- Records of SYS_REPOSITORY
+-- ----------------------------
+BEGIN;
+INSERT INTO `SYS_REPOSITORY` VALUES (1, 1043540675649384450, 'kettle', 1, 1, 'admin', 'admin', '2018-10-09 15:36:24', '2018-10-09 15:36:16', 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for SYS_REPOSITORY_DATABASE
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_REPOSITORY_DATABASE`;
+CREATE TABLE `SYS_REPOSITORY_DATABASE` (
+  `ID_REPOSITORY_CONNECTION` bigint(64) NOT NULL COMMENT '资源数据库链接ID',
+  `REPOSITORY_CONNECTION_NAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '资源数据库链接名称',
+  `DATABASE_TYPE` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '数据库类型',
+  `DATABASE_CONTYPE` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '数据库连接方式',
+  `HOST_NAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '主机名',
+  `DATABASE_NAME` mediumtext COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '数据库名',
+  `PORT` int(11) DEFAULT NULL COMMENT '端口',
+  `USERNAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '用户名',
+  `PASSWORD` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '密码',
+  `SERVERNAME` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '服务器名',
+  `DATA_TBS` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '数据表空间',
+  `INDEX_TBS` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '索引表空间',
+  `CREATE_USER` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '创建用户',
+  `UPDATE_USER` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最后修改用户',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
+  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
+  PRIMARY KEY (`ID_REPOSITORY_CONNECTION`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='资源库';
+
+-- ----------------------------
+-- Records of SYS_REPOSITORY_DATABASE
+-- ----------------------------
+BEGIN;
+INSERT INTO `SYS_REPOSITORY_DATABASE` VALUES (1043540675649384450, 'localhost', 'MYSQL', '0', 'localhost', 'kettle', 3306, 'root', 'Encrypted 2be98afc86aa7f2e4cb79ff228dc6fa8c', NULL, NULL, NULL, NULL, NULL, '2018-09-23 00:40:59', '2018-09-23 00:40:59', 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for SYS_REPOSITORY_DATABASE_ATTRIBUTE
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_REPOSITORY_DATABASE_ATTRIBUTE`;
+CREATE TABLE `SYS_REPOSITORY_DATABASE_ATTRIBUTE` (
+  `ID_REPOSITORY_DATABASE_ATTRIBUTE` bigint(64) NOT NULL COMMENT '资源库属性ID',
+  `ID_REPOSITORY_CONNECTION` bigint(64) NOT NULL COMMENT '资源库ID',
+  `CODE` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '属性名',
+  `VALUE_STR` mediumtext COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '属性值',
+  PRIMARY KEY (`ID_REPOSITORY_DATABASE_ATTRIBUTE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='资源库链接属性';
+
+-- ----------------------------
+-- Table structure for SYS_ROLE
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_ROLE`;
+CREATE TABLE `SYS_ROLE` (
+  `C_ROLE_ID` bigint(64) NOT NULL,
+  `C_ROLE_NAME` varchar(100) DEFAULT NULL COMMENT '角色名称',
+  `C_DESCRIPTION` varchar(100) DEFAULT NULL COMMENT '备注',
+  `C_ORGANIZER_ID` bigint(64) DEFAULT NULL,
+  `C_PRIVILEDGES` bigint(20) DEFAULT NULL COMMENT '设计器权限',
+  `C_ISSYSTEMROLE` int(11) DEFAULT NULL COMMENT '是否是系统保留权限',
+  `CREATE_USER` varchar(64) DEFAULT NULL COMMENT '创建用户',
+  `UPDATE_USER` varchar(64) DEFAULT NULL COMMENT '最后修改用户',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
+  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
+  PRIMARY KEY (`C_ROLE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色';
+
+-- ----------------------------
+-- Table structure for SYS_ROLE_MENU
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_ROLE_MENU`;
+CREATE TABLE `SYS_ROLE_MENU` (
+  `ROLE_ID` bigint(64) NOT NULL COMMENT '角色ID',
+  `MENU_ID` bigint(64) NOT NULL COMMENT '菜单ID',
+  PRIMARY KEY (`ROLE_ID`,`MENU_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色与菜单对应关系';
+
+-- ----------------------------
+-- Table structure for SYS_ROLE_OPERATION
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_ROLE_OPERATION`;
+CREATE TABLE `SYS_ROLE_OPERATION` (
+  `ID_OPERATION` bigint(64) NOT NULL COMMENT '操作ID',
+  `OPERATION_NAME` varchar(32) DEFAULT NULL COMMENT '操作名称',
+  PRIMARY KEY (`ID_OPERATION`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设计器操作';
+
+-- ----------------------------
+-- Records of SYS_ROLE_OPERATION
+-- ----------------------------
+BEGIN;
+INSERT INTO `SYS_ROLE_OPERATION` VALUES (1, '新建');
+INSERT INTO `SYS_ROLE_OPERATION` VALUES (2, '删除');
+INSERT INTO `SYS_ROLE_OPERATION` VALUES (4, '修改');
+INSERT INTO `SYS_ROLE_OPERATION` VALUES (8, '执行');
+INSERT INTO `SYS_ROLE_OPERATION` VALUES (16, '浏览');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for SYS_ROLE_PRIVILEDGE
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_ROLE_PRIVILEDGE`;
+CREATE TABLE `SYS_ROLE_PRIVILEDGE` (
+  `ID_PRIVILEDGE` bigint(64) NOT NULL COMMENT '权限ID',
+  `ID_RESOURCE_TYPE` bigint(64) NOT NULL COMMENT '类型ID',
+  `ID_OPERATION` bigint(64) NOT NULL COMMENT '操作ID',
+  PRIMARY KEY (`ID_PRIVILEDGE`,`ID_RESOURCE_TYPE`,`ID_OPERATION`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设计器权限';
+
+-- ----------------------------
+-- Records of SYS_ROLE_PRIVILEDGE
+-- ----------------------------
+BEGIN;
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (1, 1, 1);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (2, 1, 4);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (4, 1, 2);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (8, 1, 16);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (16, 1, 8);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (32, 2, 1);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (64, 2, 4);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (128, 2, 2);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (256, 2, 16);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (512, 4, 1);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (1024, 4, 4);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (2048, 4, 2);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (4096, 8, 1);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (8192, 8, 4);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (16384, 8, 2);
+INSERT INTO `SYS_ROLE_PRIVILEDGE` VALUES (32768, 8, 16);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for SYS_ROLE_RESOURCE_TYPE
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_ROLE_RESOURCE_TYPE`;
+CREATE TABLE `SYS_ROLE_RESOURCE_TYPE` (
+  `ID_RESOURCE_TYPE` bigint(64) NOT NULL COMMENT '设计器资源ID',
+  `RESOURCE_TYPE_NAME` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '设计器资源名称(文件 数据库连接等)',
+  PRIMARY KEY (`ID_RESOURCE_TYPE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='设计器权限类型';
+
+-- ----------------------------
+-- Records of SYS_ROLE_RESOURCE_TYPE
+-- ----------------------------
+BEGIN;
+INSERT INTO `SYS_ROLE_RESOURCE_TYPE` VALUES (1, '文件');
+INSERT INTO `SYS_ROLE_RESOURCE_TYPE` VALUES (2, '目录');
+INSERT INTO `SYS_ROLE_RESOURCE_TYPE` VALUES (4, '集群');
+INSERT INTO `SYS_ROLE_RESOURCE_TYPE` VALUES (8, '数据源');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for SYS_USER
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_USER`;
+CREATE TABLE `SYS_USER` (
+  `C_USER_ID` bigint(64) NOT NULL COMMENT '主键',
+  `C_USER_NAME` varchar(32) DEFAULT NULL COMMENT '用户名',
+  `C_PASSWORD` varchar(32) DEFAULT NULL COMMENT '密码',
+  `C_NICK_NAME` varchar(32) DEFAULT NULL COMMENT '昵称（名称）',
+  `C_EMAIL` varchar(32) DEFAULT NULL COMMENT '邮箱',
+  `C_MOBILEPHONE` varchar(32) DEFAULT NULL COMMENT '手机',
+  `C_DESCRIPTION` varchar(255) DEFAULT NULL COMMENT '描述',
+  `C_IS_SYSTEM_USER` int(11) DEFAULT NULL COMMENT '系统用户',
+  `C_ORGANIZER_ID` bigint(64) DEFAULT NULL COMMENT '组织ID',
+  `C_USER_STATUS` int(11) DEFAULT NULL COMMENT '用户状态',
+  `LAST_LOGIN_TIME` datetime DEFAULT NULL COMMENT '最后一次登录时间',
+  `LAST_LOGIN_IP` varchar(20) DEFAULT NULL COMMENT '最后一次登录IP',
+  `CREATE_USER` varchar(64) DEFAULT NULL COMMENT '创建用户',
+  `UPDATE_USER` varchar(64) DEFAULT NULL COMMENT '最后修改用户',
+  `CREATE_TIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATE_TIME` datetime DEFAULT NULL COMMENT '最后时间更新',
+  `DEL_FLAG` tinyint(4) DEFAULT 0 COMMENT '是否删除  1：已删除  0：正常',
+  PRIMARY KEY (`C_USER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+-- ----------------------------
+-- Table structure for SYS_USER_ROLE
+-- ----------------------------
+DROP TABLE IF EXISTS `SYS_USER_ROLE`;
+CREATE TABLE `SYS_USER_ROLE` (
+  `C_USER_ID` bigint(64) NOT NULL DEFAULT 0,
+  `C_ROLE_ID` bigint(64) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`C_USER_ID`,`C_ROLE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -29,7 +29,7 @@ public class GeneralScheduleRequest extends BaseRequest {
     @ApiModelProperty(value = "资源库名称")
     private String repository;
 
-    @ApiModelProperty(value = "发送错误通知用户")
+    @ApiModelProperty(value = "发送错误通知用户(用户名,多用户用','分割)")
     private String errorNoticeUser;
 
     @ApiModelProperty(value = "运行方式(1:本地运行,2:远程运行,3:集群运行;4:HA集群运行)")
@@ -81,6 +81,9 @@ public class GeneralScheduleRequest extends BaseRequest {
 
     @ApiModelProperty(value = "执行的转换或者作业path")
     private String filePath;
+
+    @ApiModelProperty(value = "transformation or job")
+    private String fileType;
 
 //    @ApiModelProperty(value = "参数")
 //    List<ParamRequest> params;

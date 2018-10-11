@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          a.ID_SYS_LOG AS logId
+          a.PLATFORM_LOG_ID AS platformLogId
         , a.USERNAME AS username
         , a.MODULE   AS module
         , a.OPERATION AS operation
@@ -20,7 +20,7 @@
     <select id="findList"  resultType="com.aofei.sys.entity.PlatformLog">
         select
         <include refid="Base_Column_List"/>
-        from KDI_SYS_PLATFORM_LOG a
+        from SYS_PLATFORM_LOG a
         <where>
             a.DEL_FLAG = 0
             <if test="startCreateTime !=null ">

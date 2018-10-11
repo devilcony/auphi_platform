@@ -17,22 +17,22 @@ import java.io.Serializable;
  * </p>
  *
  * @author Tony
- * @since 2018-09-15
+ * @since 2018-10-09
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("KDI_SYS_MENU")
+@TableName("SYS_MENU")
 public class Menu extends DataEntity<Menu> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "ID_MENU", type = IdType.ID_WORKER)
+    @TableId(value = "MENU_ID", type = IdType.ID_WORKER)
     private Long menuId;
     /**
      * 父菜单ID，一级菜单为0
      */
-    @TableField("ID_MENU_PARENT")
+    @TableField("PARENT_ID")
     private Long parentId;
     /**
      * 菜单名称
@@ -64,9 +64,9 @@ public class Menu extends DataEntity<Menu> {
      */
     @TableField("ORDER_NUM")
     private Integer orderNum;
-
     /**
      * 状态  0：正常   1：禁用
+
      */
     @TableField("STATUS")
     private Integer status;

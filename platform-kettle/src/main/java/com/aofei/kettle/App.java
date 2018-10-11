@@ -11,11 +11,15 @@ import org.pentaho.di.trans.TransExecutionConfiguration;
 import org.pentaho.metastore.stores.delegate.DelegatingMetaStore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class App {
 
 	private static App app;
 	private LogChannelInterface log;
+
+	private Map<String,Repository> repositorys;
 	
 	private TransExecutionConfiguration transExecutionConfiguration;
 	private TransExecutionConfiguration transPreviewExecutionConfiguration;
@@ -28,7 +32,7 @@ public class App {
 		props = PropsUI.getInstance();
 		log = new LogChannel( PropsUI.getAppName());
 		loadSettings();
-		
+		repositorys = new HashMap<>();
 		transExecutionConfiguration = new TransExecutionConfiguration();
 	    transExecutionConfiguration.setGatheringMetrics( true );
 	    transPreviewExecutionConfiguration = new TransExecutionConfiguration();
@@ -40,7 +44,15 @@ public class App {
 	    
 	    variables = new RowMetaAndData( new RowMeta() );
 	}
-	
+
+    public  Repository getRepository(String key) {
+		return repositorys.get(key);
+    }
+
+	public void setRepositorys(Map<String, Repository> repositorys) {
+		this.repositorys = repositorys;
+	}
+
 	public void loadSettings() {
 		LogLevel logLevel = LogLevel.getLogLevelForCode(props.getLogLevel());
 		DefaultLogLevel.setLogLevel(logLevel);

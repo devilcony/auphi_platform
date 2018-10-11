@@ -20,7 +20,6 @@
         </dependency>
 
 
-
         <dependency>
             <groupId>com.aofei</groupId>
             <artifactId>platform-log</artifactId>

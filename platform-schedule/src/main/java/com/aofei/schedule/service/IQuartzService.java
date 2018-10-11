@@ -23,7 +23,6 @@
  ******************************************************************************/
 package com.aofei.schedule.service;
 
-import com.aofei.schedule.job.QuartzExecute;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
 import com.aofei.schedule.model.request.ParamRequest;
 import org.quartz.Job;
@@ -95,5 +94,5 @@ public interface IQuartzService {
      * @param quartzExecuteClass
      * @throws SchedulerException
      */
-    void update(GeneralScheduleRequest request, String group, Class<QuartzExecute> quartzExecuteClass) throws SchedulerException;
+    void update(GeneralScheduleRequest request, String group, Class<Job> quartzExecuteClass) throws SchedulerException;
 }

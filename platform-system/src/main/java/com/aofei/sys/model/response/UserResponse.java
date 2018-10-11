@@ -15,50 +15,75 @@ import java.util.Date;
 public class UserResponse {
 
 
+
+    /**
+     * 主键
+     */
     private Long userId;
     /**
      * 用户名
      */
-    @ApiModelProperty(value = "用户名")
+    @ApiModelProperty(value = "登录名")
     private String username;
-
-
+    /**
+     * 密码
+     */
+    @ApiModelProperty(hidden = true)
+    private String password;
+    /**
+     * 昵称（名称）
+     */
+    @ApiModelProperty(value = "昵称")
+    private String nickName;
     /**
      * 邮箱
      */
     @ApiModelProperty(value = "邮箱")
     private String email;
     /**
-     * 手机号
+     * 手机
      */
     @ApiModelProperty(value = "手机号")
-    private String mobile;
+    private String mobilephone;
     /**
-     * 状态  0：正常   1：禁用
+     * 描述
      */
-    @ApiModelProperty(value = "状态  0：正常   1：禁用")
-    private Integer status;
+    @ApiModelProperty(value = "描述")
+    private String description;
     /**
-     * 部门ID
+     * 系统用户
      */
-    @ApiModelProperty(value = "部门ID")
-    private Long deptId;
+    @ApiModelProperty(value = "系统用户")
+    private Integer isSystemUser;
 
     /**
-     * 部门名称
+     * 组织ID
      */
-    @ApiModelProperty(value = "部门名称")
-    private String deptName;
+    @ApiModelProperty(value = "组织ID")
+    private Long organizerId;
 
     /**
-     * 最后登录IP
+     * 组织ID
      */
-    @ApiModelProperty(value = "最后登录IP")
-    private String loginIp;
+    @ApiModelProperty(value = "组织名称")
+    private Long organizerName;
+
+
     /**
-     * 最后登录时间
+     * 用户状态
      */
-    @ApiModelProperty(value = "最后登录时间")
-    private Date loginTime;
+    @ApiModelProperty(value = "用户状态")
+    private Integer userStatus;
+
+    /**
+     * 最后一次登录时间
+     */
+    @ApiModelProperty(value = "最后一次登录时间")
+    private Date lastLoginTime;
+    /**
+     * 最后一次登录IP
+     */
+    @ApiModelProperty(value = "最后一次登录IP")
+    private String lastLoginIp;
 
 }

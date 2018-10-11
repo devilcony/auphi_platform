@@ -64,7 +64,7 @@ public class AutoGeneratorHelper {
 		// 策略配置
 		StrategyConfig strategy = new StrategyConfig();
 
-		strategy.setTablePrefix(new String[] { "KDI_QRTZ_" });// 此处可以修改为您的表前缀
+		strategy.setTablePrefix(new String[] { "SYS_" });// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
 		strategy.setSuperEntityClass("com.aofei.base.entity.DataEntity");
 		strategy.setSuperServiceImplClass("com.aofei.base.service.impl.BaseService");
@@ -74,24 +74,27 @@ public class AutoGeneratorHelper {
 
 		//strategy.setSuperEntityColumns(new String[]{"CREATE_USER","UPDATE_USER","CREATE_TIME","UPDATE_TIME","DEL_FLAG"});
 		strategy.setInclude(new String[] {
-				 "KDI_SYS_DEPT"
-				,"KDI_SYS_MENU"
-				,"KDI_SYS_PLATFORM_LOG"
-				,"KDI_SYS_REPOSITORY"
-				,"KDI_SYS_REPOSITORY_DATABASE"
-				,"KDI_SYS_REPOSITORY_DATABASE_ATTRIBUTE"
-				,"KDI_SYS_ROLE"
-				,"KDI_SYS_ROLE_MENU"
-				,"KDI_SYS_USER"
-				,"KDI_SYS_USER_ROLE" });
-
-		strategy.setInclude(new String[] { "KDI_QRTZ_GROUP" });
+				 "SYS_MENU"
+				,"SYS_ORGANIZER"
+				,"SYS_PLATFORM_LOG"
+				,"SYS_REPOSITORY"
+				,"SYS_REPOSITORY_DATABASE"
+				,"SYS_REPOSITORY_DATABASE_ATTRIBUTE"
+				,"SYS_ROLE"
+				,"SYS_ROLE_MENU"
+				,"SYS_ROLE_PRIVILEDGE"
+				,"SYS_ROLE_RESOURCE_TYPE"
+				,"SYS_USER"
+				,"SYS_USER_ROLE"});
+		strategy.setInclude(new String[] {"SYS_MENU"});
+		strategy.setFieldPrefix(new String[] {"C_"});
+		//strategy.setInclude(new String[] { "KDI_QRTZ_GROUP" });
 
 		mpg.setStrategy(strategy);
 
 		// 包配置
 		PackageConfig pc = new PackageConfig();
-		pc.setModuleName("schedule");
+		pc.setModuleName("sys");
 
 		pc.setParent("com.aofei");// 自定义包路径
 		pc.setController("controller");// 这里是控制器包名，默认 web

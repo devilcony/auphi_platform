@@ -23,25 +23,34 @@
  ******************************************************************************/
 package com.aofei.admin.init;
 
+
+import com.aofei.base.common.Const;
+import com.aofei.kettle.App;
 import com.aofei.kettle.core.PropsUI;
-import com.aofei.sys.model.request.RepositoryRequest;
-import com.aofei.sys.model.response.RepositoryDatabaseResponse;
-import com.aofei.sys.model.response.RepositoryResponse;
-import com.aofei.sys.service.IRepositoryDatabaseService;
-import com.aofei.sys.service.IRepositoryService;
-import com.aofei.sys.utils.DatabaseCodec;
+import com.aofei.kettle.core.database.DatabaseCodec;
+import com.aofei.kettle.model.request.RepositoryRequest;
+import com.aofei.kettle.model.response.RepositoryDatabaseResponse;
+import com.aofei.kettle.model.response.RepositoryResponse;
+import com.aofei.kettle.service.IRepositoryDatabaseService;
+import com.aofei.kettle.service.IRepositoryService;
 import org.joda.time.DateTime;
 import org.pentaho.di.core.KettleEnvironment;
 import org.pentaho.di.core.Props;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.logging.KettleLogStore;
+import org.pentaho.di.repository.Repository;
+import org.pentaho.di.repository.kdr.KettleDatabaseRepository;
+import org.pentaho.di.repository.kdr.KettleDatabaseRepositoryMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 /**
  * @auther Tony
@@ -72,31 +81,24 @@ public class SystemInitBean implements InitializingBean {
         logger.info("********************************************");
         KettleLogStore.init( 5000, 720 );
         KettleEnvironment.init();
-
+        PropsUI.init( "KettleWebConsole", Props.TYPE_PROPERTIES_KITCHEN );
+        //加载
         List<RepositoryResponse> repositorys = repositoryService.getRepositorys(new RepositoryRequest());
-
+        Map<String, Repository> repositoryMap = new HashMap<>();
         for(RepositoryResponse repository : repositorys){
             RepositoryDatabaseResponse repositoryDatabase =  repositoryDatabaseService.get(repository.getRepositoryConnectionId());
             DatabaseMeta databaseMeta = DatabaseCodec.decode(repositoryDatabase);
-
+            KettleDatabaseRepositoryMeta repositoryMeta = new KettleDatabaseRepositoryMeta(
+                            String.valueOf(repository.getRepositoryId()),
+                            repository.getRepositoryName(),
+                            repository.getDescription(),
+                           databaseMeta);
+            KettleDatabaseRepository databaseRepository = new KettleDatabaseRepository();
+            databaseRepository.init(repositoryMeta);
+            databaseRepository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
+            repositoryMap.put(repository.getRepositoryName(),databaseRepository);
         }
-
-
-
-
-        PropsUI.init( "KettleWebConsole", Props.TYPE_PROPERTIES_KITCHEN );
-
-//        KettleDatabaseRepository repository = new KettleDatabaseRepository();
-//        repository.set
-//        meta.setBaseDirectory(path.getAbsolutePath());
-//        meta.setDescription("default");
-//        meta.setName("default");
-//        meta.setReadOnly(false);
-//        meta.setHidingHiddenFiles(true);
-
-
-       // KettleFileRepository rep = new KettleFileRepository();
-       // rep.init(meta);
+        App.getInstance().setRepositorys(repositoryMap);
 
 
         long timeSec = (System.currentTimeMillis() - start) / 1000;

@@ -17,51 +17,47 @@ import java.io.Serializable;
  * </p>
  *
  * @author Tony
- * @since 2018-09-15
+ * @since 2018-10-09
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("KDI_SYS_ROLE")
+@TableName("SYS_ROLE")
 public class Role extends DataEntity<Role> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "ID_ROLE", type = IdType.ID_WORKER)
+    @TableId(value = "C_ROLE_ID", type = IdType.ID_WORKER)
     private Long roleId;
     /**
      * 角色名称
      */
-    @TableField("ROLE_NAME")
+    @TableField("C_ROLE_NAME")
     private String roleName;
     /**
      * 备注
      */
-    @TableField("REMARK")
-    private String remark;
-    /**
-     * 部门ID
-     */
-    @TableField("ID_DEPT")
-    private Long deptId;
+    @TableField("C_DESCRIPTION")
+    private String description;
+
+    @TableField("C_ORGANIZER_ID")
+    private Long organizerId;
+
+    @TableField(exist = false)
+    private String organizerName;
 
     /**
      * 设计器权限
      */
-    @TableField("PRIVILEDGES")
+    @TableField("C_PRIVILEDGES")
     private Long priviledges;
-
     /**
-     * 是否是系统权限
+     * 是否是系统保留权限
      */
-    @TableField("IS_SYSTEM_ROLE")
+    @TableField("C_ISSYSTEMROLE")
     private Integer isSystemRole;
 
-    /**
-     * 部门名称
-     */
-    @TableField(exist = false)
-    private String deptName;
+
 
     @Override
     protected Serializable pkVal() {

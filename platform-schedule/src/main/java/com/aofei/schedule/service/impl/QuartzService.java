@@ -28,7 +28,6 @@ import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.exception.StatusCode;
 import com.aofei.log.annotation.Log;
 import com.aofei.schedule.i18n.Messages;
-import com.aofei.schedule.job.QuartzExecute;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
 import com.aofei.schedule.model.request.ParamRequest;
 import com.aofei.schedule.service.IQuartzService;
@@ -67,9 +66,6 @@ public class QuartzService implements IQuartzService {
         String jobName = request.getJobName();
 
         if(!checkJobExist(jobName,group)){
-            if(jobExecClass == null)
-                jobExecClass = QuartzExecute.class ;
-
             // 获取调度器
             Scheduler sched = quartzScheduler;
 
@@ -96,11 +92,11 @@ public class QuartzService implements IQuartzService {
             // a standard quartz execution.
             data.put("backgroundExecution", "true"); //$NON-NLS-1$
 
-
             Trigger trigger = QuartzUtil.getTrigger(request,group);
 
             // 告诉调度器使用该触发器来安排作业
             sched.scheduleJob(jobDetail, trigger);
+
         }else{
             throw new ApplicationException(StatusCode.CONFLICT.getCode(), Messages.getString("Schedule.Error.JobNameExist",jobName));
         }
@@ -220,7 +216,7 @@ public class QuartzService implements IQuartzService {
      */
     @Log(module = "普通调度",description = "更新调度信息")
     @Override
-    public void update(GeneralScheduleRequest request, String group, Class<QuartzExecute> quartzExecuteClass) throws SchedulerException {
+    public void update(GeneralScheduleRequest request, String group, Class<Job> quartzExecuteClass) throws SchedulerException {
         if(checkJobExist(request.getJobName(),String.valueOf(group))){
             removeJob(request.getJobName(),String.valueOf(group));
             create(request,group,quartzExecuteClass);

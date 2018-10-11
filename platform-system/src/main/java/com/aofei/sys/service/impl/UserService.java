@@ -49,7 +49,7 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
             String encryData = MD5Utils.getStringMD5(password);
             if (existing.getPassword().equals(encryData)) {//验证密码是否正确
 
-                if(User.STATUS_NORMAL.equals(existing.getStatus())){
+                if(User.STATUS_NORMAL.equals(existing.getUserStatus())){
                     return BeanCopier.copy(existing, UserResponse.class);
                 }else{
                     //账户被禁用
@@ -135,9 +135,8 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
         User existing = selectById(request.getUserId());
         if (existing != null) {
             existing.setEmail(request.getEmail());
-            existing.setDeptId(request.getDeptId());
-            existing.setMobile(request.getMobile());
-            existing.setStatus(request.getStatus());
+            existing.setDescription(request.getDescription());
+            existing.setUserStatus(request.getUserStatus());
             existing.preUpdate();
             super.insertOrUpdate(existing);
             return BeanCopier.copy(existing, UserResponse.class);

@@ -25,16 +25,22 @@ public class RoleResponse {
      * 备注
      */
     @ApiModelProperty(value = "备注")
-    private String remark;
-    /**
-     * 部门ID
-     */
-    @ApiModelProperty(value = "部门ID")
-    private Long deptId;
+    private String description;
 
+    @ApiModelProperty(value = "组织ID")
+    private Long organizerId;
+
+    private String organizerName;
     /**
-     * 部门名称
+     * 设计器权限
      */
-    @ApiModelProperty(value = "部门名称")
-    private String deptName;
+    @ApiModelProperty(value = "设计器权限")
+    private Long priviledges;
+    /**
+     * 是否是系统保留权限
+     */
+    @ApiModelProperty(value = "是否是系统保留权限(1:是 0:否 ),系统保留不可更改")
+    private Integer isSystemRole;
+
+
 }

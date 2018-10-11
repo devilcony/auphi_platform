@@ -46,7 +46,11 @@
             <version>${project.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-system</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.quartz-scheduler</groupId>

@@ -1,6 +1,7 @@
 package com.aofei.sys.model.request;
 
 import com.aofei.base.model.request.BaseRequest;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,9 @@ import java.util.Date;
 @Getter
 public class UserRequest<User> extends BaseRequest<User> {
 
+    /**
+     * 主键
+     */
     private Long userId;
     /**
      * 用户名
@@ -24,34 +28,48 @@ public class UserRequest<User> extends BaseRequest<User> {
      */
     private String password;
     /**
+     * 昵称（名称）
+     */
+    private String nickName;
+    /**
      * 邮箱
      */
     private String email;
     /**
-     * 手机号
+     * 手机
      */
-    private String mobile;
+    private String mobilephone;
     /**
-     * 状态  0：正常   1：禁用
+     * 描述
      */
-    private Integer status;
+    private String description;
     /**
-     * 部门ID
+     * 系统用户
      */
-    private Long deptId;
+    private Integer isSystemUser;
+    /**
+     * 组织ID
+     */
+    @ApiModelProperty(hidden = true)
+    private Long organizerId;
 
     /**
-     * 最后登录IP
+     * 用户状态
      */
-    private String loginIp;
+    @ApiModelProperty(hidden = true)
+    private Integer userStatus;
+
     /**
-     * 最后登录时间
+     * 最后一次登录时间
      */
-    private Date loginTime;
+    @ApiModelProperty(hidden = true)
+    private Date lastLoginTime;
+    /**
+     * 最后一次登录IP
+     */
+    @ApiModelProperty(hidden = true)
+    private String lastLoginIp;
 
-    public UserRequest() {
-
-    }
 
     public UserRequest(Long userId) {
        setUserId(userId);

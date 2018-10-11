@@ -18,7 +18,7 @@ public class PlatformLogRequest extends BaseRequest {
 
     private static final long serialVersionUID = 1L;
 
-    private Long logId;
+    private Long platformLogId;
     /**
      * 用户名
      */

@@ -4,9 +4,11 @@ import com.aofei.base.annotation.CurrentUser;
 import com.aofei.base.controller.BaseController;
 import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
-import com.aofei.schedule.job.QuartzExecute;
+import com.aofei.schedule.job.JobRunner;
+import com.aofei.schedule.job.TransRunner;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
 import com.aofei.schedule.service.IQuartzService;
+import com.aofei.sys.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -30,6 +32,9 @@ public class PeriodicSchedulerController extends BaseController {
 
     @Autowired
     private IQuartzService quartzService;
+
+    @Autowired
+    private IUserService userService;
 
     /**
      * 新建调度
@@ -59,17 +64,27 @@ public class PeriodicSchedulerController extends BaseController {
             "<strong>weekNum</strong> (integer): 第几个星期 1-4表示 L表示最后一个星期</br>"+
             "<strong>dayNum</strong> (integer): 1-7分别表示 周日-周六(周日开始);和weekNum同时使用表示第几个星期的星期几 </br>" +
             "<strong>endDate</strong> (string): 结束日期(格式:yyyy-MM-dd);结束日期为空,表示永不结束;周期为执行一次结束时间为空 </br>" +
-            "<strong>errorNoticeUser</strong> (string): 发送错误通知用户 ,</br>" +
+            "<strong>errorNoticeUser</strong> (string): 发送错误通知用户(用户名,多用户用','分割) </br>" +
             "<strong>execType</strong> (integer): 运行方式(1:本地运行,2:远程运行,3:集群运行;4:HA集群运行) </br>" +
             "<strong>file</strong> (string): 执行的转换或者作业名 ,</br>" +
             "<strong>filePath</strong> (string): 执行的转换或者作业path </br>" +
+            "<strong>fileType</strong> (string): transformation or job </br>" +
             "<strong>version</strong> (string): 版本(固定值v3.9) ,</br>" ,httpMethod = "POST")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Response<Boolean> add(
             @RequestBody GeneralScheduleRequest request,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
-        
-        quartzService.create(request, request.getGroup() ,QuartzExecute.class);
+        Class quartzExecuteClass = null;
+        if(request.getFile().endsWith("kjb") || request.getFile().endsWith("KJB")){
+            quartzExecuteClass = JobRunner.class;
+        }else if(request.getFile().endsWith("ktr") || request.getFile().endsWith("KTR")){
+            quartzExecuteClass = TransRunner.class;
+        }
+
+
+
+
+        quartzService.create(request, request.getGroup()  ,quartzExecuteClass);
 
         return Response.ok(true) ;
     }
@@ -106,13 +121,19 @@ public class PeriodicSchedulerController extends BaseController {
             "<strong>execType</strong> (integer): 运行方式(1:本地运行,2:远程运行,3:集群运行;4:HA集群运行) </br>" +
             "<strong>file</strong> (string): 执行的转换或者作业名 ,</br>" +
             "<strong>filePath</strong> (string): 执行的转换或者作业path </br>" +
+            "<strong>fileType</strong> (string): transformation or job </br>" +
             "<strong>version</strong> (string): 版本(固定值v3.9) ,</br>" ,httpMethod = "POST")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Response<Boolean> update(
             @RequestBody GeneralScheduleRequest request,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
-
-        quartzService.update(request,request.getGroup(), QuartzExecute.class);
+        Class quartzExecuteClass = null;
+        if(request.getFile().endsWith("kjb") || request.getFile().endsWith("KJB")){
+            quartzExecuteClass = JobRunner.class;
+        }else if(request.getFile().endsWith("ktr") || request.getFile().endsWith("KTR")){
+            quartzExecuteClass = TransRunner.class;
+        }
+        quartzService.update(request,request.getGroup(), quartzExecuteClass);
 
         return Response.ok(true) ;
     }
@@ -156,5 +177,7 @@ public class PeriodicSchedulerController extends BaseController {
 
         return Response.ok(quartzService.execute(name,group,null)) ;
     }
+
+
 
 }

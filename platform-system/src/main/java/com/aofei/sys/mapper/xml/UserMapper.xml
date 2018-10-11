@@ -6,62 +6,55 @@
     <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
 
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.User">
+        <id column="C_USER_ID" property="userId" />
+        <result column="C_USER_NAME" property="username" />
+        <result column="C_PASSWORD" property="password" />
+        <result column="C_NICK_NAME" property="nickName" />
+        <result column="C_EMAIL" property="email" />
+        <result column="C_MOBILEPHONE" property="mobilephone" />
+        <result column="C_DESCRIPTION" property="description" />
+        <result column="C_IS_SYSTEM_USER" property="isSystemUser" />
+        <result column="C_ORGANIZER_ID" property="organizerId" />
+        <result column="C_USER_STATUS" property="userStatus" />
+        <result column="CREATE_USER" property="createUser" />
+        <result column="UPDATE_USER" property="updateUser" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="DEL_FLAG" property="delFlag" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          a.ID_USER AS userId
-        , a.USERNAME AS username
-        , a.PASSWORD AS password
-        , a.EMAIL AS email
-        , a.MOBILE AS mobile
-        , a.STATUS AS status
-        , a.ID_DEPT AS deptId
+          a.C_USER_ID AS userId
+        , a.C_USER_NAME AS username
+        , a.C_PASSWORD AS password
+        , a.C_NICK_NAME AS nickName
+        , a.C_EMAIL AS email
+        , a.C_MOBILEPHONE AS mobilephone
+        , a.C_DESCRIPTION AS description
+        , a.C_IS_SYSTEM_USER AS isSystemUser
+        , a.C_ORGANIZER_ID AS organizerId
+        , b.ORGANIZER_NAME AS organizerName
+        , a.C_USER_STATUS AS userStatus
+        , a.LAST_LOGIN_TIME AS lastLoginTime
+        , a.LAST_LOGIN_IP AS lastLoginIp
         , a.CREATE_USER AS createUser
         , a.UPDATE_USER AS updateUser
         , a.CREATE_TIME AS createTime
         , a.UPDATE_TIME AS updateTime
         , a.DEL_FLAG AS delFlag
-        , a.LOGIN_IP AS loginIp
-        , a.LOGIN_TIME AS loginTime
-        , dept.NAME AS deptName
     </sql>
     <sql id="Base_Joins">
-        LEFT JOIN KDI_SYS_DEPT dept ON dept.ID_DEPT = a.ID_DEPT
+        LEFT JOIN SYS_ORGANIZER b ON b.ORGANIZER_ID = a.C_ORGANIZER_ID
     </sql>
 
-    <insert id="insert">
-        insert into KDI_SYS_USER (
-              ID_USER
-            , USERNAME
-            , PASSWORD
-            , EMAIL
-            , MOBILE
-            , STATUS
-            , ID_DEPT
-            , CREATE_USER
-            , UPDATE_USER
-            , CREATE_TIME
-            , UPDATE_TIME
-            , DEL_FLAG
-        )values(
-              #{userId}
-            , #{username}
-            , #{password}
-            , #{email}
-            , #{mobile}
-            , #{status}
-            , #{deptId}
-            , #{createUser}
-            , #{updateUser}
-            , #{createTime}
-            , #{updateTime}
-            , #{delFlag}
-        )
-    </insert>
 
     <select id="findList"  resultType="com.aofei.sys.entity.User">
         select
         <include refid="Base_Column_List"/>
-        from KDI_SYS_USER a
+        from SYS_USER a
         <include refid="Base_Joins"/>
         <where>
             a.DEL_FLAG = 0
@@ -74,7 +67,7 @@
     <select id="findByUsername" resultType="com.aofei.sys.entity.User">
         select
         <include refid="Base_Column_List"/>
-        from KDI_SYS_USER a
+        from SYS_USER a
         <include refid="Base_Joins"/>
         where  a.USERNAME = #{username} and a.DEL_FLAG = 0
     </select>
@@ -82,47 +75,32 @@
     <select id="findUserByRoleCode"  resultType="com.aofei.sys.entity.User">
         select
         <include refid="Base_Column_List"/>
-        from KDI_SYS_USER a
+        from SYS_USER a
         <include refid="Base_Joins"/>
-        left join KDI_SYS_USER_ROLE ur on ur.ID_USER= a.ID_USER
-        left join KDI_SYS_ROLE r on ur.ROLE_ID = r.ROLE_ID
-        where a.DEL_FLAG = 0 and r.ROLE_ID = #{roleId}
+        join SYS_USER_ROLE ur on ur.C_USER_ID= a.C_USER_ID
+        join SYS_ROLE r on ur.C_ROLE_ID = r.C_ROLE_ID
+        where a.DEL_FLAG = 0 and r.C_ROLE_ID = #{roleId}
     </select>
 
     <select id="selectById" resultType="com.aofei.sys.entity.User">
         select
         <include refid="Base_Column_List"/>
-        from KDI_SYS_USER a
+        from SYS_USER a
         <include refid="Base_Joins"/>
-        where  a.ID_USER = #{id} and a.DEL_FLAG = 0
+        where  a.C_USER_ID = #{id} and a.DEL_FLAG = 0
     </select>
 
-    <update id="updateById">
-        update KDI_SYS_USER a
-        <set>
-              a.ID_USER = #{userId}
-            , a.USERNAME = #{username}
-            , a.PASSWORD = #{password}
-            , a.EMAIL = #{email}
-            , a.MOBILE = #{mobile}
-            , a.STATUS = #{status}
-            , a.ID_DEPT = #{deptId}
-            , a.UPDATE_USER = #{updateUser}
-            , a.UPDATE_TIME = #{updateTime}
-            , a.DEL_FLAG = #{delFlag}
-        </set>
-        where a.ID_USER = #{et.id}
-    </update>
+
 
     <update id="updateLoginInfo">
-        UPDATE KDI_SYS_USER SET
-        LOGIN_IP = #{loginIp},
-        LOGIN_TIME = #{loginTime}
-        WHERE ID_USER = #{userId}
+        UPDATE SYS_USER SET
+         LAST_LOGIN_IP = #{loginIp},
+        LAST_LOGIN_TIME = #{loginTime}
+        WHERE C_USER_ID = #{userId}
     </update>
 
     <update id="deleteById">
-        update KDI_SYS_USER a set a.DEL_FLAG = 1  where a.ID_USER = #{id}
+        update SYS_USER a set a.DEL_FLAG = 1  where a.C_USER_ID = #{id}
     </update>
 
 

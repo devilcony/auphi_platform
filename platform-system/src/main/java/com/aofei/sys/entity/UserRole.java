@@ -1,6 +1,6 @@
 package com.aofei.sys.entity;
 
-import com.baomidou.mybatisplus.activerecord.Model;
+import com.aofei.base.entity.DataEntity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
@@ -11,29 +11,24 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 用户与角色对应关系
+ * 
  * </p>
  *
  * @author Tony
- * @since 2018-09-15
+ * @since 2018-10-09
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("KDI_SYS_USER_ROLE")
-public class UserRole extends Model<UserRole> {
+@TableName("SYS_USER_ROLE")
+public class UserRole extends DataEntity<UserRole> {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 用户ID
-     */
-    @TableField(value = "ID_USER")
+    @TableField(value = "C_USER_ID")
     private Long userId;
-    /**
-     * 角色ID
-     */
-    @TableField("ID_ROLE")
+
+    @TableField("C_ROLE_ID")
     private Long roleId;
 
 

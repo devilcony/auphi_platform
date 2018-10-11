@@ -6,8 +6,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          a.ID_MENU AS menuId
-        , a.ID_MENU_PARENT AS parentId
+          a.MENU_ID AS menuId
+        , a.PARENT_ID AS parentId
         , a.NAME AS name
         , a.URL AS url
         , a.PERMS AS perms
@@ -16,7 +16,7 @@
         , a.ORDER_NUM AS orderNum
         , a.STATUS AS status
         , a.CREATE_USER AS createUser
-        , a.UPDATE_ID_USER AS updateUser
+        , a.UPDATE_USER AS updateUser
         , a.CREATE_TIME AS createTime
         , a.UPDATE_TIME AS updateTime
         , a.DEL_FLAG AS delFlag
@@ -25,11 +25,11 @@
     <select id="findList"  resultType="com.aofei.sys.entity.Menu">
         select
         <include refid="Base_Column_List"/>
-        from KDI_SYS_MENU a
+        from SYS_MENU a
         <where>
             a.DEL_FLAG = 0
             <if test="parentId !=null ">
-                AND  a.ID_MENU_PARENT  = #{parentId}
+                AND  a.PARENT_ID  = #{parentId}
             </if>
             <if test="name != null and name != ''">
                 AND a.NAME LIKE '%#{name}%'
@@ -41,15 +41,15 @@
         select
         <include refid="Base_Column_List"/>
 
-        from KDI_SYS_MENU a
-        JOIN KDI_SYS_ROLE_MENU rm on rm.ID_MENU = a.ID_MENU
-        JOIN KDI_SYS_USER_ROLE ur on ur.ID_ROLE = rm.ID_ROLE
+        from SYS_MENU a
+        JOIN SYS_ROLE_MENU rm on rm.MENU_ID = a.MENU_ID
+        JOIN SYS_USER_ROLE ur on ur.C_ROLE_ID = rm.ROLE_ID
         where ur.ID_USER = #{userId} and a.DEL_FLAG = 0
     </select>
 
 
 
     <update id="deleteById">
-        update KDI_SYS_MENU a set a.DEL_FLAG = 1  where a.ID_MENU = #{id}
+        update SYS_MENU a set a.DEL_FLAG = 1  where a.MENU_ID = #{id}
     </update>
 </mapper>

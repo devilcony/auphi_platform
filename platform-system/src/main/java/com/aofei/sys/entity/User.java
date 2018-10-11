@@ -14,77 +14,90 @@ import java.util.Date;
 
 /**
  * <p>
- * 系统用户
+ * 用户表
  * </p>
  *
  * @author Tony
- * @since 2018-09-15
+ * @since 2018-10-09
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("KDI_SYS_USER")
+@TableName("SYS_USER")
 public class User extends DataEntity<User> {
-
 
     public static final Integer STATUS_NORMAL = 0;
 
     public static final Integer STATUS_DISABLE = 1;
 
-
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "ID_USER", type = IdType.ID_WORKER)
+    /**
+     * 主键
+     */
+    @TableId(value = "C_USER_ID", type = IdType.ID_WORKER)
     private Long userId;
     /**
      * 用户名
      */
-    @TableField("USERNAME")
+    @TableField("C_USER_NAME")
     private String username;
     /**
      * 密码
      */
-    @TableField("PASSWORD")
+    @TableField("C_PASSWORD")
     private String password;
+    /**
+     * 昵称（名称）
+     */
+    @TableField("C_NICK_NAME")
+    private String nickName;
     /**
      * 邮箱
      */
-    @TableField("EMAIL")
+    @TableField("C_EMAIL")
     private String email;
     /**
-     * 手机号
+     * 手机
      */
-    @TableField("MOBILE")
-    private String mobile;
+    @TableField("C_MOBILEPHONE")
+    private String mobilephone;
     /**
-     * 状态  0：正常   1：禁用
+     * 描述
      */
-    @TableField("STATUS")
-    private Integer status;
+    @TableField("C_DESCRIPTION")
+    private String description;
     /**
-     * 部门ID
+     * 系统用户
      */
-    @TableField(value = "ID_DEPT")
-    private Long deptId;
+    @TableField("C_IS_SYSTEM_USER")
+    private Integer isSystemUser;
+    /**
+     * 组织ID
+     */
+    @TableField("C_ORGANIZER_ID")
+    private Long organizerId;
 
-    /**
-     * 部门名称
-     */
+
     @TableField(exist = false)
-    private String deptName;
-
+    private String organizerName;
 
     /**
-     * 最后登录IP
+     * 用户状态
      */
-    @TableField("LOGIN_IP")
-    private String loginIp;
-    /**
-     * 最后登录时间
-     */
-    @TableField("LOGIN_TIME")
-    private Date loginTime;
+    @TableField("C_USER_STATUS")
+    private Integer userStatus;
 
+    /**
+     * 最后一次登录时间
+     */
+    @TableField("LAST_LOGIN_TIME")
+    private Date lastLoginTime;
+    /**
+     * 最后一次登录IP
+     */
+    @TableField("LAST_LOGIN_IP")
+    private String lastLoginIp;
 
 
     @Override

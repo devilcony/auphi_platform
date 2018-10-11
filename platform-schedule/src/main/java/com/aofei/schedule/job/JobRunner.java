@@ -2,7 +2,7 @@ package com.aofei.schedule.job;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.aofei.base.common.Const;
+import com.aofei.kettle.App;
 import com.aofei.kettle.core.job.JobExecutionConfigurationCodec;
 import com.aofei.kettle.executor.JobExecutor;
 import com.aofei.kettle.utils.StringEscapeHelper;
@@ -23,7 +23,7 @@ public class JobRunner extends QuartzJobBean {
 			String dir = path.substring(0, path.lastIndexOf("/"));
 			String name = path.substring(path.lastIndexOf("/") + 1);
 			
-			Repository repository = Const.repositorys.get("");
+			Repository repository = App.getInstance().getRepository("");
 			RepositoryDirectoryInterface directory = repository.findDirectory(dir);
 			if(directory == null)
 				directory = repository.getUserHomeDirectory();

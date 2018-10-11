@@ -23,7 +23,6 @@
  ******************************************************************************/
 package com.aofei.admin.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.aofei.admin.authorization.Token;
 import com.aofei.admin.authorization.jwt.JwtConfig;
 import com.aofei.admin.authorization.jwt.JwtTokenBuilder;
@@ -44,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -100,8 +98,8 @@ public class AccountController extends BaseController {
             UserUtil.setSessionUser(BeanCopier.copy(user, CurrentUserResponse.class));
             String host = StringUtils.getRemoteAddr();
             UserRequest userRequest = new UserRequest(user.getUserId());
-            userRequest.setLoginIp(host);
-            userRequest.setLoginTime(new Date());
+            userRequest.setLastLoginIp(host);
+            userRequest.setLastLoginTime(new Date());
             userService.updateLogin(userRequest);
 
             Map map = new HashMap();
@@ -125,50 +123,6 @@ public class AccountController extends BaseController {
         }
     }
 
-
-    /**
-     * 登录
-     *
-     * @return
-     */
-    @ApiIgnore
-    @RequestMapping(value = "/client/login", method = RequestMethod.POST)
-    @ResponseBody
-    public Response<JSONObject> login(
-           @RequestParam(value = "username") String username,
-           @RequestParam(value = "password") String password) throws Exception {
-
-        //验证码校验
-        UserResponse user = null;
-        try {
-            //用户名密码验证
-            user = userService.auth(username, password);
-        }catch (ApplicationException e){
-            throw new ApplicationException(SystemError.LOGIN_FAILED.getCode(), SystemError.LOGIN_FAILED.getMessage());
-        }
-
-        if(user != null) {
-            UserUtil.setSessionUser(BeanCopier.copy(user, CurrentUserResponse.class));
-            String host = StringUtils.getRemoteAddr();
-            UserRequest userRequest = new UserRequest(user.getUserId());
-            userRequest.setLoginIp(host);
-            userRequest.setLoginTime(new Date());
-            userService.updateLogin(userRequest);
-
-            JSONObject object = new JSONObject();
-            object.put("user",user);
-
-
-
-            return Response.ok(object);
-
-
-
-
-        } else {
-            throw new ApplicationException(SystemError.LOGIN_FAILED.getCode(), SystemError.LOGIN_FAILED.getMessage());
-        }
-    }
 
 
 

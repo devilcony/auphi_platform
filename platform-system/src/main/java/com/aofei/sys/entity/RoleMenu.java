@@ -15,12 +15,12 @@ import java.io.Serializable;
  * </p>
  *
  * @author Tony
- * @since 2018-09-15
+ * @since 2018-10-09
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("KDI_SYS_ROLE_MENU")
+@TableName("SYS_ROLE_MENU")
 public class RoleMenu extends Model<RoleMenu> {
 
     private static final long serialVersionUID = 1L;
@@ -28,18 +28,16 @@ public class RoleMenu extends Model<RoleMenu> {
     /**
      * 角色ID
      */
-    @TableField(value = "ID_ROLE")
+    @TableField(value = "ROLE_ID")
     private Long roleId;
     /**
      * 菜单ID
      */
-    @TableField("ID_MENU")
+    @TableField("MENU_ID")
     private Long menuId;
-
 
     @Override
     protected Serializable pkVal() {
-        return this.roleId;
+        return null;
     }
-
 }

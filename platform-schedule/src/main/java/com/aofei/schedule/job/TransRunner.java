@@ -1,10 +1,13 @@
 package com.aofei.schedule.job;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aofei.base.common.Const;
+import com.aofei.kettle.App;
 import com.aofei.kettle.core.trans.TransExecutionConfigurationCodec;
 import com.aofei.kettle.executor.TransExecutor;
+import com.aofei.schedule.model.request.GeneralScheduleRequest;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.repository.RepositoryDirectoryInterface;
 import org.pentaho.di.trans.TransExecutionConfiguration;
@@ -18,11 +21,14 @@ public class TransRunner extends QuartzJobBean {
 	@Override
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		try {
-			String path = context.getJobDetail().getKey().getName();
-			String dir = path.substring(0, path.lastIndexOf("/"));
-			String name = path.substring(path.lastIndexOf("/") + 1);
+            String json = (String) context.getJobDetail().getJobDataMap().get(Const.GENERAL_SCHEDULE_KEY);
+
+            GeneralScheduleRequest request = JSON.parseObject(json,GeneralScheduleRequest.class);
+
+			String dir = request.getFilePath();
+			String name = request.getFile();
 			
-			Repository repository = Const.repositorys.get("");
+			Repository repository = App.getInstance().getRepository("");
 
 			RepositoryDirectoryInterface directory = repository.findDirectory(dir);
 			if(directory == null)

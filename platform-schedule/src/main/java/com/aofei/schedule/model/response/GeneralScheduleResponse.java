@@ -77,5 +77,7 @@ public class GeneralScheduleResponse  {
     @ApiModelProperty(value = "执行的转换或者作业path")
     private String filePath;
 
+    @ApiModelProperty(value = "transformation or job")
+    private String fileType;
 
 }

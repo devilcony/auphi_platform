@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.OrganizerMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.sys.entity.Organizer">
+        <id column="ORGANIZER_ID" property="organizerId" />
+        <result column="ORGANIZER_NAME" property="name" />
+        <result column="ORGANIZER_CONTACT" property="contact" />
+        <result column="ORGANIZER_EMAIL" property="email" />
+        <result column="ORGANIZER_TELPHONE" property="telphone" />
+        <result column="ORGANIZER_MOBILE" property="mobile" />
+        <result column="ORGANIZER_ADDRESS" property="address" />
+        <result column="ORGANIZER_VERIFY_CODE" property="verifyCode" />
+        <result column="ORGANIZER_STATUS" property="status" />
+        <result column="CREATE_USER" property="createUser" />
+        <result column="UPDATE_USER" property="updateUser" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="DEL_FLAG" property="delFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ORGANIZER_ID AS organizerId
+        , a.ORGANIZER_NAME AS name
+        , a.ORGANIZER_CONTACT AS contact
+        , a.ORGANIZER_EMAIL AS email
+        , a.ORGANIZER_TELPHONE AS telphone
+        , a.ORGANIZER_MOBILE AS mobile
+        , a.ORGANIZER_ADDRESS AS address
+        , a.ORGANIZER_VERIFY_CODE AS verifyCode
+        , a.ORGANIZER_STATUS AS status
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.sys.entity.Menu">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_ORGANIZER a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="name != null and name != ''">
+                AND a.ORGANIZER_NAME LIKE '%#{name}%'
+            </if>
+        </where>
+    </select>
+
+    <update id="deleteById">
+        update SYS_ORGANIZER a set a.DEL_FLAG = 1  where a.ORGANIZER_ID = #{id}
+    </update>
+</mapper>

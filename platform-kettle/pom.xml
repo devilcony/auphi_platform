@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>platform-kettle</artifactId>
+    <description>kettle相关</description>
 
     <properties>
         <pentaho.version>9.0.0.0-SNAPSHOT</pentaho.version>
@@ -24,9 +25,16 @@
     <dependencies>
         <dependency>
             <groupId>com.aofei</groupId>
-            <artifactId>platform-utils</artifactId>
+            <artifactId>platform-common</artifactId>
             <version>${parent.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-log</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.pentaho.di</groupId>
             <artifactId>kettle-core</artifactId>
@@ -255,6 +263,12 @@
             <artifactId>fastjson</artifactId>
         </dependency>
         <!-- fastjson end-->
+
+        <dependency>
+            <groupId>com.mxgraph</groupId>
+            <artifactId>mxgraph-all</artifactId>
+            <version>1.8.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.owasp.encoder</groupId>

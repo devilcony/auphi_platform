@@ -3,7 +3,6 @@ package com.aofei.base.common;
 import com.aofei.utils.PropertiesLoader;
 import com.aofei.utils.StringUtils;
 import com.google.common.collect.Maps;
-import org.pentaho.di.repository.Repository;
 
 import java.util.Map;
 
@@ -13,16 +12,8 @@ import java.util.Map;
  */
 public class Const {
 
-    /**
-     * 保存全局属性值
-     */
-    public static Repository repository ;
 
-    /**
-     * 保存全局属性值
-     */
-    public static Map<String, Repository> repositorys = Maps.newHashMap();
-
+    public static final String GENERAL_SCHEDULE_KEY = "general_schedule_key";
     /**
      * 保存全局属性值
      */

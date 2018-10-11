@@ -55,9 +55,7 @@ public class RoleService extends BaseService<RoleMapper, Role> implements IRoleS
     public RoleResponse update(RoleRequest request) {
         Role existing = selectById(request.getRoleId());
         if (existing != null) {
-            existing.setDeptId(request.getDeptId());
             existing.setRoleName(request.getRoleName());
-            existing.setRemark(request.getRemark());
             existing.preUpdate();
 
             super.insertOrUpdate(existing);

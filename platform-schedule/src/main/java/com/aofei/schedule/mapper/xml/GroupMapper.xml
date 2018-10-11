@@ -17,10 +17,10 @@
         , DESCRIPTION AS description
     </sql>
 
-    <select id="findList"  resultType="com.aofei.sys.entity.Dept">
+    <select id="findList"  resultType="com.aofei.schedule.entity.Group">
         select
         <include refid="Base_Column_List"/>
-        from KDI_QRTZ_GROUP a
+        from QRTZ_GROUP a
         <where>
             <if test="groupName != null and groupName != ''">
                 AND a.GROUP_NAME LIKE '%#{groupName}%'
