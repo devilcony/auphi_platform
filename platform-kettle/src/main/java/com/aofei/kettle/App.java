@@ -49,6 +49,10 @@ public class App {
 		return repositorys.get(key);
     }
 
+    public  void setRepository(String key,Repository repository) {
+		repositorys.put(key,repository);
+	}
+
 	public void setRepositorys(Map<String, Repository> repositorys) {
 		this.repositorys = repositorys;
 	}

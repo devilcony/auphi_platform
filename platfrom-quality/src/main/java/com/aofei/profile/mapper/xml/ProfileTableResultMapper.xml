@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.profile.mapper.ProfileTableResultMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          ID_PROFILE_TABLE_RESULT AS profileTableResultId
+        , ID_PROFILE_TABLE_COLUMN AS profileTableColumnId
+        , INDICATOR_DATA_TYPE AS indicatorDataType
+        , INDICATOR_DATA_LENGTH AS indicatorDataLength
+        , INDICATOR_DATA_PRECISION AS indicatorDataPrecision
+        , INDICATOR_DATA_SCALE AS indicatorDataScale
+        , INDICATOR_ALL_COUNT AS indicatorAllCount
+        , INDICATOR_DISTINCT_COUNT AS indicatorDistinctCount
+        , INDICATOR_NULL_COUNT AS indicatorNullCount
+        , INDICATOR_ZERO_COUNT AS indicatorZeroCount
+        , INDICATOR_AGG_AVG AS indicatorAggAvg
+        , INDICATOR_AGG_MAX AS indicatorAggMax
+        , INDICATOR_AGG_MIN AS indicatorAggMin
+        , CREATE_TIME AS createTime
+        , EXECUTE_SQL AS executeSql
+        , CREATE_USER AS createUser
+        , UPDATE_USER AS updateUser
+        , UPDATE_TIME AS updateTime
+        , DEL_FLAG AS delFlag
+    </sql>
+
+</mapper>

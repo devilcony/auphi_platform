@@ -31,7 +31,7 @@ public class Organizer extends DataEntity<Organizer> {
     /**
      * 组织ID
      */
-    @TableId(value = "ORGANIZER_ID", type = IdType.AUTO)
+    @TableId(value = "ORGANIZER_ID", type = IdType.ID_WORKER)
     private Long organizerId;
     /**
      * 组织名称

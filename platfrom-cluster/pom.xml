@@ -18,6 +18,12 @@
             <artifactId>platform-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.mxgraph</groupId>
+            <artifactId>mxgraph-all</artifactId>
+            <version>1.8.0</version>
+        </dependency>
     </dependencies>
 
     <build>

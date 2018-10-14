@@ -5,7 +5,9 @@ import com.aofei.base.controller.BaseController;
 import com.aofei.base.model.response.Response;
 import com.aofei.base.model.vo.DataGrid;
 import com.aofei.kettle.App;
+import com.aofei.kettle.core.repository.RepositoryCodec;
 import com.aofei.kettle.model.request.RepositoryRequest;
+import com.aofei.kettle.model.response.RepositoryDatabaseResponse;
 import com.aofei.kettle.model.response.RepositoryExplorerTreeResponse;
 import com.aofei.kettle.model.response.RepositoryResponse;
 import com.aofei.kettle.service.IRepositoryDatabaseService;
@@ -88,9 +90,12 @@ public class RepositoryController extends BaseController {
     @ApiOperation(value = "新建资源库", notes = "新建资源库", httpMethod = "POST")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Response<RepositoryResponse> add(
-            @RequestBody RepositoryRequest request)  {
-
-        return Response.ok(repositoryService.save(request)) ;
+            @RequestBody RepositoryRequest request) throws KettleException {
+        RepositoryResponse response =  repositoryService.save(request);
+        RepositoryDatabaseResponse databaseResponse = repositoryDatabaseService.get(response.getRepositoryConnectionId());
+        Repository repository = RepositoryCodec.decode(response,databaseResponse);
+        App.getInstance().setRepository(response.getRepositoryName(),repository);
+        return Response.ok(response) ;
     }
 
     /**

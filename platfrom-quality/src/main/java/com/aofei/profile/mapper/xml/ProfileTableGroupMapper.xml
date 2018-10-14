@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.profile.mapper.ProfileTableGroupMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          ID_PROFIEL_TABLE_GROUP AS profielTableGroupId
+        , PROFIEL_TABLE_GROUP_NAME AS profielTableGroupName
+        , PROFIEL_TABLE_GROUP_DESC AS profielTableGroupDesc
+        , CREATE_USER AS createUser
+        , UPDATE_USER AS updateUser
+        , UPDATE_TIME AS updateTime
+        , DEL_FLAG AS delFlag
+    </sql>
+
+</mapper>

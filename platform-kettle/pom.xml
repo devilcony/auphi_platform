@@ -49,6 +49,7 @@
             <classifier>auphi</classifier>
         </dependency>
 
+
         <dependency>
             <groupId>org.pentaho.di</groupId>
             <artifactId>kettle-engine</artifactId>
@@ -264,11 +265,7 @@
         </dependency>
         <!-- fastjson end-->
 
-        <dependency>
-            <groupId>com.mxgraph</groupId>
-            <artifactId>mxgraph-all</artifactId>
-            <version>1.8.0</version>
-        </dependency>
+
 
         <dependency>
             <groupId>org.owasp.encoder</groupId>

@@ -17,6 +17,12 @@
             <artifactId>platform-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-log</artifactId>
+            <version>v3.9.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.aofei.datasource.entity.Database">
-        <id column="ID_DATABASE" property="idDatabase" />
+        <id column="ID_DATABASE" property="databaseId" />
         <result column="NAME" property="name" />
         <result column="ID_DATABASE_TYPE" property="idDatabaseType" />
         <result column="ID_DATABASE_CONTYPE" property="idDatabaseContype" />
@@ -20,7 +20,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID_DATABASE AS idDatabase, NAME AS name, ID_DATABASE_TYPE AS idDatabaseType, ID_DATABASE_CONTYPE AS idDatabaseContype, HOST_NAME AS hostName, DATABASE_NAME AS databaseName, PORT AS port, USERNAME AS username, PASSWORD AS password, SERVERNAME AS servername, DATA_TBS AS dataTbs, INDEX_TBS AS indexTbs
+        ID_DATABASE AS databaseId, NAME AS name, ID_DATABASE_TYPE AS idDatabaseType, ID_DATABASE_CONTYPE AS idDatabaseContype, HOST_NAME AS hostName, DATABASE_NAME AS databaseName, PORT AS port, USERNAME AS username, PASSWORD AS password, SERVERNAME AS servername, DATA_TBS AS dataTbs, INDEX_TBS AS indexTbs
     </sql>
 
 

@@ -28,6 +28,7 @@ import com.aofei.base.common.Const;
 import com.aofei.kettle.App;
 import com.aofei.kettle.core.PropsUI;
 import com.aofei.kettle.core.database.DatabaseCodec;
+import com.aofei.kettle.core.repository.RepositoryCodec;
 import com.aofei.kettle.model.request.RepositoryRequest;
 import com.aofei.kettle.model.response.RepositoryDatabaseResponse;
 import com.aofei.kettle.model.response.RepositoryResponse;
@@ -87,15 +88,7 @@ public class SystemInitBean implements InitializingBean {
         Map<String, Repository> repositoryMap = new HashMap<>();
         for(RepositoryResponse repository : repositorys){
             RepositoryDatabaseResponse repositoryDatabase =  repositoryDatabaseService.get(repository.getRepositoryConnectionId());
-            DatabaseMeta databaseMeta = DatabaseCodec.decode(repositoryDatabase);
-            KettleDatabaseRepositoryMeta repositoryMeta = new KettleDatabaseRepositoryMeta(
-                            String.valueOf(repository.getRepositoryId()),
-                            repository.getRepositoryName(),
-                            repository.getDescription(),
-                           databaseMeta);
-            KettleDatabaseRepository databaseRepository = new KettleDatabaseRepository();
-            databaseRepository.init(repositoryMeta);
-            databaseRepository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
+            Repository databaseRepository = RepositoryCodec.decode(repository,repositoryDatabase);
             repositoryMap.put(repository.getRepositoryName(),databaseRepository);
         }
         App.getInstance().setRepositorys(repositoryMap);
