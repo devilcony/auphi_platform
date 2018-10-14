@@ -24,10 +24,8 @@
 package com.aofei.admin.init;
 
 
-import com.aofei.base.common.Const;
 import com.aofei.kettle.App;
 import com.aofei.kettle.core.PropsUI;
-import com.aofei.kettle.core.database.DatabaseCodec;
 import com.aofei.kettle.core.repository.RepositoryCodec;
 import com.aofei.kettle.model.request.RepositoryRequest;
 import com.aofei.kettle.model.response.RepositoryDatabaseResponse;
@@ -37,11 +35,8 @@ import com.aofei.kettle.service.IRepositoryService;
 import org.joda.time.DateTime;
 import org.pentaho.di.core.KettleEnvironment;
 import org.pentaho.di.core.Props;
-import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.logging.KettleLogStore;
 import org.pentaho.di.repository.Repository;
-import org.pentaho.di.repository.kdr.KettleDatabaseRepository;
-import org.pentaho.di.repository.kdr.KettleDatabaseRepositoryMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
