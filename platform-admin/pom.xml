@@ -166,17 +166,17 @@
             <artifactId>jjwt</artifactId>
         </dependency>
         <!-- jwt end -->
-
-
-
     </dependencies>
-
 
     <build>
         <finalName>etl_platform</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                </includes>
             </resource>
             <resource>
                 <directory>src/main/java</directory>

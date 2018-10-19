@@ -49,10 +49,10 @@ public class MenuService extends BaseService<MenuMapper, Menu> implements IMenuS
     @Log(module = "系统菜单", description = "新建菜单信息")
     @Transactional
     public MenuResponse save(MenuRequest request) {
-        Menu Menu = BeanCopier.copy(request, Menu.class);
-        Menu.preInsert();
-        super.insert(Menu);
-        return BeanCopier.copy(Menu, MenuResponse.class);
+        Menu menu = BeanCopier.copy(request, Menu.class);
+        menu.preInsert();
+        super.insert(menu);
+        return BeanCopier.copy(menu, MenuResponse.class);
     }
 
     @Override

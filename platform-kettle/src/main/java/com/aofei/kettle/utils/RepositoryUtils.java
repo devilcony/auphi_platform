@@ -21,9 +21,6 @@ public class RepositoryUtils {
 
         return getRepositoryExplorerTree(repository,dir);
 
-
-
-
     }
 
     private static List<RepositoryExplorerTreeResponse> getRepositoryExplorerTree(Repository repository, RepositoryDirectoryInterface dir) throws KettleException {
