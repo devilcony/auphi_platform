@@ -1,15 +1,13 @@
-package com.aofei.compare.entity;
+package com.aofei.compare.model.response;
 
-import com.aofei.base.entity.DataEntity;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
+import com.aofei.base.model.response.BaseResponse;
+import com.aofei.compare.entity.CompareSqlColumn;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,69 +22,59 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("COMPARE_SQL")
-public class CompareSql extends DataEntity<CompareSql> {
+public class CompareSqlResponse extends BaseResponse {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "ID_COMPARE_SQL", type = IdType.ID_WORKER)
     private Long compareSqlId;
+
+
     /**
      * 资源库名称
      */
-    @TableField("REPOSITORY_NAME")
+    @ApiModelProperty(value = "资源库名称")
     private String repositoryName;
 
     /**
      * ID in r_databsae table
      */
-    @TableField("ID_DATABASE")
+    @ApiModelProperty(value = "数据源")
     private String databaseId;
-
-    /**
-     * 数据源名称
-     */
-    @TableField(exist = false)
-    private String databaseName;
     /**
      * 参考sql数据库ID
      */
-    @TableField("ID_REFERENCE_DB")
+    @ApiModelProperty(value = "参考sql数据源")
     private String referenceDbId;
-
     /**
      * ID in profile_table_group
      */
-    @TableField("ID_COMPARE_TABLE_GROUP")
-    private Long compareTableGroupId;
+    @ApiModelProperty(value = "分组ID")
+    private Integer compareTableGroupId;
     /**
      * profile_name
      */
-    @TableField("COMPARE_NAME")
+    @ApiModelProperty(value = "名称")
     private String compareName;
     /**
      * compare desc
      */
-    @TableField("COMPARE_DESC")
+    @ApiModelProperty(value = "描述")
     private String compareDesc;
     /**
      * 1 for one value compare, 2 for multi-value compare, default 1
      */
-    @TableField("COMPARE_TYPE")
+    @ApiModelProperty(value = "1 for one value compare, 2 for multi-value compare, default 1")
     private Integer compareType;
-    @TableField("SQL")
+
+    @ApiModelProperty(value = "sql语句")
     private String sql;
-    @TableField("REFERENCE_SQL")
+
+    @ApiModelProperty(value = "参照sql")
     private String referenceSql;
 
-    @TableField("USER_ID")
-    private Integer userId;
 
-    @TableField(exist = false)
+    @ApiModelProperty(value = "参照字段")
     List<CompareSqlColumn> compareSqlColumns;
 
-    @Override
-    protected Serializable pkVal() {
-        return this.compareSqlId;
-    }
 
 }
