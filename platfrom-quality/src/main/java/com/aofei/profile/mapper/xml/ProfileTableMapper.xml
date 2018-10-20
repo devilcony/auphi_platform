@@ -6,21 +6,22 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          ID_PROFILE_TABLE AS profileTableId
-        , ID_DATABASE AS databaseId
-        , ID_PROFIEL_TABLE_GROUP AS profielTableGroupId
-        , PROFIEL_NAME AS profielName
-        , PROFIEL_DESC AS profielDesc
-        , SCHEMA_NAME AS schemaName
-        , TABLE_NAME AS tableName
-        , CONDITION AS condition
-        , CREATE_TIME AS createTime
-        , USER_ID AS userId
-        , TABLE_NAME_TAG AS tableNameTag
-        , CREATE_USER AS createUser
-        , UPDATE_USER AS updateUser
-        , UPDATE_TIME AS updateTime
-        , DEL_FLAG AS delFlag
+          a.ID_PROFILE_TABLE AS profileTableId
+        , a.REPOSITORY_NAME AS repositoryName
+        , a.ID_DATABASE AS databaseId
+        , a.ID_PROFIEL_TABLE_GROUP AS profielTableGroupId
+        , a.PROFIEL_NAME AS profielName
+        , a.PROFIEL_DESC AS profielDesc
+        , a.SCHEMA_NAME AS schemaName
+        , a.TABLE_NAME AS tableName
+        , a.CONDITION AS condition
+        , a.CREATE_TIME AS createTime
+        , a.USER_ID AS userId
+        , a.TABLE_NAME_TAG AS tableNameTag
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
     </sql>
 
 </mapper>

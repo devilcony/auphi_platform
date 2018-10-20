@@ -6,25 +6,25 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          ID_PROFILE_TABLE_RESULT AS profileTableResultId
-        , ID_PROFILE_TABLE_COLUMN AS profileTableColumnId
-        , INDICATOR_DATA_TYPE AS indicatorDataType
-        , INDICATOR_DATA_LENGTH AS indicatorDataLength
-        , INDICATOR_DATA_PRECISION AS indicatorDataPrecision
-        , INDICATOR_DATA_SCALE AS indicatorDataScale
-        , INDICATOR_ALL_COUNT AS indicatorAllCount
-        , INDICATOR_DISTINCT_COUNT AS indicatorDistinctCount
-        , INDICATOR_NULL_COUNT AS indicatorNullCount
-        , INDICATOR_ZERO_COUNT AS indicatorZeroCount
-        , INDICATOR_AGG_AVG AS indicatorAggAvg
-        , INDICATOR_AGG_MAX AS indicatorAggMax
-        , INDICATOR_AGG_MIN AS indicatorAggMin
-        , CREATE_TIME AS createTime
-        , EXECUTE_SQL AS executeSql
-        , CREATE_USER AS createUser
-        , UPDATE_USER AS updateUser
-        , UPDATE_TIME AS updateTime
-        , DEL_FLAG AS delFlag
+          a.ID_PROFILE_TABLE_RESULT AS profileTableResultId
+        , a.ID_PROFILE_TABLE_COLUMN AS profileTableColumnId
+        , a.INDICATOR_DATA_TYPE AS indicatorDataType
+        , a.INDICATOR_DATA_LENGTH AS indicatorDataLength
+        , a.INDICATOR_DATA_PRECISION AS indicatorDataPrecision
+        , a.INDICATOR_DATA_SCALE AS indicatorDataScale
+        , a.INDICATOR_ALL_COUNT AS indicatorAllCount
+        , a.INDICATOR_DISTINCT_COUNT AS indicatorDistinctCount
+        , a.INDICATOR_NULL_COUNT AS indicatorNullCount
+        , a.INDICATOR_ZERO_COUNT AS indicatorZeroCount
+        , a.INDICATOR_AGG_AVG AS indicatorAggAvg
+        , a.INDICATOR_AGG_MAX AS indicatorAggMax
+        , a.INDICATOR_AGG_MIN AS indicatorAggMin
+        , a.CREATE_TIME AS createTime
+        , a.EXECUTE_SQL AS executeSql
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
     </sql>
 
 </mapper>

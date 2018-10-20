@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -29,6 +30,11 @@ public class ProfileTable extends DataEntity<ProfileTable> {
 
     @TableId(value = "ID_PROFILE_TABLE", type = IdType.ID_WORKER)
     private Long profileTableId;
+    /**
+     * 资源库名称
+     */
+    @TableField("REPOSITORY_NAME")
+    private String repositoryName;
     /**
      * ID in r_databsae table
      */
@@ -64,7 +70,11 @@ public class ProfileTable extends DataEntity<ProfileTable> {
     @TableField("TABLE_NAME_TAG")
     private Integer tableNameTag;
 
-
+    /**
+     *字段选择信息
+     */
+    @TableField(exist = false)
+    private List<ProfileTableColumn> profileTableColumns;
 
     @Override
     protected Serializable pkVal() {

@@ -21,7 +21,7 @@
         , a.UPDATE_TIME AS updateTime
         , a.DEL_FLAG AS delFlag
     </sql>
-    
+
     <sql id="Result_Join">
         LEFT JOIN(
           SELECT
@@ -49,12 +49,14 @@
             <if test="compareSqlColumnId !=null ">
                 AND  a.ID_COMPARE_SQL_COLUMN  = #{compareSqlColumnId}
             </if>
-
+            <if test="compareSqlId !=null ">
+                AND  a.ID_COMPARE_SQL  = #{compareSqlId}
+            </if>
         </where>
 
     </select>
 
-    <select id="findResultList" parameterType="com.aofei.compare.entity.CompareSqlColumn">
+    <select id="findList" parameterType="com.aofei.compare.entity.CompareSqlColumn">
         select
         <include refid="Base_Column_List"/>
         from COMPARE_SQL_COLUMN a
@@ -62,6 +64,9 @@
             a.DEL_FLAG = 0
             <if test="compareSqlColumnId !=null ">
                 AND  a.ID_COMPARE_SQL_COLUMN  = #{compareSqlColumnId}
+            </if>
+            <if test="compareSqlId !=null ">
+                AND  a.ID_COMPARE_SQL  = #{compareSqlId}
             </if>
         </where>
     </select>

@@ -21,6 +21,7 @@ public class DatabaseUtils {
         DatabaseMeta databaseMeta = repository.loadDatabaseMeta(objectId,null);
         Database database = new Database(databaseMeta);
         repository.getRepositoryMeta();
+        database.connect();
         return database;
 
 

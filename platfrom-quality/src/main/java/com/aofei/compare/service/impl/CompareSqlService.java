@@ -52,7 +52,7 @@ public class CompareSqlService extends BaseService<CompareSqlMapper, CompareSql>
 
             compareSqlColumnMapper.delete(new EntityWrapper<CompareSqlColumn>().eq("ID_COMPARE_SQL",existing.getCompareSqlId()));
 
-            for(CompareSqlColumnRequest columnRequest : request.getCompareSqlColumn()){
+            for(CompareSqlColumnRequest columnRequest : request.getCompareSqlColumns()){
                 CompareSqlColumn compareSqlColumn = BeanCopier.copy(columnRequest,CompareSqlColumn.class);
                 compareSqlColumn.preInsert();
                 compareSqlColumn.setCompareSqlId(existing.getCompareSqlId());
@@ -74,7 +74,7 @@ public class CompareSqlService extends BaseService<CompareSqlMapper, CompareSql>
             CompareSqlRequest compareSqlRequest = new CompareSqlRequest();
             compareSqlRequest.setCompareSqlId(existing.getCompareSqlId());
             List<CompareSqlColumn> compareSqlColumns = compareSqlColumnMapper.findList(compareSqlRequest);
-            existing.setCompareSqlColumn(compareSqlColumns);
+            existing.setCompareSqlColumns(compareSqlColumns);
             return BeanCopier.copy(existing, CompareSqlResponse.class);
         }else{
             //不存在
@@ -88,7 +88,7 @@ public class CompareSqlService extends BaseService<CompareSqlMapper, CompareSql>
         compareSql.preInsert();
         super.insert(compareSql);
 
-        for(CompareSqlColumnRequest columnRequest : request.getCompareSqlColumn()){
+        for(CompareSqlColumnRequest columnRequest : request.getCompareSqlColumns()){
             CompareSqlColumn compareSqlColumn = BeanCopier.copy(columnRequest,CompareSqlColumn.class);
             compareSqlColumn.preInsert();
             compareSqlColumn.setCompareSqlId(compareSql.getCompareSqlId());
@@ -105,7 +105,7 @@ public class CompareSqlService extends BaseService<CompareSqlMapper, CompareSql>
             CompareSqlRequest compareSqlRequest = new CompareSqlRequest();
             compareSqlRequest.setCompareSqlId(compareSql.getCompareSqlId());
             List<CompareSqlColumn> compareSqlColumns = compareSqlColumnMapper.findResultList(compareSqlRequest);
-            compareSql.setCompareSqlColumn(compareSqlColumns);
+            compareSql.setCompareSqlColumns(compareSqlColumns);
         }
         page.setRecords(list);
         return convert(page, CompareSqlResponse.class);

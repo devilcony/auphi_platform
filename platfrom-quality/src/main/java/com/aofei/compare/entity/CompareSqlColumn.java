@@ -14,7 +14,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Tony
@@ -81,8 +81,8 @@ public class CompareSqlColumn extends DataEntity<CompareSqlColumn> {
      */
     @TableField(exist =  false)
     private Integer compareResult;
-    @TableField(exist =  false)
 
+    @TableField(exist =  false)
     private Date resultTime;
 
 

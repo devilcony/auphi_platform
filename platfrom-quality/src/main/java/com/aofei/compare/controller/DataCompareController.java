@@ -80,11 +80,13 @@ public class DataCompareController extends BaseController {
      */
     @ApiOperation(value = "执行数据稽核", notes = "执行数据稽核", httpMethod = "POST")
     @RequestMapping(value = "/exec", method = RequestMethod.POST)
-    public Response<Integer> exec(@RequestBody Long[] ids)  {
+    public Response<Integer> exec(
+            @ApiParam(value = "id数组", required = true) @RequestBody Long[] ids) throws Exception {
         int count = 0;
         for(Long id : ids){
             if(id!=null){
                 CompareSqlResponse response = compareSqlService.get(id);
+                execCompareSql(response);
             }
 
         }
