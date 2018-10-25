@@ -2,27 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aofei.datasource.mapper.DatabaseMapper">
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.aofei.datasource.entity.Database">
-        <id column="ID_DATABASE" property="databaseId" />
-        <result column="NAME" property="name" />
-        <result column="ID_DATABASE_TYPE" property="idDatabaseType" />
-        <result column="ID_DATABASE_CONTYPE" property="idDatabaseContype" />
-        <result column="HOST_NAME" property="hostName" />
-        <result column="DATABASE_NAME" property="databaseName" />
-        <result column="PORT" property="port" />
-        <result column="USERNAME" property="username" />
-        <result column="PASSWORD" property="password" />
-        <result column="SERVERNAME" property="servername" />
-        <result column="DATA_TBS" property="dataTbs" />
-        <result column="INDEX_TBS" property="indexTbs" />
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID_DATABASE AS databaseId, NAME AS name, ID_DATABASE_TYPE AS idDatabaseType, ID_DATABASE_CONTYPE AS idDatabaseContype, HOST_NAME AS hostName, DATABASE_NAME AS databaseName, PORT AS port, USERNAME AS username, PASSWORD AS password, SERVERNAME AS servername, DATA_TBS AS dataTbs, INDEX_TBS AS indexTbs
+          a.ID_DATABASE AS databaseId
+        , a.NAME AS name
+        , a.ID_DATABASE_TYPE AS databaseTypeId
+        , b.DESCRIPTION AS databaseTypeName
+        , a.ID_DATABASE_CONTYPE AS databaseContypeId
+        , c.DESCRIPTION AS databaseContypeName
+        , a.HOST_NAME AS hostName
+        , a.DATABASE_NAME AS databaseName
+        , a.PORT AS port
+        , a.USERNAME AS username
+        , a.PASSWORD AS password
+        , a.SERVERNAME AS servername
+        , a.DATA_TBS AS dataTbs
+        , a.INDEX_TBS AS indexTbs
     </sql>
 
+    <sql id="Base_Joins">
+        LEFT JOIN R_DATABASE_TYPE b on b.ID_DATABASE_TYPE = a.ID_DATABASE_TYPE
+        LEFT JOIN R_DATABASE_CONTYPE c on c.ID_DATABASE_CONTYPE = a.ID_DATABASE_CONTYPE
+    </sql>
+    <select id="findList"  resultType="com.aofei.datasource.entity.DatabaseEntity">
+        select
+        <include refid="Base_Column_List"/>
+        from R_DATABASE a
+        <include refid="Base_Joins"/>
 
+    </select>
 
 </mapper>

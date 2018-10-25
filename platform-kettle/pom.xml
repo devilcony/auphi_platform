@@ -98,6 +98,9 @@
             <classifier>auphi</classifier>
         </dependency>
 
+
+
+
         <dependency>
             <groupId>org.pentaho.di</groupId>
             <artifactId>kettle-log4j-core</artifactId>
@@ -277,6 +280,11 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.mxgraph</groupId>
+            <artifactId>mxgraph-all</artifactId>
+            <version>1.8.0</version>
         </dependency>
 
     </dependencies>

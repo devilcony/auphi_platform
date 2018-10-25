@@ -1,6 +1,7 @@
 package com.aofei.datasource.mapper;
 
-import com.aofei.datasource.entity.Database;
+import com.aofei.base.annotation.MyBatisMapper;
+import com.aofei.datasource.entity.DatabaseEntity;
 import com.aofei.base.mapper.BaseMapper;
 
 /**
@@ -11,6 +12,7 @@ import com.aofei.base.mapper.BaseMapper;
  * @author Tony
  * @since 2018-09-22
  */
-public interface DatabaseMapper extends BaseMapper<Database> {
+@MyBatisMapper
+public interface DatabaseMapper extends BaseMapper<DatabaseEntity> {
 
 }

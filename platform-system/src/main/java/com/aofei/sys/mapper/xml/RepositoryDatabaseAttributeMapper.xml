@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.RepositoryDatabaseAttributeMapper">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ID_REPOSITORY_DATABASE_ATTRIBUTE AS repositoryDatabaseAttributeId
+        , a.ID_REPOSITORY_CONNECTION AS repositoryConnectionId
+        , a.CODE AS code
+        , a.VALUE_STR AS valueStr
+    </sql>
+
+    <sql id="Base_Joins">
+
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.sys.entity.RepositoryDatabaseAttribute">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_REPOSITORY_DATABASE_ATTRIBUTE a
+        <include refid="Base_Joins"/>
+        <where>
+            <if test="repositoryConnectionId !=null ">
+                AND  a.ID_REPOSITORY_CONNECTION  = #{repositoryConnectionId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByDatabaseId">
+        delete from SYS_REPOSITORY_DATABASE_ATTRIBUTE where ID_REPOSITORY_CONNECTION = #{repositoryConnectionId}
+    </delete>
+
+
+
+</mapper>

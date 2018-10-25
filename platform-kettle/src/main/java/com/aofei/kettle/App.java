@@ -1,12 +1,15 @@
 package com.aofei.kettle;
 
+import com.aofei.base.common.Const;
 import com.aofei.kettle.core.PropsUI;
 import org.pentaho.di.core.DBCache;
 import org.pentaho.di.core.RowMetaAndData;
+import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.logging.*;
 import org.pentaho.di.core.row.RowMeta;
 import org.pentaho.di.job.JobExecutionConfiguration;
 import org.pentaho.di.repository.Repository;
+import org.pentaho.di.repository.kdr.KettleDatabaseRepository;
 import org.pentaho.di.trans.TransExecutionConfiguration;
 import org.pentaho.metastore.stores.delegate.DelegatingMetaStore;
 
@@ -20,12 +23,12 @@ public class App {
 	private LogChannelInterface log;
 
 	private Map<String,Repository> repositorys;
-	
+
 	private TransExecutionConfiguration transExecutionConfiguration;
 	private TransExecutionConfiguration transPreviewExecutionConfiguration;
 	private TransExecutionConfiguration transDebugExecutionConfiguration;
 	private JobExecutionConfiguration jobExecutionConfiguration;
-	
+
 	public PropsUI props;
 
 	private App() {
@@ -41,15 +44,24 @@ public class App {
 	    transDebugExecutionConfiguration.setGatheringMetrics( true );
 
 	    jobExecutionConfiguration = new JobExecutionConfiguration();
-	    
+
 	    variables = new RowMetaAndData( new RowMeta() );
 	}
 
-    public  Repository getRepository(String key) {
-		return repositorys.get(key);
+    public  Repository getRepository(String key) throws KettleException {
+		KettleDatabaseRepository repository = (KettleDatabaseRepository) repositorys.get(key);
+		if(repository!=null && !repository.isConnected()){
+			repository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
+		}
+
+		return repository;
     }
 
-    public  void setRepository(String key,Repository repository) {
+	public Map<String, Repository> getRepositorys() {
+		return repositorys;
+	}
+
+	public  void setRepository(String key, Repository repository) {
 		repositorys.put(key,repository);
 	}
 
@@ -75,18 +87,18 @@ public class App {
 	}
 
 
-	
+
 	private Repository defaultRepository;
-	
+
 	public void initDefault(Repository defaultRepo) {
 		if(this.defaultRepository == null)
 			this.defaultRepository = defaultRepo;
 	}
-	
+
 	public Repository getDefaultRepository() {
 		return this.defaultRepository;
 	}
-	
+
 
 
 	private DelegatingMetaStore metaStore;
@@ -94,18 +106,18 @@ public class App {
 	public DelegatingMetaStore getMetaStore() {
 		return metaStore;
 	}
-	
+
 	public LogChannelInterface getLog() {
 		return log;
 	}
-	
+
 	private RowMetaAndData variables = null;
 	private ArrayList<String> arguments = new ArrayList<String>();
-	
+
 	public String[] getArguments() {
 		return arguments.toArray(new String[arguments.size()]);
 	}
-	
+
 	public JobExecutionConfiguration getJobExecutionConfiguration() {
 		return jobExecutionConfiguration;
 	}
@@ -121,11 +133,11 @@ public class App {
 	public TransExecutionConfiguration getTransExecutionConfiguration() {
 		return transExecutionConfiguration;
 	}
-	
+
 	public RowMetaAndData getVariables() {
 		return variables;
 	}
-	
+
 //	public JSONArray encodeVariables() {
 //		Object[] data = variables.getData();
 //		String[] fields = variables.getRowMeta().getFieldNames();
@@ -138,5 +150,5 @@ public class App {
 //		}
 //		return jsonArray;
 //	}
-	
+
 }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.RepositoryMapper">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ID_REPOSITORY AS repositoryId
+        , a.ID_REPOSITORY_CONNECTION AS repositoryConnectionId
+        , a.REPOSITORY_NAME AS repositoryName
+        , a.IS_DEFAULT AS isDefault
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+        , rd.REPOSITORY_CONNECTION_NAME AS repositoryConnectionName
+        , rd.HOST_NAME AS hostName
+        , rd.HOST_NAME AS hostName
+    </sql>
+
+    <sql id="Base_Joins">
+        LEFT JOIN SYS_REPOSITORY_DATABASE rd ON rd.ID_REPOSITORY_CONNECTION = a.ID_REPOSITORY_CONNECTION
+    </sql>
+
+
+
+    <select id="findByRepositoryName" resultType="com.aofei.sys.entity.Repository">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_REPOSITORY a
+        <include refid="Base_Joins"/>
+        where  a.REPOSITORY_NAME = #{repositoryName} and a.DEL_FLAG = 0
+    </select>
+
+    <select id="selectById" resultType="com.aofei.sys.entity.Repository">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_REPOSITORY a
+        <include refid="Base_Joins"/>
+        where  a.ID_REPOSITORY = #{id} and a.DEL_FLAG = 0
+    </select>
+
+
+    <select id="findList"  resultType="com.aofei.sys.entity.Repository">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_REPOSITORY a
+        <include refid="Base_Joins"/>
+        <where>
+            a.DEL_FLAG = 0
+            <if test="repositoryId !=null ">
+                and  a.ID_REPOSITORY  = #{repositoryId}
+            </if>
+            <if test="repositoryName !=null and repositoryName != '' ">
+                and  a.REPOSITORY_NAME  like '%${repositoryName}%'
+            </if>
+        </where>
+    </select>
+
+    <update id="cancelAllDefault">
+        update SYS_REPOSITORY set IS_DEFAULT = 0;
+    </update>
+</mapper>
