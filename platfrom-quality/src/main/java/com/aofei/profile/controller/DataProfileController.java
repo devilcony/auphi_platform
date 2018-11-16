@@ -4,9 +4,7 @@ import com.aofei.base.controller.BaseController;
 import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.model.response.Response;
 import com.aofei.base.model.vo.DataGrid;
-
 import com.aofei.compare.util.TemplateUtil;
-import com.aofei.kettle.utils.DatabaseUtils;
 import com.aofei.profile.entity.ProfileTableColumn;
 import com.aofei.profile.entity.ProfileTableResult;
 import com.aofei.profile.model.request.ProfileTableRequest;
@@ -16,6 +14,7 @@ import com.aofei.profile.service.IProfileTableService;
 import com.baomidou.mybatisplus.plugins.Page;
 import io.swagger.annotations.*;
 import lombok.extern.log4j.Log4j;
+import com.aofei.kettle.utils.DatabaseUtils;
 import org.pentaho.di.core.database.Database;
 import org.pentaho.di.core.exception.KettleDatabaseException;
 import org.slf4j.Logger;

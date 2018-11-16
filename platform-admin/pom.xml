@@ -73,7 +73,7 @@
         <!--日志-->
         <dependency>
             <groupId>com.aofei</groupId>
-            <artifactId>platform-log</artifactId>
+            <artifactId>platform-log-sys</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -98,7 +98,11 @@
             <version>${project.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-kettle-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
 
         <!-- spring begin-->

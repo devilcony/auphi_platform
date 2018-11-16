@@ -1,16 +1,16 @@
 package com.aofei.sys.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.aofei.base.controller.BaseController;
 import com.aofei.base.model.response.Response;
-import com.aofei.kettle.core.repository.RepositoryCodec;
 import com.aofei.sys.model.request.RepositoryDatabaseRequest;
 import com.aofei.sys.model.response.RepositoryDatabaseResponse;
 import com.aofei.sys.service.IRepositoryDatabaseService;
 import com.aofei.sys.utils.DatabaseCodec;
+import com.aofei.sys.utils.RepositoryCodec;
 import io.swagger.annotations.*;
 import lombok.extern.log4j.Log4j;
+import com.aofei.kettle.utils.JSONObject;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.database.Database;
 import org.pentaho.di.core.database.DatabaseMeta;
@@ -79,7 +79,7 @@ public class RepositoryDatabaseController extends BaseController {
     public Response<String> create(
             @RequestBody JSONObject request) throws KettleDatabaseException {
 
-        DatabaseMeta databaseMeta =  DatabaseCodec.checkParameters(request);
+        DatabaseMeta databaseMeta =  DatabaseCodec.decode(request);
 
         RepositoryDatabaseRequest databaseRequest = DatabaseCodec.decode(databaseMeta);
 
@@ -107,8 +107,8 @@ public class RepositoryDatabaseController extends BaseController {
 
         StringBuffer sql = new StringBuffer();
         KettleDatabaseRepositoryMeta repositoryMeta= (KettleDatabaseRepositoryMeta) RepositoryCodec.decode(request);
-        JSONObject extraOptions  = request.getJSONObject("extraOptions");
-        String connectionName = extraOptions.getString("database");
+        JSONObject extraOptions  = request.optJSONObject("extraOptions");
+        String connectionName = extraOptions.optString("database");
 
         RepositoryDatabaseResponse databaseResponse = repositoryDatabaseService.getByConnectionName(connectionName);
 

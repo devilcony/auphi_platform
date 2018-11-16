@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.dataservice.mapper.ServiceMonitorMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.dataservice.entity.ServiceMonitor">
+        <id column="MONITOR_ID" property="monitorId" />
+        <result column="SERVICE_ID" property="serviceId" />
+        <result column="START_TIME" property="startTime" />
+        <result column="END_TIME" property="endTime" />
+        <result column="STATUS" property="status" />
+        <result column="userName" property="userName" />
+        <result column="systemName" property="systemName" />
+        <result column="CREATE_USER" property="createUser" />
+        <result column="UPDATE_USER" property="updateUser" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="DEL_FLAG" property="delFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        MONITOR_ID AS monitorId, SERVICE_ID AS serviceId, START_TIME AS startTime, END_TIME AS endTime, STATUS AS status, userName, systemName, CREATE_USER AS createUser, UPDATE_USER AS updateUser, CREATE_TIME AS createTime, UPDATE_TIME AS updateTime, DEL_FLAG AS delFlag
+    </sql>
+
+</mapper>

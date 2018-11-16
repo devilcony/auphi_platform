@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.joblog.mapper.LogJobMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.joblog.entity.LogJob">
+        <id column="JOB_ID" property="jobId" />
+        <result column="JOB_CONFIG_ID" property="jobConfigId" />
+        <result column="CHANNEL_ID" property="channelId" />
+        <result column="JOB_NAME" property="jobName" />
+        <result column="JOB_CN_NAME" property="jobCnName" />
+        <result column="STATUS" property="status" />
+        <result column="LINES_READ" property="linesRead" />
+        <result column="LINES_WRITTEN" property="linesWritten" />
+        <result column="LINES_UPDATED" property="linesUpdated" />
+        <result column="LINES_INPUT" property="linesInput" />
+        <result column="LINES_OUTPUT" property="linesOutput" />
+        <result column="LINES_REJECTED" property="linesRejected" />
+        <result column="ERRORS" property="errors" />
+        <result column="STARTDATE" property="startdate" />
+        <result column="ENDDATE" property="enddate" />
+        <result column="LOGDATE" property="logdate" />
+        <result column="DEPDATE" property="depdate" />
+        <result column="REPLAYDATE" property="replaydate" />
+        <result column="LOG_FIELD" property="logField" />
+        <result column="EXECUTING_SERVER" property="executingServer" />
+        <result column="EXECUTING_USER" property="executingUser" />
+        <result column="EXCUTOR_TYPE" property="excutorType" />
+        <result column="JOB_LOG" property="jobLog" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        JOB_ID AS jobId, JOB_CONFIG_ID AS jobConfigId, CHANNEL_ID AS channelId, JOB_NAME AS jobName, JOB_CN_NAME AS jobCnName, STATUS AS status, LINES_READ AS linesRead, LINES_WRITTEN AS linesWritten, LINES_UPDATED AS linesUpdated, LINES_INPUT AS linesInput, LINES_OUTPUT AS linesOutput, LINES_REJECTED AS linesRejected, ERRORS AS errors, STARTDATE AS startdate, ENDDATE AS enddate, LOGDATE AS logdate, DEPDATE AS depdate, REPLAYDATE AS replaydate, LOG_FIELD AS logField, EXECUTING_SERVER AS executingServer, EXECUTING_USER AS executingUser, EXCUTOR_TYPE AS excutorType, JOB_LOG AS jobLog
+    </sql>
+
+</mapper>

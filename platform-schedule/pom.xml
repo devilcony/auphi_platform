@@ -42,7 +42,7 @@
 
         <dependency>
             <groupId>com.aofei</groupId>
-            <artifactId>platform-kettle</artifactId>
+            <artifactId>platform-kettle-base</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -78,7 +78,7 @@
         </dependency>
         <dependency>
             <groupId>com.aofei</groupId>
-            <artifactId>platform-log</artifactId>
+            <artifactId>platform-log-sys</artifactId>
             <version>${parent.version}</version>
             <scope>compile</scope>
         </dependency>

@@ -30,6 +30,7 @@
             org.springframework.web.util.Log4jConfigListener
         </listener-class>
     </listener>
+
     <!-- log4j -->
 
     <!-- session timeout -->
@@ -61,6 +62,10 @@
     <!-- Spring ContextLoaderListener -->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
     <!-- 浏览器不支持put,delete等method,由该filter将/blog?_method=delete转换为标准的http delete方法 -->
@@ -101,4 +106,3 @@
 
 
 </web-app>
-        

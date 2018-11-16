@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.aofei</groupId>
-            <artifactId>platform-kettle</artifactId>
+            <artifactId>platform-kettle-base</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -41,12 +41,6 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.2.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.pentaho.di</groupId>
-            <artifactId>kettle-core</artifactId>
-            <version>9.0.0.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- log end -->

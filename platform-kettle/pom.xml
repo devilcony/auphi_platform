@@ -10,7 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>platform-kettle</artifactId>
+    <packaging>pom</packaging>
     <description>kettle相关</description>
+    <modules>
+        <module>platform-kettle-base</module>
+        <module>platform-kettle-engine</module>
+    </modules>
 
     <properties>
         <pentaho.version>9.0.0.0-SNAPSHOT</pentaho.version>
@@ -20,6 +25,7 @@
         <pentaho-hadoop-shims-api.version>9.0.0.0-SNAPSHOT</pentaho-hadoop-shims-api.version>
         <mondrian.version>9.0.0.0-SNAPSHOT</mondrian.version>
         <encoder.version>1.2</encoder.version>
+        <ftp4che.version>0.7.1</ftp4che.version>
     </properties>
 
     <dependencies>
@@ -29,16 +35,18 @@
             <version>${parent.version}</version>
         </dependency>
 
+
         <dependency>
-            <groupId>com.aofei</groupId>
-            <artifactId>platform-log</artifactId>
-            <version>${parent.version}</version>
+            <groupId>pentaho-kettle</groupId>
+            <artifactId>kettle-core</artifactId>
+            <version>9.0.0.0-SNAPSHOT</version>
+            <classifier>auphi</classifier>
         </dependency>
 
         <dependency>
-            <groupId>org.pentaho.di</groupId>
-            <artifactId>kettle-core</artifactId>
-            <version>9.0.0.0</version>
+            <groupId>pentaho-kettle</groupId>
+            <artifactId>kettle-engine</artifactId>
+            <version>9.0.0.0-SNAPSHOT</version>
             <classifier>auphi</classifier>
         </dependency>
 
@@ -49,13 +57,6 @@
             <classifier>auphi</classifier>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.pentaho.di</groupId>
-            <artifactId>kettle-engine</artifactId>
-            <version>9.0.0.0</version>
-            <classifier>auphi</classifier>
-        </dependency>
 
         <!-- pentaho begin-->
         <dependency>
@@ -76,28 +77,6 @@
             <artifactId>pentaho-platform-api</artifactId>
             <version>9.0.0.0-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.pentaho.di</groupId>
-            <artifactId>kettle-core</artifactId>
-            <version>9.0.0.0</version>
-            <classifier>auphi</classifier>
-        </dependency>
-
-        <dependency>
-            <groupId>org.pentaho.di</groupId>
-            <artifactId>kettle-dbdialog</artifactId>
-            <version>9.0.0.0</version>
-            <classifier>auphi</classifier>
-        </dependency>
-
-        <dependency>
-            <groupId>org.pentaho.di</groupId>
-            <artifactId>kettle-engine</artifactId>
-            <version>9.0.0.0</version>
-            <classifier>auphi</classifier>
-        </dependency>
-
 
 
 
@@ -253,6 +232,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.pentaho.di.plugins</groupId>
+            <artifactId>pdi-core-plugins-impl</artifactId>
+            <version>${pentaho.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>pentaho</groupId>
             <artifactId>mondrian</artifactId>
             <version>${mondrian.version}</version>
@@ -268,7 +253,46 @@
         </dependency>
         <!-- fastjson end-->
 
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ftp4che</groupId>
+            <artifactId>ftp4che</artifactId>
+            <version>${ftp4che.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.enterprisedt</groupId>
+            <artifactId>edtftpj</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.owasp.encoder</groupId>

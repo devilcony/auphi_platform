@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.mdm.mapper.DataCleanMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ID AS id
+        , a.ID_MODEL AS modelId
+        , model.MODEL_NAME AS modelName
+        , a.ATTRIBUTE_MODEL AS attributeModel
+        , a.REPOSITORY_NAME AS repositoryName
+        , a.MDM_ID_DATABASE AS databaseId
+        , a.MDM_SCHEMA_NAME AS schemaName
+        , a.MDM_TABLE_NAME AS tableName
+        , a.MDM_PRIMARY_KEY AS primaryKey
+        , a.MDM_COLUMN_NAME AS columnName
+        , a.MDM_WHERE_CONDITION AS whereCondition
+        , a.MAPING_MODE AS mapingMode
+        , a.MAPING_ID_DATABASE AS mapingIdDatabase
+        , a.MAPING_SCHEMA_NAME AS mapingSchemaName
+        , a.MAPING_TABLE_NAME AS mapingTableName
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+    <sql id="Base_Joins">
+        LEFT JOIN MDM_MODEL model ON model.ID_MODEL = a.ID_MODEL
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.mdm.entity.DataClean">
+        select
+        <include refid="Base_Column_List"/>
+        from MDM_DATA_CLEAN a
+        <include refid="Base_Joins"/>
+        <where>
+            a.DEL_FLAG = 0
+        </where>
+    </select>
+
+    <update id="deleteById">
+        update MDM_DATA_CLEAN a set a.DEL_FLAG = 1  where a.ID = #{id}
+    </update>
+
+</mapper>

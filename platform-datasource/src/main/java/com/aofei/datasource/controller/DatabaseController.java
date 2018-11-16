@@ -47,7 +47,7 @@ public class DatabaseController extends BaseController {
             @ApiImplicitParam(name = "page", value = "当前页码(默认1)", paramType = "query", dataType = "Integer"),
             @ApiImplicitParam(name = "rows", value = "每页数量(默认10)", paramType = "query", dataType = "Integer"),
             @ApiImplicitParam(name = "name", value = "数据源名称(like查询)", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "repository", value = "资源库名称(required=)", paramType = "query", dataType = "String", required=true)
+            @ApiImplicitParam(name = "repository", value = "资源库名称", paramType = "query", dataType = "String", required=true)
     })
     @RequestMapping(value = "/listPage", method = RequestMethod.GET)
     public Response<DataGrid<DatabaseResponse>> page(@ApiIgnore DatabaseRequest request) throws KettleException, SQLException {

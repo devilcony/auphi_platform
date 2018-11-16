@@ -29,6 +29,8 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.SchedulerException;
 
+import java.text.ParseException;
+
 /**
  *
  * ${DESCRIPTION}
@@ -38,7 +40,7 @@ import org.quartz.SchedulerException;
  */
 public interface IQuartzService {
 
-    void create(GeneralScheduleRequest request, String group, Class<? extends Job> jobExecClass) throws SchedulerException;
+    void create(GeneralScheduleRequest request, String group, Class<? extends Job> jobExecClass) throws SchedulerException, ParseException;
 
 
     /**
@@ -94,5 +96,5 @@ public interface IQuartzService {
      * @param quartzExecuteClass
      * @throws SchedulerException
      */
-    void update(GeneralScheduleRequest request, String group, Class<Job> quartzExecuteClass) throws SchedulerException;
+    void update(GeneralScheduleRequest request, String group, Class<Job> quartzExecuteClass) throws SchedulerException, ParseException;
 }

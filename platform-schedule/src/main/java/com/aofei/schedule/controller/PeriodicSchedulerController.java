@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.text.ParseException;
+
 /**
  * @auther Tony
  * @create 2018-09-22 15:39
@@ -73,7 +75,7 @@ public class PeriodicSchedulerController extends BaseController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Response<Boolean> add(
             @RequestBody GeneralScheduleRequest request,
-            @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
+            @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException, ParseException {
         Class quartzExecuteClass = null;
         if(request.getFile().endsWith("kjb") || request.getFile().endsWith("KJB")){
             quartzExecuteClass = JobRunner.class;
@@ -126,7 +128,7 @@ public class PeriodicSchedulerController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Response<Boolean> update(
             @RequestBody GeneralScheduleRequest request,
-            @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
+            @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException, ParseException {
         Class quartzExecuteClass = null;
         if(request.getFile().endsWith("kjb") || request.getFile().endsWith("KJB")){
             quartzExecuteClass = JobRunner.class;

@@ -18,6 +18,8 @@
     <module>platform-datasource</module>
     <module>platfrom-cluster</module>
     <module>platform-system-priviledge</module>
+    <module>platform-mdm</module>
+    <module>platform-dataservice</module>
   </modules>
   <packaging>pom</packaging>
   <name>auphi_platform_v3.9.0</name>
@@ -28,10 +30,10 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
-    <!-- 文件拷贝时的编码 -->  
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>  
-    <!-- 编译时的编码 -->  
+    <!-- 文件拷贝时的编码 -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <!-- 编译时的编码 -->
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 
     <jdk.version>1.8</jdk.version>
@@ -118,8 +120,8 @@
     <swagger.version>2.5.0</swagger.version>
     <fasterxml.jackson.core.version>2.9.2</fasterxml.jackson.core.version>
     <jwt.version></jwt.version>
-  </properties>  
-  
+  </properties>
+
   <repositories>
 
     <repository>
@@ -148,7 +150,7 @@
   </repositories>
 
 
-  
+
 
 
   <dependencyManagement>
@@ -790,6 +792,12 @@
       <version>1.9.9</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>1.9.9</version>
+    </dependency>
+
 
 
     <dependency>
@@ -811,11 +819,7 @@
     </dependency>-->
 
 
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-      <version>1.9.9</version>
-    </dependency>
+
 
 
 
@@ -1621,7 +1625,7 @@
     </resources>
   </build>-->
   <!--build end-->
-  
+
   <!--<build>
     <plugins>
       <plugin>
@@ -1633,26 +1637,26 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
-      <plugin>    
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>   
-        <executions>    
-          <execution>    
-            <id>unpack</id>    
-            <phase>generate-resources</phase>    
-            <goals>    
-                <goal>unpack-dependencies</goal>    
-            </goals>    
-            <configuration>    
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
               <includeGroupIds>org.pentaho</includeGroupIds>
               <includeArtifactIds>pentaho-big-data-plugin</includeArtifactIds>
               &lt;!&ndash; <version>5.0.1</version>  &ndash;&gt;
               <type>zip</type>
-              <outputDirectory>${project.basedir}/WebContent/plugins</outputDirectory>    
-              <includes>*/**</includes>    
-            </configuration>    
-          </execution>    
-        </executions>    
+              <outputDirectory>${project.basedir}/WebContent/plugins</outputDirectory>
+              <includes>*/**</includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>-->

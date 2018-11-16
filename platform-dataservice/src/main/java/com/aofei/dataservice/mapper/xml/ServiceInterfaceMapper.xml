@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.dataservice.mapper.ServiceInterfaceMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.SERVICE_ID AS serviceId
+        , a.SERVICE_NAME AS serviceName
+        , a.SERVICE_IDENTIFY AS serviceIdentify
+        , a.SERVICE_URL AS serviceUrl
+        , a.JOB_TYPE AS jobType
+        , a.TRANS_NAME AS transName
+        , a.RETURN_TYPE AS returnType
+        , a.DATASOURCE AS datasource
+        , a.TIMEOUT AS timeout
+        , a.IS_COMPRESS AS isCompress
+        , a.TABLENAME AS tablename
+        , a.DELIMITER AS delimiter
+        , a.FIELDS AS fields
+        , a.CONDITIONS AS conditions
+        , a.CREATEDATE AS createdate
+        , a.INTERFACE_DESC AS interfaceDesc
+        , a.ID_DATABASE AS databaseId
+        , database.NAME AS databaseName
+        , a.job_Config_Id AS jobConfigId
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+    <sql id="Base_Joins">
+        LEFT JOIN R_DATABASE database ON database.ID_DATABASE = a.ID_DATABASE
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.dataservice.entity.ServiceInterface">
+        select
+        <include refid="Base_Column_List"/>
+        from DATASERVICE_INTERFACE a
+        <include refid="Base_Joins"/>
+        <where>
+            a.DEL_FLAG = 0
+        </where>
+    </select>
+</mapper>

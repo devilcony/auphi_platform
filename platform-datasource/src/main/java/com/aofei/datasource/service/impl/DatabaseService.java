@@ -1,5 +1,6 @@
 package com.aofei.datasource.service.impl;
 
+import com.aofei.base.common.Const;
 import com.aofei.base.service.impl.BaseService;
 import com.aofei.datasource.entity.DatabaseEntity;
 import com.aofei.datasource.mapper.DatabaseMapper;
@@ -14,10 +15,8 @@ import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.baomidou.mybatisplus.plugins.pagination.dialects.DB2Dialect;
 import com.baomidou.mybatisplus.plugins.pagination.dialects.MySqlDialect;
 import com.baomidou.mybatisplus.plugins.pagination.dialects.OracleDialect;
-import org.pentaho.di.core.database.DB2DatabaseMeta;
+import com.baomidou.mybatisplus.plugins.pagination.dialects.PostgreDialect;
 import org.pentaho.di.core.database.Database;
-import org.pentaho.di.core.database.MySQLDatabaseMeta;
-import org.pentaho.di.core.database.OracleDatabaseMeta;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.repository.kdr.KettleDatabaseRepository;
 import org.springframework.stereotype.Service;
@@ -44,17 +43,22 @@ public class DatabaseService extends BaseService<DatabaseMapper, DatabaseEntity>
         if(!StringUtils.isEmpty(request.getName())){
             listSQL.append(" WHERE a.NAME LIKE ").append("'%").append(request.getName()).append("%'");
         }
-        KettleDatabaseRepository repository = (KettleDatabaseRepository) App.getInstance().getRepository(request.getRepository());
+        KettleDatabaseRepository repository = (KettleDatabaseRepository) App.getInstance().getRepository();
+        repository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
         List<DatabaseResponse> list = new ArrayList<>();
         Database database = repository.getDatabase();
         IDialect dialect = null;
-        if (database.getDatabaseMeta().getDatabaseInterface() instanceof MySQLDatabaseMeta) {
-            dialect = new MySqlDialect();
-
-        } else if (database.getDatabaseMeta().getDatabaseInterface() instanceof OracleDatabaseMeta) {
-            dialect = new OracleDialect();
-        }else if(database.getDatabaseMeta().getDatabaseInterface() instanceof DB2DatabaseMeta){
-            dialect = new DB2Dialect();
+        switch (database.getDatabaseMeta().getDriverClass()){
+            case "com.mysql.jdbc.Driver":
+            case "org.gjt.mm.mysql.Driver":
+            case "com.mysql.cj.jdbc.Driver":
+                dialect = new MySqlDialect(); break;
+            case "oracle.jdbc.driver.OracleDriver":
+                dialect = new OracleDialect(); break;
+            case "com.ibm.db2.jcc.DB2Driverr":
+                dialect = new DB2Dialect(); break;
+            case "org.postgresql.Driver":
+                dialect = new PostgreDialect(); break;
         }
 
         String pageSQL = dialect.buildPaginationSql(listSQL.toString(), PageHelper.offsetCurrent(page), page.getSize());
@@ -89,6 +93,7 @@ public class DatabaseService extends BaseService<DatabaseMapper, DatabaseEntity>
         responsePage.setRecords(list);
         objectrs.close();
         countrs.close();
+        repository.disconnect();
         return responsePage;
 
     }

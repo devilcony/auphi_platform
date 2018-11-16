@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.joblog.mapper.LogJobStepMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.joblog.entity.LogJobStep">
+        <id column="JOB_STEP_ID" property="jobStepId" />
+        <result column="JOB_ID" property="jobId" />
+        <result column="CHANNEL_ID" property="channelId" />
+        <result column="LOG_DATE" property="logDate" />
+        <result column="JOBNAME" property="jobname" />
+        <result column="STEPNAME" property="stepname" />
+        <result column="LINES_READ" property="linesRead" />
+        <result column="LINES_WRITTEN" property="linesWritten" />
+        <result column="LINES_UPDATED" property="linesUpdated" />
+        <result column="LINES_INPUT" property="linesInput" />
+        <result column="LINES_OUTPUT" property="linesOutput" />
+        <result column="LINES_REJECTED" property="linesRejected" />
+        <result column="ERRORS" property="errors" />
+        <result column="RESULT" property="result" />
+        <result column="NR_RESULT_ROWS" property="nrResultRows" />
+        <result column="NR_RESULT_FILES" property="nrResultFiles" />
+        <result column="LOG_FIELD" property="logField" />
+        <result column="COPY_NR" property="copyNr" />
+        <result column="SETP_LOG" property="setpLog" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        JOB_STEP_ID AS jobStepId, JOB_ID AS jobId, CHANNEL_ID AS channelId, LOG_DATE AS logDate, JOBNAME AS jobname, STEPNAME AS stepname, LINES_READ AS linesRead, LINES_WRITTEN AS linesWritten, LINES_UPDATED AS linesUpdated, LINES_INPUT AS linesInput, LINES_OUTPUT AS linesOutput, LINES_REJECTED AS linesRejected, ERRORS AS errors, RESULT AS result, NR_RESULT_ROWS AS nrResultRows, NR_RESULT_FILES AS nrResultFiles, LOG_FIELD AS logField, COPY_NR AS copyNr, SETP_LOG AS setpLog
+    </sql>
+
+</mapper>

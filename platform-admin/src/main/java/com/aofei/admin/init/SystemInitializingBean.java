@@ -24,6 +24,8 @@
 package com.aofei.admin.init;
 
 
+import com.alibaba.druid.pool.DruidDataSource;
+import com.aofei.base.common.Const;
 import com.aofei.kettle.App;
 import com.aofei.kettle.core.PropsUI;
 import com.aofei.sys.model.request.RepositoryRequest;
@@ -36,6 +38,7 @@ import org.joda.time.DateTime;
 import org.pentaho.di.core.KettleEnvironment;
 import org.pentaho.di.core.Props;
 import org.pentaho.di.core.logging.KettleLogStore;
+import org.pentaho.di.i18n.LanguageChoice;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.repository.kdr.KettleDatabaseRepository;
 import org.slf4j.Logger;
@@ -47,6 +50,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -59,6 +63,9 @@ public class SystemInitializingBean implements InitializingBean, DisposableBean 
 
     @Autowired
     private IRepositoryService repositoryService;
+
+    @Autowired
+    private DruidDataSource dataSource;
 
     @Autowired
     private IRepositoryDatabaseService repositoryDatabaseService;
@@ -77,6 +84,7 @@ public class SystemInitializingBean implements InitializingBean, DisposableBean 
         logger.info("********系统开始启动字典装载程序****************");
         logger.info("********开始加载资源库*************************");
         logger.info("********************************************");
+        LanguageChoice.getInstance().setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
         KettleLogStore.init( 5000, 720 );
         KettleEnvironment.init();
         PropsUI.init( "KettleWebConsole", Props.TYPE_PROPERTIES_KITCHEN );
@@ -87,9 +95,15 @@ public class SystemInitializingBean implements InitializingBean, DisposableBean 
             RepositoryDatabaseResponse repositoryDatabase =  repositoryDatabaseService.get(repository.getRepositoryConnectionId());
             Repository databaseRepository = RepositoryCodec.decode(repository,repositoryDatabase);
             repositoryMap.put(repository.getRepositoryName(),databaseRepository);
+            if(repository.getIsDefault()== Const.YES){
+                App.getInstance().setRepository(databaseRepository);
+            }
         }
-        App.getInstance().setRepositorys(repositoryMap);
-
+        //默认当前系统dataSource为默认资源库
+        if(App.getInstance().getRepository()==null){
+            App.getInstance().setRepository(RepositoryCodec.decodeDefault(dataSource));
+        }
+        App.getInstance().setRepositories(repositoryMap);
 
         long timeSec = (System.currentTimeMillis() - start) / 1000;
         logger.info("********************************************");
@@ -102,7 +116,7 @@ public class SystemInitializingBean implements InitializingBean, DisposableBean 
     public void destroy() throws Exception {
         logger.info("********************************************");
         logger.info("******************正在停止系统****************");
-        Map<String, Repository> repositorys = App.getInstance().getRepositorys();
+        Map<String, Repository> repositorys = App.getInstance().getRepositories();
         for(String key : repositorys.keySet()){
 
             KettleDatabaseRepository repository = (KettleDatabaseRepository) repositorys.get(key);

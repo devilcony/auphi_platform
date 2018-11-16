@@ -18,7 +18,8 @@ public enum SystemError {
     CAPTCHA_ERROR(200002, "captcha error"),//验证码错误
     DISABLED_ACCOUNT(200003, "Account disabled"),//账号被禁用
     ORIGINAL_PASSWORD_ERROR(200004, "invalid original password error"),//原始密码错误
-    PHONE_NUMBER_EXIST(200005, "the phone number is exist"),//手机号被占用
+    USERNAME_EXIST(200005, "the username is exist"),//用户名被占用
+    EMAIL_EXIST(200011, "the email is exist"),//邮箱被占用
     PERMISSION_DENIED(200006, "Permission Denied"),
     NATIONCODE_EMPTY(200007, "Permission Denied"),
     STATUS_DISABLED(200008, "user was disabled"),

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.mdm.mapper.ModelAttributeMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ID_ATTRIBUTE AS attributeId
+        , a.ID_MODEL AS modelId
+        , a.ATTRIBUTE_ORDER AS attributeOrder
+        , a.ATTRIBUTE_NAME AS attributeName
+        , a.STATISTIC_TYPE AS statisticType
+        , a.FIELD_NAME AS fieldName
+        , a.FIELD_TYPE AS fieldType
+        , a.FIELD_LENGTH AS fieldLength
+        , a.IS_PRIMARY AS isPrimary
+        , a.FIELD_PRECISION AS fieldPrecision
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+
+    <select id="findList"  resultType="com.aofei.mdm.entity.ModelAttribute">
+        select
+        <include refid="Base_Column_List"/>
+        from MDM_MODEL_ATTRIBUTE a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="modelId !=null ">
+                AND  a.ID_MODEL  = #{modelId}
+            </if>
+        </where>
+    </select>
+
+    <select id="findListByModelId"  resultType="com.aofei.mdm.entity.ModelAttribute">
+        select
+        <include refid="Base_Column_List"/>
+        from MDM_MODEL_ATTRIBUTE a
+        <where>
+            a.DEL_FLAG = 0 AND  a.ID_MODEL  = #{modelId}
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="attributeId">
+        INSERT INTO MDM_MODEL(
+              ID_MODEL
+            , ATTRIBUTE_ORDER
+            , ATTRIBUTE_NAME
+            , STATISTIC_TYPE
+            , FIELD_NAME
+            , FIELD_TYPE
+            , FIELD_LENGTH
+            , IS_PRIMARY
+            , FIELD_PRECISION
+            , CREATE_USER
+            , UPDATE_USER
+            , CREATE_TIME
+            , UPDATE_TIME
+            , DEL_FLAG
+        )VALUES (
+              #{modelId}
+            , #{attributeOrder}
+            , #{attributeName}
+            , #{statisticType}
+            , #{fieldName}
+            , #{fieldType}
+            , #{fieldLength}
+            , #{isPrimary}
+            , #{fieldPrecision}
+            , #{createUser}
+            , #{updateUser}
+            , #{createTime}
+            , #{updateTime}
+            , #{delFlag}
+        )
+    </insert>
+
+    <update id="deleteById">
+        update MDM_MODEL_ATTRIBUTE a set a.DEL_FLAG = 1  where a.ID_ATTRIBUTE = #{id}
+    </update>
+
+    <update id="deleteByModelId">
+        update MDM_MODEL_ATTRIBUTE a set a.DEL_FLAG = 1  where a.ID_MODEL = #{modelId}
+    </update>
+
+</mapper>

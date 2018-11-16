@@ -11,9 +11,9 @@ import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 
 /**
- * 
+ *
  * 自动生成映射工具类
- * 
+ *
  * @author hubin
  *
  */
@@ -64,7 +64,7 @@ public class AutoGeneratorHelper {
 		// 策略配置
 		StrategyConfig strategy = new StrategyConfig();
 
-		strategy.setTablePrefix(new String[] { "" });// 此处可以修改为您的表前缀
+		strategy.setTablePrefix(new String[] { "DATA" });// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
 		strategy.setSuperEntityClass("com.aofei.base.entity.DataEntity");
 		strategy.setSuperServiceImplClass("com.aofei.base.service.impl.BaseService");
@@ -74,11 +74,11 @@ public class AutoGeneratorHelper {
 
 		//strategy.setSuperEntityColumns(new String[]{"CREATE_USER","UPDATE_USER","CREATE_TIME","UPDATE_TIME","DEL_FLAG"});
 		strategy.setInclude(new String[] {
-				 "PROFILE_TABLE"
-				,"PROFILE_TABLE_COLUMN"
-				,"PROFILE_TABLE_GROUP"
-				,"PROFILE_TABLE_RESULT"
-				});
+				 "LOG_TRANS"
+				,"LOG_TRANS_STEP"
+
+		});
+		//strategy.setInclude(new String[] {"DATASOURCE_HADOOP"});
 		//strategy.setInclude(new String[] {"SYS_MENU"});
 		//strategy.setFieldPrefix(new String[] {"C_"});
 		//strategy.setInclude(new String[] { "KDI_QRTZ_GROUP" });
@@ -87,7 +87,7 @@ public class AutoGeneratorHelper {
 
 		// 包配置
 		PackageConfig pc = new PackageConfig();
-		pc.setModuleName("profile");
+		pc.setModuleName("translog");
 
 		pc.setParent("com.aofei");// 自定义包路径
 		pc.setController("controller");// 这里是控制器包名，默认 web

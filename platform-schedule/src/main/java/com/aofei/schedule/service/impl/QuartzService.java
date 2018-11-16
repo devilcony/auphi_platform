@@ -70,8 +70,7 @@ public class QuartzService implements IQuartzService {
             Scheduler sched = quartzScheduler;
 
             // 创建一项作业
-            JobDetail jobDetail = JobBuilder.newJob(jobExecClass)
-                    .withIdentity(jobName, group).build();
+            JobDetail jobDetail = JobBuilder.newJob(jobExecClass).withIdentity(jobName, group).build();
 
 
             JobDataMap data = jobDetail.getJobDataMap();

@@ -16,6 +16,7 @@ public class BaseResponse {
     @ApiModelProperty(value = "创建时间")
     protected Date createTime;
 
-
+    @ApiModelProperty(value = "创建用户")
+    private String createUser;
 
 }

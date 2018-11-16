@@ -69,7 +69,7 @@
         <include refid="Base_Column_List"/>
         from SYS_USER a
         <include refid="Base_Joins"/>
-        where  a.USERNAME = #{username} and a.DEL_FLAG = 0
+        where  a.C_USER_NAME = #{username} and a.DEL_FLAG = 0
     </select>
 
     <select id="findUserByRoleCode"  resultType="com.aofei.sys.entity.User">
@@ -94,8 +94,8 @@
 
     <update id="updateLoginInfo">
         UPDATE SYS_USER SET
-         LAST_LOGIN_IP = #{loginIp},
-        LAST_LOGIN_TIME = #{loginTime}
+         LAST_LOGIN_IP = #{lastLoginIp},
+        LAST_LOGIN_TIME = #{lastLoginTime}
         WHERE C_USER_ID = #{userId}
     </update>
 

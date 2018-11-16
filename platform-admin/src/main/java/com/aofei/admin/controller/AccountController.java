@@ -23,6 +23,7 @@
  ******************************************************************************/
 package com.aofei.admin.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.aofei.admin.authorization.Token;
 import com.aofei.admin.authorization.jwt.JwtConfig;
 import com.aofei.admin.authorization.jwt.JwtTokenBuilder;
@@ -32,13 +33,18 @@ import com.aofei.base.controller.BaseController;
 import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
+import com.aofei.kettle.App;
+import com.aofei.sys.entity.User;
 import com.aofei.sys.exception.SystemError;
+import com.aofei.sys.model.request.RegisterRequest;
 import com.aofei.sys.model.request.UserRequest;
 import com.aofei.sys.model.response.UserResponse;
 import com.aofei.sys.service.IUserService;
 import com.aofei.utils.BeanCopier;
 import com.aofei.utils.StringUtils;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.swagger.annotations.*;
+import org.pentaho.di.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +122,9 @@ public class AccountController extends BaseController {
 
             //存储到redis
             //tokenManager.createRelationship(user.getUsername(), accessToken);
+            Repository repository =  App.getInstance().getRepository();
+            repository.disconnect();
+            repository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
 
             return Response.ok(token);
         } else {
@@ -123,6 +132,57 @@ public class AccountController extends BaseController {
         }
     }
 
+
+    /**
+     * 注销
+     *
+     * @return
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public Integer logout(@RequestHeader(name = "Authorization") String token) {
+        //TODO 操蛋的JWT不能从服务端destroy token， logout目前只能在客户端的cookie 或 localStorage/sessionStorage  remove token
+        //TODO 准备用jwt生成永久的token，再结合redis来实现Logout。具体是把token的生命周期交给redis来管理，jwt只负责生成token
+        try {
+
+            return 1;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    /**
+     * 登录
+     *
+     * @return
+     */
+    @ApiOperation(value = "用户登录", notes = "用户登录返回Token,后期访问接口在head中添加Authorization={Token}", httpMethod = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200005, message = "username is exist"),
+            @ApiResponse(code = 200011, message = "email is exist"),
+            @ApiResponse(code = 200, message = "success")})
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public Response<Integer> register(@RequestBody RegisterRequest request) throws Exception {
+
+        int usernameCount = userService.selectCount(new EntityWrapper<User>().eq("C_USER_NAME",request.getUsername()));
+        if(usernameCount>0){
+            throw new ApplicationException(SystemError.USERNAME_EXIST.getCode(),"username is exist");
+        }
+
+        int emailCount = userService.selectCount(new EntityWrapper<User>().eq("C_USER_NAME",request.getEmail()));
+        if(emailCount>0){
+            throw new ApplicationException(SystemError.EMAIL_EXIST.getCode(),"email is exist");
+        }
+
+        String json =  JSON.toJSONString(request);
+
+
+        String accessToken = jwtTokenBuilder.buildToken(json, 1000*60*60*24, jwtConfig.getBase64Secret());
+
+        //TODO发送邮件继续注册
+
+
+        return Response.ok(0);
+    }
 
 
 

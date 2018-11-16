@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.mdm.mapper.ModelMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ID_MODEL AS modelId
+        , a.MODEL_NAME AS modelName
+        , a.MODEL_DESC AS modelDesc
+        , a.MODEL_STATUS AS modelStatus
+        , a.MODEL_AUTHOR AS modelAuthor
+        , a.MODEL_NOTE AS modelNote
+        , a.MODEL_CODE AS modelCode
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+
+
+    <select id="findList"  resultType="com.aofei.mdm.entity.Model">
+        select
+        <include refid="Base_Column_List"/>
+        from MDM_MODEL a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="modelName !=null and modelName !='' ">
+                AND  a.MODEL_NAME  like '%${modelName}%'
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="modelId">
+        INSERT INTO MDM_MODEL(
+              MODEL_NAME
+            , MODEL_DESC
+            , MODEL_STATUS
+            , MODEL_AUTHOR
+            , MODEL_NOTE
+            , MODEL_CODE
+            , CREATE_USER
+            , UPDATE_USER
+            , CREATE_TIME
+            , UPDATE_TIME
+            , DEL_FLAG
+        )VALUES (
+              #{modelName}
+            , #{modelDesc}
+            , #{modelStatus}
+            , #{modelAuthor}
+            , #{modelNote}
+            , #{modelCode}
+            , #{createUser}
+            , #{updateUser}
+            , #{createTime}
+            , #{updateTime}
+            , #{delFlag}
+        )
+    </insert>
+
+    <update id="deleteById">
+        update MDM_MODEL a set a.DEL_FLAG = 1  where a.ID_MODEL = #{id}
+    </update>
+</mapper>

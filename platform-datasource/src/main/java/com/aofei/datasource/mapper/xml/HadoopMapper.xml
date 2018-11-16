@@ -19,7 +19,7 @@
         , a.DEL_FLAG AS delFlag
     </sql>
 
-    <select id="findList"  resultType="ccom.aofei.datasource.entity.Menu">
+    <select id="findList"  resultType="com.aofei.datasource.entity.Hadoop">
         select
         <include refid="Base_Column_List"/>
         from DATASOURCE_HADOOP a
