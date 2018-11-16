@@ -60,6 +60,20 @@
         </aop:aspect>
     </aop:config>
 
+    <!-- 邮件发送 -->
+    <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.smtp.host}"></property>
+        <property name="username" value="${mail.smtp.username}"></property>
+        <property name="password" value="${mail.smtp.password}"></property>
+        <!-- 相当于javax.mail.Session中的props属性-->
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+                <prop key="mail.smtp.timeout">${mail.smtp.timeout}</prop>
+                <prop key="mail.smtp.from">${mail.smtp.from}</prop>
+            </props>
+        </property>
+    </bean>
 
 
     <import resource="/spring-ehcache.xml" />

@@ -103,7 +103,25 @@
         <version>RELEASE</version>
         <scope>compile</scope>
     </dependency>
-    <!-- pinyin4j end -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <!-- pinyin4j end -->
+
+        <!--Java MAil 发送邮件API-->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <!-- 真正的实现库 -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

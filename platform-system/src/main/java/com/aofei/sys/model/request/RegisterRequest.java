@@ -25,6 +25,11 @@ public class RegisterRequest  {
     private String password;
 
     /**
+     * 组织名称
+     */
+    @ApiModelProperty(value = "组织名称")
+    private String organizerName;
+    /**
      * 邮箱
      */
     @ApiModelProperty(value = "邮箱")

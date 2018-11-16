@@ -41,6 +41,7 @@ import com.aofei.sys.model.request.UserRequest;
 import com.aofei.sys.model.response.UserResponse;
 import com.aofei.sys.service.IUserService;
 import com.aofei.utils.BeanCopier;
+import com.aofei.utils.SendMailUtil;
 import com.aofei.utils.StringUtils;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.swagger.annotations.*;
@@ -73,6 +74,9 @@ public class AccountController extends BaseController {
 
     @Autowired
     private JwtTokenBuilder jwtTokenBuilder;
+
+    @Autowired
+    private SendMailUtil sendMailUtil;
 
     /**
      * 登录
@@ -168,7 +172,7 @@ public class AccountController extends BaseController {
             throw new ApplicationException(SystemError.USERNAME_EXIST.getCode(),"username is exist");
         }
 
-        int emailCount = userService.selectCount(new EntityWrapper<User>().eq("C_USER_NAME",request.getEmail()));
+        int emailCount = userService.selectCount(new EntityWrapper<User>().eq("C_EMAIL",request.getEmail()));
         if(emailCount>0){
             throw new ApplicationException(SystemError.EMAIL_EXIST.getCode(),"email is exist");
         }
@@ -177,6 +181,8 @@ public class AccountController extends BaseController {
 
 
         String accessToken = jwtTokenBuilder.buildToken(json, 1000*60*60*24, jwtConfig.getBase64Secret());
+
+        sendMailUtil.sendHtmlMail("381906259@qq.com","傲飞数据整合平台-用户注册认证",accessToken,null);
 
         //TODO发送邮件继续注册
 
