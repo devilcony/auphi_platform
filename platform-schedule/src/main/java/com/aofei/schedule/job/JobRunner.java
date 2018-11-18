@@ -1,10 +1,10 @@
 package com.aofei.schedule.job;
 
 
+import com.aofei.joblog.task.JobLogTimerTask;
 import com.aofei.kettle.App;
 import com.aofei.kettle.JobExecutor;
-import com.aofei.kettle.utils.JSONObject;
-import com.aofei.kettle.utils.StringEscapeHelper;
+
 import org.pentaho.di.core.RowMetaAndData;
 import org.pentaho.di.core.logging.DefaultLogLevel;
 import org.pentaho.di.job.JobExecutionConfiguration;
@@ -17,6 +17,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 
 public class JobRunner extends QuartzJobBean {
 
@@ -69,22 +70,9 @@ public class JobRunner extends QuartzJobBean {
 		    Thread tr = new Thread(jobExecutor, "JobExecutor_" + jobExecutor.getExecutionId());
 		    tr.start();
 
-		    while(!jobExecutor.isFinished()) {
-		    	Thread.sleep(1000);
-		    }
-
-		    JSONObject result = new JSONObject();
-		    result.put("finished", jobExecutor.isFinished());
-			if(jobExecutor.isFinished()) {
-				result.put("jobMeasure", jobExecutor.getJobMeasure());
-				result.put("log", StringEscapeHelper.encode(jobExecutor.getExecutionLog()));
-			} else {
-				result.put("jobMeasure", jobExecutor.getJobMeasure());
-				result.put("log", StringEscapeHelper.encode(jobExecutor.getExecutionLog()));
-			}
-			context.getMergedJobDataMap().put("execMethod", executionConfiguration.isExecutingLocally() ? "本地" : "远程:" + executionConfiguration.getRemoteServer().getName());
-			context.getMergedJobDataMap().put("error", jobExecutor.getErrCount());
-			context.getMergedJobDataMap().put("executionLog", result.toString());
+			JobLogTimerTask jobLogTimerTask = new JobLogTimerTask(jobExecutor);
+			Timer logTimer = new Timer();
+			logTimer.schedule(jobLogTimerTask, 0,1000);
 
 		} catch(Exception e) {
 			throw new JobExecutionException(e);

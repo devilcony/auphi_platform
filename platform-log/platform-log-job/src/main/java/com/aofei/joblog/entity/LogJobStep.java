@@ -1,24 +1,28 @@
 package com.aofei.joblog.entity;
 
-import com.baomidou.mybatisplus.activerecord.Model;
+import java.io.Serializable;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.aofei.base.entity.DataEntity;
+
+import com.baomidou.mybatisplus.annotations.Version;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author Tony
- * @since 2018-11-11
+ * @since 2018-11-17
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,11 +32,10 @@ public class LogJobStep extends Model<LogJobStep> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "JOB_STEP_ID", type = IdType.ID_WORKER)
-    private Long jobStepId;
-
-    @TableField("JOB_ID")
-    private Long jobId;
+    @TableId(value = "LOG_JOB_STEP_ID", type = IdType.ID_WORKER)
+    private String logJobStepId;
+    @TableField("LOG_JOB_ID")
+    private String logJobId;
     @TableField("CHANNEL_ID")
     private String channelId;
     @TableField("LOG_DATE")
@@ -77,7 +80,7 @@ public class LogJobStep extends Model<LogJobStep> {
 
     @Override
     protected Serializable pkVal() {
-        return this.jobStepId;
+        return this.logJobStepId;
     }
 
 }

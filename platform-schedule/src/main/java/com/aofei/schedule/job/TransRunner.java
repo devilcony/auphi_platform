@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSON;
 import com.aofei.base.common.Const;
 import com.aofei.kettle.App;
 import com.aofei.kettle.TransExecutor;
-import com.aofei.kettle.utils.JSONObject;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
+import com.aofei.translog.task.TransLogTimerTask;
 import org.pentaho.di.core.RowMetaAndData;
 import org.pentaho.di.core.logging.DefaultLogLevel;
 import org.pentaho.di.repository.Repository;
@@ -15,12 +15,17 @@ import org.pentaho.di.trans.TransExecutionConfiguration;
 import org.pentaho.di.trans.TransMeta;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 
 public class TransRunner extends QuartzJobBean {
+
+	private static Logger logger = LoggerFactory.getLogger(TransRunner.class);
 
 	@Override
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -33,7 +38,7 @@ public class TransRunner extends QuartzJobBean {
 			String name = request.getFile();
 
 			Repository repository = App.getInstance().getRepository();
-
+			repository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
 			RepositoryDirectoryInterface directory = repository.findDirectory(dir);
 			if(directory == null)
 				directory = repository.getUserHomeDirectory();
@@ -78,35 +83,14 @@ public class TransRunner extends QuartzJobBean {
 			for (String key : paramNames) {
 				params.put(key, "");
 			}
-
+			repository.disconnect();
 		    TransExecutor transExecutor = TransExecutor.initExecutor(executionConfiguration, transMeta);
-		    Thread tr = new Thread(transExecutor, "TransExecutor_" + transExecutor.getExecutionId());
+			Timer logTimer = new Timer();
+
+			Thread tr = new Thread(transExecutor, "TransExecutor_" + transExecutor.getExecutionId());
 		    tr.start();
-
-		    while(!transExecutor.isFinished()) {
-		    	Thread.sleep(1000);
-		    }
-
-		    JSONObject result = new JSONObject();
-		    result.put("finished", transExecutor.isFinished());
-			if(transExecutor.isFinished()) {
-				result.put("stepMeasure", transExecutor.getStepMeasure());
-				result.put("log", transExecutor.getExecutionLog());
-				result.put("stepStatus", transExecutor.getStepStatus());
-			} else {
-				result.put("stepMeasure", transExecutor.getStepMeasure());
-				result.put("log", transExecutor.getExecutionLog());
-				result.put("stepStatus", transExecutor.getStepStatus());
-			}
-			String execMethod = "本地";
-			if(executionConfiguration.isExecutingRemotely())
-				execMethod = "远程:" + executionConfiguration.getRemoteServer().getName();
-			else if(executionConfiguration.isExecutingClustered())
-				execMethod = "集群";
-			context.getMergedJobDataMap().put("execMethod",  execMethod );
-			context.getMergedJobDataMap().put("error", transExecutor.getErrCount());
-			context.getMergedJobDataMap().put("executionLog", result.toString());
-
+            TransLogTimerTask transTimerTask = new TransLogTimerTask(transExecutor);
+			logTimer.schedule(transTimerTask, 0,10000);
 		} catch(Exception e) {
 			throw new JobExecutionException(e);
 		}

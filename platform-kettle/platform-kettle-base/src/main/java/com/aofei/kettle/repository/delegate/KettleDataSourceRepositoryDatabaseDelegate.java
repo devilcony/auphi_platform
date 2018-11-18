@@ -178,10 +178,19 @@ public class KettleDataSourceRepositoryDatabaseDelegate extends KettleDataSource
         // Insert new Note in repository
         //
         databaseMeta.setObjectId( insertDatabase(
-          databaseMeta.getName(), databaseMeta.getPluginId(), DatabaseMeta.getAccessTypeDesc( databaseMeta
-            .getAccessType() ), databaseMeta.getHostname(), databaseMeta.getDatabaseName(), databaseMeta
-            .getDatabasePortNumberString(), databaseMeta.getUsername(), databaseMeta.getPassword(),
-          databaseMeta.getServername(), databaseMeta.getDataTablespace(), databaseMeta.getIndexTablespace(),databaseMeta.getCreateUser() ) );
+          databaseMeta.getName()
+                , databaseMeta.getPluginId()
+                , DatabaseMeta.getAccessTypeDesc( databaseMeta.getAccessType() )
+                , databaseMeta.getHostname()
+                , databaseMeta.getDatabaseName()
+                , databaseMeta.getDatabasePortNumberString()
+                , databaseMeta.getUsername()
+                , databaseMeta.getPassword()
+                , databaseMeta.getServername()
+                , databaseMeta.getDataTablespace()
+                , databaseMeta.getIndexTablespace()
+                ,databaseMeta.getCreateUser()
+                ,databaseMeta.getOrganizerId()) );
       } else {
         // --> found entry with the same name...
 
@@ -283,7 +292,7 @@ public class KettleDataSourceRepositoryDatabaseDelegate extends KettleDataSource
 
   public synchronized ObjectId insertDatabase( String name, String type, String access, String host,
                                                String dbname, String port, String user, String pass, String servername, String data_tablespace,
-                                               String index_tablespace,String createUser ) throws KettleException {
+                                               String index_tablespace,String createUser,Long organizerId ) throws KettleException {
 
     ObjectId id = repository.connectionDelegate.getNextDatabaseID();
 

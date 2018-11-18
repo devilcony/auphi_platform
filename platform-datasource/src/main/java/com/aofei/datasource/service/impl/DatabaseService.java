@@ -1,29 +1,15 @@
 package com.aofei.datasource.service.impl;
 
-import com.aofei.base.common.Const;
 import com.aofei.base.service.impl.BaseService;
 import com.aofei.datasource.entity.DatabaseEntity;
 import com.aofei.datasource.mapper.DatabaseMapper;
 import com.aofei.datasource.model.request.DatabaseRequest;
 import com.aofei.datasource.model.response.DatabaseResponse;
 import com.aofei.datasource.service.IDatabaseService;
-import com.aofei.kettle.App;
-import com.aofei.utils.StringUtils;
+import com.aofei.utils.BeanCopier;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.plugins.pagination.IDialect;
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.baomidou.mybatisplus.plugins.pagination.dialects.DB2Dialect;
-import com.baomidou.mybatisplus.plugins.pagination.dialects.MySqlDialect;
-import com.baomidou.mybatisplus.plugins.pagination.dialects.OracleDialect;
-import com.baomidou.mybatisplus.plugins.pagination.dialects.PostgreDialect;
-import org.pentaho.di.core.database.Database;
-import org.pentaho.di.core.exception.KettleException;
-import org.pentaho.di.repository.kdr.KettleDatabaseRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,10 +20,13 @@ import java.util.List;
 public class DatabaseService extends BaseService<DatabaseMapper, DatabaseEntity> implements IDatabaseService {
 
     @Override
-    public Page<DatabaseResponse> getPage(Page<DatabaseEntity> page, DatabaseRequest request) throws KettleException, SQLException {
+    public Page<DatabaseResponse> getPage(Page<DatabaseEntity> page, DatabaseRequest request) {
 
+        List<DatabaseEntity> list = baseMapper.findList(page, request);
+        page.setRecords(list);
+        return convert(page, DatabaseResponse.class);
 
-        String countSQl = "SELECT COUNT(*) FROM R_DATABASE";
+        /*String countSQl = "SELECT COUNT(*) FROM R_DATABASE";
 
         StringBuffer listSQL = new  StringBuffer("SELECT a.ID_DATABASE AS databaseId,a.NAME AS NAME,a.ID_DATABASE_TYPE AS databaseTypeId,b.DESCRIPTION AS databaseTypeName,a.ID_DATABASE_CONTYPE AS databaseContypeId,c.DESCRIPTION AS databaseContypeName,a.HOST_NAME AS hostName,a.DATABASE_NAME AS databaseName,a.PORT AS PORT,a.USERNAME AS username,a.PASSWORD AS PASSWORD,a.SERVERNAME AS servername,a.DATA_TBS AS dataTbs,a.INDEX_TBS AS indexTbs FROM R_DATABASE a LEFT JOIN R_DATABASE_TYPE b ON b.ID_DATABASE_TYPE=a.ID_DATABASE_TYPE LEFT JOIN R_DATABASE_CONTYPE c ON c.ID_DATABASE_CONTYPE=a.ID_DATABASE_CONTYPE ");
         if(!StringUtils.isEmpty(request.getName())){
@@ -94,7 +83,13 @@ public class DatabaseService extends BaseService<DatabaseMapper, DatabaseEntity>
         objectrs.close();
         countrs.close();
         repository.disconnect();
-        return responsePage;
+        return responsePage;*/
 
+    }
+
+    @Override
+    public List<DatabaseResponse> getDatabases(DatabaseRequest request) {
+        List<DatabaseEntity> list = baseMapper.findList(request);
+        return BeanCopier.copy(list,DatabaseResponse.class);
     }
 }

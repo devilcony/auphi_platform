@@ -48,6 +48,18 @@
 
         <dependency>
             <groupId>com.aofei</groupId>
+            <artifactId>platform-log-trans</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-log-job</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aofei</groupId>
             <artifactId>platform-system</artifactId>
             <version>${project.version}</version>
         </dependency>

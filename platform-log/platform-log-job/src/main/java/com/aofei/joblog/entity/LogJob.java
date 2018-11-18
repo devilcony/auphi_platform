@@ -1,35 +1,39 @@
 package com.aofei.joblog.entity;
 
-import com.baomidou.mybatisplus.activerecord.Model;
+import java.io.Serializable;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.aofei.base.entity.DataEntity;
+
+import com.baomidou.mybatisplus.annotations.Version;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author Tony
- * @since 2018-11-11
+ * @since 2018-11-17
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("LOG_JOB")
-public class LogJob extends Model<LogJobStep> {
+public class LogJob extends Model<LogJob> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "JOB_ID", type = IdType.ID_WORKER)
-    private Long jobId;
+    @TableId(value = "LOG_JOB_ID", type = IdType.ID_WORKER)
+    private String logJobId;
     /**
      * 对应r_job表中的ID_JOB主键
      */
@@ -37,7 +41,7 @@ public class LogJob extends Model<LogJobStep> {
     private Long jobConfigId;
     /**
      * 唯一，通UUID表示
-
+            
      */
     @TableField("CHANNEL_ID")
     private String channelId;
@@ -88,7 +92,7 @@ public class LogJob extends Model<LogJobStep> {
 
     @Override
     protected Serializable pkVal() {
-        return this.jobId;
+        return this.logJobId;
     }
 
 }

@@ -4,14 +4,17 @@ import com.aofei.base.annotation.CurrentUser;
 import com.aofei.base.controller.BaseController;
 import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
+import com.aofei.base.model.vo.DataGrid;
 import com.aofei.schedule.job.JobRunner;
 import com.aofei.schedule.job.TransRunner;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
+import com.aofei.schedule.model.request.JobDetailsRequest;
+import com.aofei.schedule.model.response.JobDetailsResponse;
+import com.aofei.schedule.service.IJobDetailsService;
 import com.aofei.schedule.service.IQuartzService;
-import com.aofei.sys.service.IUserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+
+import com.baomidou.mybatisplus.plugins.Page;
+import io.swagger.annotations.*;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +38,32 @@ public class PeriodicSchedulerController extends BaseController {
     @Autowired
     private IQuartzService quartzService;
 
+
     @Autowired
-    private IUserService userService;
+    private IJobDetailsService jobDetailsService;
+    /**
+     * 资源库列表(分页查询)
+     * @param request
+     * @return
+     */
+    @ApiOperation(value = "周期调度列表(分页查询)", notes = "周期调度列表(分页查询)", httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "当前页码(默认1)", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "rows", value = "每页数量(默认10)", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "jobGroup", value = "分组(模糊查询)", paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "jobName", value = "调度名称(模糊查询)", paramType = "query", dataType = "String")
+
+    })
+    @RequestMapping(value = "/listPage", method = RequestMethod.GET)
+    public Response<DataGrid<JobDetailsResponse>> page(
+                            @ApiIgnore JobDetailsRequest request,
+                            @ApiIgnore @CurrentUser CurrentUserResponse user)  {
+        request.setOrganizerId(request.getOrganizerId());
+        Page<JobDetailsResponse> page = jobDetailsService.getPage(getPagination(request), request);
+        return Response.ok(buildDataGrid(page)) ;
+    }
+
+
 
     /**
      * 新建调度
@@ -70,23 +97,23 @@ public class PeriodicSchedulerController extends BaseController {
             "<strong>execType</strong> (integer): 运行方式(1:本地运行,2:远程运行,3:集群运行;4:HA集群运行) </br>" +
             "<strong>file</strong> (string): 执行的转换或者作业名 ,</br>" +
             "<strong>filePath</strong> (string): 执行的转换或者作业path </br>" +
-            "<strong>fileType</strong> (string): transformation or job </br>" +
+            "<strong>fileType</strong> (string): TRANSFORMATION or JOB </br>" +
             "<strong>version</strong> (string): 版本(固定值v3.9) ,</br>" ,httpMethod = "POST")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Response<Boolean> add(
             @RequestBody GeneralScheduleRequest request,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException, ParseException {
         Class quartzExecuteClass = null;
-        if(request.getFile().endsWith("kjb") || request.getFile().endsWith("KJB")){
+        if("JOB".equalsIgnoreCase(request.getFileType())){
             quartzExecuteClass = JobRunner.class;
-        }else if(request.getFile().endsWith("ktr") || request.getFile().endsWith("KTR")){
+        }else if("TRANSFORMATION".equalsIgnoreCase(request.getFileType())){
             quartzExecuteClass = TransRunner.class;
         }
+        request.setUsername(user.getUsername());
+        request.setOrganizerId(user.getOrganizerId());
 
 
-
-
-        quartzService.create(request, request.getGroup()  ,quartzExecuteClass);
+        quartzService.create(request ,quartzExecuteClass);
 
         return Response.ok(true) ;
     }
@@ -135,7 +162,7 @@ public class PeriodicSchedulerController extends BaseController {
         }else if(request.getFile().endsWith("ktr") || request.getFile().endsWith("KTR")){
             quartzExecuteClass = TransRunner.class;
         }
-        quartzService.update(request,request.getGroup(), quartzExecuteClass);
+        quartzService.update(request, quartzExecuteClass);
 
         return Response.ok(true) ;
     }
@@ -147,7 +174,7 @@ public class PeriodicSchedulerController extends BaseController {
             @ApiParam(value = "调度分组名称", required = true)@PathVariable String group,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
 
-        return Response.ok(quartzService.removeJob(name,group)) ;
+        return Response.ok(quartzService.removeJob(name,group,user.getOrganizerId())) ;
     }
 
     @ApiOperation(value = "暂停调度", notes = "暂停调度", httpMethod = "GET")

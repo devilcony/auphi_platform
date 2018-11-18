@@ -4,9 +4,11 @@ import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.exception.StatusCode;
 import com.aofei.base.service.impl.BaseService;
 import com.aofei.log.annotation.Log;
+import com.aofei.sys.entity.Organizer;
 import com.aofei.sys.entity.User;
 import com.aofei.sys.exception.SystemError;
 import com.aofei.sys.mapper.UserMapper;
+import com.aofei.sys.model.request.RegisterRequest;
 import com.aofei.sys.model.request.UserRequest;
 import com.aofei.sys.model.response.UserResponse;
 import com.aofei.sys.service.IUserService;
@@ -190,6 +192,25 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
             //用户不存在
             throw new ApplicationException(StatusCode.NOT_FOUND.getCode(), StatusCode.NOT_FOUND.getMessage());
         }
+    }
+
+    @Override
+    @Transactional
+    public Integer register(RegisterRequest request) {
+
+        Organizer organizer = new Organizer();
+        organizer.setName(request.getOrganizerName());
+        organizer.setStatus(1);
+        organizer.setEmail(request.getEmail());
+        organizer.setMobile(request.getMobilephone());
+        organizer.insert();
+        User existing = new User();
+        existing.setEmail(request.getEmail());
+        existing.setUsername(request.getUsername());
+        existing.setPassword(MD5Utils.getStringMD5(request.getPassword()));
+        existing.setOrganizerId(organizer.getOrganizerId());
+        baseMapper.insert(existing);
+        return 1;
     }
 
     /**

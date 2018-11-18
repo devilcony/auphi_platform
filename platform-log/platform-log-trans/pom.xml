@@ -16,6 +16,7 @@
             <groupId>com.aofei</groupId>
             <artifactId>platform-kettle-base</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <build>

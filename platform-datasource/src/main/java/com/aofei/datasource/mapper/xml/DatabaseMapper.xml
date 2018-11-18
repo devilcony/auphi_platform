@@ -30,7 +30,11 @@
         <include refid="Base_Column_List"/>
         from R_DATABASE a
         <include refid="Base_Joins"/>
-
+        <where>
+            <if test="organizerId != null ">
+                AND a.ORGANIZER_ID = #{organizerId}
+            </if>
+        </where>
     </select>
 
 </mapper>

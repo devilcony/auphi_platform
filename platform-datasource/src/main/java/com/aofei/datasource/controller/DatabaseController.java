@@ -1,11 +1,16 @@
 package com.aofei.datasource.controller;
 
+import com.aofei.base.annotation.Authorization;
+import com.aofei.base.annotation.CurrentUser;
 import com.aofei.base.controller.BaseController;
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
 import com.aofei.base.model.vo.DataGrid;
 import com.aofei.datasource.model.request.DatabaseRequest;
+import com.aofei.datasource.model.response.DatabaseNameResponse;
 import com.aofei.datasource.model.response.DatabaseResponse;
 import com.aofei.datasource.service.IDatabaseService;
+import com.aofei.utils.BeanCopier;
 import com.baomidou.mybatisplus.plugins.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * <p>
@@ -31,6 +37,7 @@ import java.sql.SQLException;
  */
 @Log4j
 @Api(tags = { "数据源管理-数据库管理模块接口" })
+@Authorization
 @RestController
 @RequestMapping(value = "/datasource/database", produces = {"application/json;charset=UTF-8"})
 public class DatabaseController extends BaseController {
@@ -50,11 +57,22 @@ public class DatabaseController extends BaseController {
             @ApiImplicitParam(name = "repository", value = "资源库名称", paramType = "query", dataType = "String", required=true)
     })
     @RequestMapping(value = "/listPage", method = RequestMethod.GET)
-    public Response<DataGrid<DatabaseResponse>> page(@ApiIgnore DatabaseRequest request) throws KettleException, SQLException {
-
+    public Response<DataGrid<DatabaseResponse>> page(
+            @ApiIgnore DatabaseRequest request, @ApiIgnore @CurrentUser CurrentUserResponse user) throws KettleException, SQLException {
+        request.setOrganizerId(user.getOrganizerId());
         Page<DatabaseResponse> page = databaseService.getPage(getPagination(request), request);
         return Response.ok(buildDataGrid(page)) ;
-
-
+    }
+    /**
+     * 列表(分页查询)
+     * @return
+     */
+    @ApiOperation(value = "数据库名称列表(只返回name)", notes = "数据库名称列表", httpMethod = "GET")
+    @RequestMapping(value = "/listNames", method = RequestMethod.GET)
+    public Response<List<DatabaseNameResponse>> listNames(
+            @ApiIgnore DatabaseRequest request, @ApiIgnore @CurrentUser CurrentUserResponse user) throws KettleException, SQLException {
+        request.setOrganizerId(user.getOrganizerId());
+        List<DatabaseResponse> list = databaseService.getDatabases(request);
+        return Response.ok(BeanCopier.copy(list,DatabaseNameResponse.class)) ;
     }
 }

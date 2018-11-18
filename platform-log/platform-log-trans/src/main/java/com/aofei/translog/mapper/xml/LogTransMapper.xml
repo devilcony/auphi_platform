@@ -2,39 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aofei.translog.mapper.LogTransMapper">
 
-    <!-- 开启二级缓存 -->
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.aofei.translog.entity.LogTrans">
-        <id column="TRANS_ID" property="transId" />
-        <result column="TRANS_CONFIG_ID" property="transConfigId" />
-        <result column="CHANNEL_ID" property="channelId" />
-        <result column="TRANSNAME" property="transname" />
-        <result column="STATUS" property="status" />
-        <result column="LINES_READ" property="linesRead" />
-        <result column="LINES_WRITTEN" property="linesWritten" />
-        <result column="LINES_UPDATED" property="linesUpdated" />
-        <result column="LINES_INPUT" property="linesInput" />
-        <result column="LINES_OUTPUT" property="linesOutput" />
-        <result column="LINES_REJECTED" property="linesRejected" />
-        <result column="ERRORS" property="errors" />
-        <result column="STARTDATE" property="startdate" />
-        <result column="ENDDATE" property="enddate" />
-        <result column="LOGDATE" property="logdate" />
-        <result column="DEPDATE" property="depdate" />
-        <result column="REPLAYDATE" property="replaydate" />
-        <result column="LOG_FIELD" property="logField" />
-        <result column="EXECUTING_SERVER" property="executingServer" />
-        <result column="EXECUTING_USER" property="executingUser" />
-        <result column="EXCUTOR_TYPE" property="excutorType" />
-        <result column="LOGINFO" property="loginfo" />
-        <result column="TRANS_CN_NAME" property="transCnName" />
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        TRANS_ID AS transId, TRANS_CONFIG_ID AS transConfigId, CHANNEL_ID AS channelId, TRANSNAME AS transname, STATUS AS status, LINES_READ AS linesRead, LINES_WRITTEN AS linesWritten, LINES_UPDATED AS linesUpdated, LINES_INPUT AS linesInput, LINES_OUTPUT AS linesOutput, LINES_REJECTED AS linesRejected, ERRORS AS errors, STARTDATE AS startdate, ENDDATE AS enddate, LOGDATE AS logdate, DEPDATE AS depdate, REPLAYDATE AS replaydate, LOG_FIELD AS logField, EXECUTING_SERVER AS executingServer, EXECUTING_USER AS executingUser, EXCUTOR_TYPE AS excutorType, LOGINFO AS loginfo, TRANS_CN_NAME AS transCnName
+          LOG_TRANS_ID AS logTransId
+        , TRANS_CONFIG_ID AS transConfigId
+        , CHANNEL_ID AS channelId
+        , TRANSNAME AS transname
+        , STATUS AS status
+        , LINES_READ AS linesRead
+        , LINES_WRITTEN AS linesWritten
+        , LINES_UPDATED AS linesUpdated
+        , LINES_INPUT AS linesInput
+        , LINES_OUTPUT AS linesOutput
+        , LINES_REJECTED AS linesRejected
+        , ERRORS AS errors
+        , STARTDATE AS startdate
+        , ENDDATE AS enddate
+        , LOGDATE AS logdate
+        , DEPDATE AS depdate
+        , REPLAYDATE AS replaydate
+        , LOG_FIELD AS logField
+        , EXECUTING_SERVER AS executingServer
+        , EXECUTING_USER AS executingUser
+        , EXCUTOR_TYPE AS excutorType
+        , LOGINFO AS loginfo
+        , TRANS_CN_NAME AS transCnName
     </sql>
 
 </mapper>

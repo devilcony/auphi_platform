@@ -24,6 +24,7 @@
 package com.aofei.admin.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.aofei.admin.authorization.Token;
 import com.aofei.admin.authorization.jwt.JwtConfig;
 import com.aofei.admin.authorization.jwt.JwtTokenBuilder;
@@ -44,6 +45,7 @@ import com.aofei.utils.BeanCopier;
 import com.aofei.utils.SendMailUtil;
 import com.aofei.utils.StringUtils;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.*;
 import org.pentaho.di.repository.Repository;
 import org.slf4j.Logger;
@@ -159,7 +161,7 @@ public class AccountController extends BaseController {
      *
      * @return
      */
-    @ApiOperation(value = "用户登录", notes = "用户登录返回Token,后期访问接口在head中添加Authorization={Token}", httpMethod = "POST")
+    @ApiOperation(value = "用户注册", notes = "用户注册(该接口只发送邮件，用户在邮件点击列表完成注册)", httpMethod = "POST")
     @ApiResponses(value = {
             @ApiResponse(code = 200005, message = "username is exist"),
             @ApiResponse(code = 200011, message = "email is exist"),
@@ -182,14 +184,36 @@ public class AccountController extends BaseController {
 
         String accessToken = jwtTokenBuilder.buildToken(json, 1000*60*60*24, jwtConfig.getBase64Secret());
 
-        sendMailUtil.sendHtmlMail("381906259@qq.com","傲飞数据整合平台-用户注册认证",accessToken,null);
+        sendMailUtil.sendHtmlMail(request.getEmail(),"傲飞数据整合平台-用户注册认证",accessToken,null);
 
         //TODO发送邮件继续注册
-
 
         return Response.ok(0);
     }
 
+    /**
+     * 登录
+     *
+     * @return
+     */
+    @ApiOperation(value = "邮箱验证", notes = "邮箱验证", httpMethod = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200012, message = "mail overdue"),
+            @ApiResponse(code = 200, message = "success")})
+    @RequestMapping(value = "/active", method = RequestMethod.POST)
+    public Response<Integer> active(
+            @ApiParam(value = "验证码", required = true)String auth_code) throws Exception {
 
+        Claims claims = jwtTokenBuilder.decodeToken(auth_code, jwtConfig.getBase64Secret());
+        if(claims==null){
+            throw  new ApplicationException(SystemError.ACTIVE_OVERDUE.getCode(),"mail overdue");
+        }else{
+            String subject = claims.getSubject();//用户信息
+            RegisterRequest request = JSON.parseObject(subject, new TypeReference<RegisterRequest>() {});
+            userService.register(request);
+        }
+
+        return Response.ok(0);
+    }
 
 }

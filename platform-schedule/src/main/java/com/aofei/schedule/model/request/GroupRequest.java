@@ -1,6 +1,7 @@
 package com.aofei.schedule.model.request;
 
 import com.aofei.base.model.request.BaseRequest;
+import com.baomidou.mybatisplus.annotations.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -12,7 +13,14 @@ import lombok.Data;
 public class GroupRequest extends BaseRequest {
 
 
-    private Long groupId;
+    private String groupId;
+
+    /**
+     * 组织ID
+     */
+    @ApiModelProperty(hidden = true)
+    private Long organizerId;
+
     /**
      * 分组名称
      */

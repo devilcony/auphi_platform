@@ -23,6 +23,12 @@
             <artifactId>platform-kettle-base</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-log-sys</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,6 +1,7 @@
 package com.aofei.sys.service;
 
 import com.aofei.sys.entity.User;
+import com.aofei.sys.model.request.RegisterRequest;
 import com.aofei.sys.model.request.UserRequest;
 import com.aofei.sys.model.response.UserResponse;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -87,4 +88,6 @@ public interface IUserService extends IService<User> {
      * @return
      */
     Integer modifyPassword(Long userId, String originalPassword, String newPassword);
+
+    Integer register(RegisterRequest request);
 }

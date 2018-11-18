@@ -26,6 +26,7 @@ package com.aofei.admin.router;
 import com.aofei.base.router.BaseRouter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @auther Tony
@@ -40,5 +41,11 @@ public class AdminRouter extends BaseRouter {
         return null;
     }
 
-
+    /**
+     * 通用邮箱验证页面
+     */
+    @RequestMapping(value = "/active", method = RequestMethod.GET)
+    public String active(String auth_code) {
+        return "/active";
+    }
 }

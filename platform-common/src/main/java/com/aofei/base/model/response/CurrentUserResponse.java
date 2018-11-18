@@ -28,12 +28,12 @@ public class CurrentUserResponse {
     private String mobile;
 
     /**
-     * 部门ID
+     * 组织ID
      */
-    private Long deptId;
+    private Long organizerId;
 
     /**
-     * 部门名称
+     * 组织ID
      */
-    private String deptName;
+    private Long organizerName;
 }

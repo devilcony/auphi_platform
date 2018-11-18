@@ -1,7 +1,9 @@
 package com.aofei.schedule.controller;
 
 
+import com.aofei.base.annotation.CurrentUser;
 import com.aofei.base.controller.BaseController;
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
 import com.aofei.base.model.vo.DataGrid;
 import com.aofei.schedule.model.request.GroupRequest;
@@ -47,7 +49,10 @@ public class GroupController extends BaseController {
             @ApiImplicitParam(name = "groupName", value = "名称(模糊查询)", paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/listPage", method = RequestMethod.GET)
-    public Response<DataGrid<GroupResponse>> page(@ApiIgnore GroupRequest request)  {
+    public Response<DataGrid<GroupResponse>> page(
+            @ApiIgnore GroupRequest request,
+            @ApiIgnore @CurrentUser CurrentUserResponse user)  {
+        request.setOrganizerId(user.getOrganizerId());
         Page<GroupResponse> page = groupService.getPage(getPagination(request), request);
         return Response.ok(buildDataGrid(page)) ;
     }
@@ -62,7 +67,9 @@ public class GroupController extends BaseController {
             @ApiImplicitParam(name = "groupName", value = "名称(模糊查询)", paramType = "query", dataType = "Long")
     })
     @RequestMapping(value = "/listAll", method = RequestMethod.GET)
-    public Response<List<GroupResponse>> list(@ApiIgnore GroupRequest request)  {
+    public Response<List<GroupResponse>> list(
+            @ApiIgnore GroupRequest request,
+            @ApiIgnore @CurrentUser CurrentUserResponse user)  {
         List<GroupResponse> list = groupService.getGroups(request);
         return Response.ok(list) ;
     }

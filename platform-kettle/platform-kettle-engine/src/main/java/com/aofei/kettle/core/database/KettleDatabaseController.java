@@ -357,7 +357,7 @@ public class KettleDatabaseController {
 	    	JsonUtils.fail(result.toString());
 			return;
 	    }
-
+		databaseMeta.setOrganizerId(user.getOrganizerId());
 		databaseMeta.setCreateUser(user.getUsername());
 	    databaseMeta.setUpdateUser(user.getUsername());
 	    Repository repository = App.getInstance().getRepository();

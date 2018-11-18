@@ -20,11 +20,13 @@ public enum SystemError {
     ORIGINAL_PASSWORD_ERROR(200004, "invalid original password error"),//原始密码错误
     USERNAME_EXIST(200005, "the username is exist"),//用户名被占用
     EMAIL_EXIST(200011, "the email is exist"),//邮箱被占用
+
     PERMISSION_DENIED(200006, "Permission Denied"),
     NATIONCODE_EMPTY(200007, "Permission Denied"),
     STATUS_DISABLED(200008, "user was disabled"),
     CHECK_DATABASE_FAILURE(200009, "数据库连接验证失败"),
-    DATABASE_EXIST(200010, "数据量连接已存在")
+    DATABASE_EXIST(200010, "数据量连接已存在"),
+    ACTIVE_OVERDUE(200012, "mail overdue")
     ;
 
     /*状态码*/

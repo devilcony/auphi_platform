@@ -1,7 +1,5 @@
 package com.aofei.schedule.entity;
 
-import java.io.Serializable;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -16,9 +14,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 调度分组
+ * 调度用户表
  * </p>
  *
  * @author Tony
@@ -27,37 +27,39 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("QRTZ_GROUP")
-public class Group extends DataEntity<Group> {
+@TableName("QRTZ_JOB_ORGANIZER")
+public class JobOrganizer extends Model<JobOrganizer> {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 分组ID
-     */
-    @TableId(value = "ID_GROUP", type = IdType.ID_WORKER_STR)
-    private String groupId;
+    public JobOrganizer(){}
+
+    public JobOrganizer(Long organizerId,String jobName,String jobGroup){
+        setOrganizerId(organizerId);
+        setJobName(jobName);
+        setJobGroup(jobGroup);
+    }
+
+
     /**
      * 组织ID
      */
     @TableField("ORGANIZER_ID")
     private Long organizerId;
     /**
-     * 分组名称
+     * 调度名称
      */
-    @TableField("GROUP_NAME")
-    private String groupName;
+    @TableField("JOB_NAME")
+    private String jobName;
     /**
-     * 分组描述
+     * 调度分组名称
      */
-    @TableField("DESCRIPTION")
-    private String description;
-
+    @TableField("JOB_GROUP")
+    private String jobGroup;
 
 
     @Override
     protected Serializable pkVal() {
-        return this.groupId;
+        return null;
     }
-
 }

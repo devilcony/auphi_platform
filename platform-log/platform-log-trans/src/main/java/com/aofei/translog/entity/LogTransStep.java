@@ -1,6 +1,6 @@
 package com.aofei.translog.entity;
 
-import com.baomidou.mybatisplus.enums.IdType;
+import java.io.Serializable;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
@@ -22,20 +22,20 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author Tony
- * @since 2018-11-11
+ * @since 2018-11-17
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("LOG_TRANS_STEP")
-public class LogTransStep extends DataEntity<LogTransStep> {
+public class LogTransStep extends Model<LogTransStep> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("TRANS_ID")
-    private Long transId;
-    @TableId(value = "STEP_ID", type = IdType.AUTO)
-    private Long stepId;
+    @TableId(value = "LOG_STEP_ID", type = IdType.ID_WORKER)
+    private Long logStepId;
+    @TableField("LOG_TRANS_ID")
+    private Long logTransId;
     @TableField("CHANNEL_ID")
     private String channelId;
     @TableField("LOG_DATE")
@@ -72,7 +72,7 @@ public class LogTransStep extends DataEntity<LogTransStep> {
 
     @Override
     protected Serializable pkVal() {
-        return this.stepId;
+        return this.logStepId;
     }
 
 }

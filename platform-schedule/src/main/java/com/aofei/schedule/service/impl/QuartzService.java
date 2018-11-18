@@ -24,15 +24,18 @@
 package com.aofei.schedule.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.aofei.base.common.Const;
 import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.exception.StatusCode;
 import com.aofei.log.annotation.Log;
+import com.aofei.schedule.entity.JobOrganizer;
 import com.aofei.schedule.i18n.Messages;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
 import com.aofei.schedule.model.request.ParamRequest;
 import com.aofei.schedule.service.IQuartzService;
 import com.aofei.schedule.util.QuartzUtil;
 import com.aofei.utils.DateUtils;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.joda.time.DateTime;
 import org.quartz.*;
 import org.slf4j.Logger;
@@ -53,18 +56,21 @@ public class QuartzService implements IQuartzService {
     private Scheduler quartzScheduler;
 
 
+
+
+
+
     /**
      * 创建调度
      * @param request
-     * @param group
      * @param jobExecClass
      * @throws SchedulerException
      */
     @Log(module = "普通调度",description = "创建调度信息")
     @Override
-    public  void create(GeneralScheduleRequest request, String group,  Class<? extends Job> jobExecClass) throws SchedulerException {
+    public  void create(GeneralScheduleRequest request,  Class<? extends Job> jobExecClass) throws SchedulerException {
         String jobName = request.getJobName();
-
+        String group = request.getGroup();
         if(!checkJobExist(jobName,group)){
             // 获取调度器
             Scheduler sched = quartzScheduler;
@@ -75,7 +81,7 @@ public class QuartzService implements IQuartzService {
 
             JobDataMap data = jobDetail.getJobDataMap();
 
-            data.put("request", JSONObject.toJSONString(request));
+            data.put(Const.GENERAL_SCHEDULE_KEY, JSONObject.toJSONString(request));
 
             data.put("isFastConfig", false);
 
@@ -95,6 +101,8 @@ public class QuartzService implements IQuartzService {
 
             // 告诉调度器使用该触发器来安排作业
             sched.scheduleJob(jobDetail, trigger);
+
+
 
         }else{
             throw new ApplicationException(StatusCode.CONFLICT.getCode(), Messages.getString("Schedule.Error.JobNameExist",jobName));
@@ -124,16 +132,19 @@ public class QuartzService implements IQuartzService {
      * 根据作业名删除作业
      * @param name
      * @param group
+     * @param organizerId
      * @return
      */
     @Log(module = "普通调度",description = "删除调度信息")
     @Override
-    public boolean removeJob(String name, String group) throws SchedulerException {
+    public boolean removeJob(String name, String group, Long organizerId) throws SchedulerException {
+
         TriggerKey tk = TriggerKey.triggerKey(name, group);
         quartzScheduler.pauseTrigger(tk);//停止触发器  
         quartzScheduler.unscheduleJob(tk);//移除触发器
         JobKey jobKey = JobKey.jobKey(name, group);
         quartzScheduler.deleteJob(jobKey);//删除作业
+
         logger.info("删除作业=> [作业名称：" + name + " 作业组：" + group + "] ");
         return true;
     }
@@ -209,18 +220,19 @@ public class QuartzService implements IQuartzService {
     /**
      * 更新调度信息
      * @param request
-     * @param group
      * @param quartzExecuteClass
      * @throws SchedulerException
      */
     @Log(module = "普通调度",description = "更新调度信息")
     @Override
-    public void update(GeneralScheduleRequest request, String group, Class<Job> quartzExecuteClass) throws SchedulerException {
-        if(checkJobExist(request.getJobName(),String.valueOf(group))){
-            removeJob(request.getJobName(),String.valueOf(group));
-            create(request,group,quartzExecuteClass);
+    public void update(GeneralScheduleRequest request, Class<Job> quartzExecuteClass) throws SchedulerException {
+        if(checkJobExist(request.getJobName(),request.getGroup())){
+            removeJob(request.getJobName(),request.getGroup(), request.getOrganizerId());
+            create(request,quartzExecuteClass);
         }else{
             throw new ApplicationException(StatusCode.NOT_FOUND.getCode(), StatusCode.NOT_FOUND.getMessage());
         }
     }
+
+
 }

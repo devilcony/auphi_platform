@@ -1,5 +1,6 @@
 package com.aofei.translog.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
@@ -21,18 +22,18 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author Tony
- * @since 2018-11-11
+ * @since 2018-11-17
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("LOG_TRANS")
-public class LogTrans extends DataEntity<LogTrans> {
+public class LogTrans extends Model<LogTrans> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "TRANS_ID", type = IdType.ID_WORKER)
-    private Long transId;
+    @TableId(value = "LOG_TRANS_ID", type = IdType.ID_WORKER)
+    private Long logTransId;
     /**
      * 对应转换表 R_TRANSFORMATION 中的ID_TRANSFORMATION 字段
      */
@@ -87,7 +88,7 @@ public class LogTrans extends DataEntity<LogTrans> {
 
     @Override
     protected Serializable pkVal() {
-        return this.transId;
+        return this.logTransId;
     }
 
 }

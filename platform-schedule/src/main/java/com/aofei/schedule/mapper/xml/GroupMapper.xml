@@ -3,18 +3,18 @@
 <mapper namespace="com.aofei.schedule.mapper.GroupMapper">
 
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.aofei.schedule.entity.Group">
-        <id column="ID_GROUP" property="groupId" />
-        <result column="GROUP_NAME" property="groupName" />
-        <result column="DESCRIPTION" property="description" />
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
           ID_GROUP AS groupId
+        , ORGANIZER_ID AS organizerId
         , GROUP_NAME AS groupName
         , DESCRIPTION AS description
+        , CREATE_USER AS createUser
+        , UPDATE_USER AS updateUser
+        , CREATE_TIME AS createTime
+        , UPDATE_TIME AS updateTime
+        , DEL_FLAG AS delFlag
     </sql>
 
     <select id="findList"  resultType="com.aofei.schedule.entity.Group">
@@ -22,11 +22,11 @@
         <include refid="Base_Column_List"/>
         from QRTZ_GROUP a
         <where>
-            <if test="groupName != null and groupName != ''">
-                AND a.GROUP_NAME LIKE '%#{groupName}%'
+            a.DEL_FLAG = 0
+            <if test="organizerId !=null ">
+                AND  a.ORGANIZER_ID  = #{organizerId}
             </if>
         </where>
     </select>
-
 
 </mapper>

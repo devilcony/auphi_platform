@@ -23,8 +23,12 @@
  ******************************************************************************/
 package com.aofei.schedule.service;
 
+import com.aofei.schedule.entity.GeneralSchedule;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
 import com.aofei.schedule.model.request.ParamRequest;
+import com.aofei.schedule.model.response.GeneralScheduleResponse;
+import com.aofei.sys.model.response.RepositoryResponse;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.SchedulerException;
@@ -40,7 +44,7 @@ import java.text.ParseException;
  */
 public interface IQuartzService {
 
-    void create(GeneralScheduleRequest request, String group, Class<? extends Job> jobExecClass) throws SchedulerException, ParseException;
+    void create(GeneralScheduleRequest request, Class<? extends Job> jobExecClass) throws SchedulerException, ParseException;
 
 
     /**
@@ -54,9 +58,10 @@ public interface IQuartzService {
      * 根据作业名删除作业
      * @param name
      * @param group
+     * @param organizerId
      * @return
      */
-    boolean removeJob(String name, String group) throws SchedulerException;
+    boolean removeJob(String name, String group, Long organizerId) throws SchedulerException;
 
 
     /**
@@ -92,9 +97,10 @@ public interface IQuartzService {
     /**
      * 修改调度信息
      * @param request
-     * @param group
      * @param quartzExecuteClass
      * @throws SchedulerException
      */
-    void update(GeneralScheduleRequest request, String group, Class<Job> quartzExecuteClass) throws SchedulerException, ParseException;
+    void update(GeneralScheduleRequest request, Class<Job> quartzExecuteClass) throws SchedulerException, ParseException;
+
+
 }

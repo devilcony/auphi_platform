@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.schedule.mapper.JobDetailsMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.SCHED_NAME AS schedName
+        , a.JOB_NAME AS jobName
+        , a.JOB_GROUP AS jobGroup
+        , a.DESCRIPTION AS description
+        , a.JOB_CLASS_NAME AS jobClassName
+        , a.IS_DURABLE AS isDurable
+        , a.IS_NONCONCURRENT AS isNonconcurrent
+        , a.IS_UPDATE_DATA AS isUpdateData
+        , a.REQUESTS_RECOVERY AS requestsRecovery
+        , a.JOB_DATA AS jobData
+        , triggers.NEXT_FIRE_TIME AS nextFireTime
+        , triggers.PREV_FIRE_TIME AS prevFireTime
+        , triggers.START_TIME AS startTime
+        , triggers.END_TIME AS endTime
+        , triggers.TRIGGER_STATE AS triggerState
+    </sql>
+
+    <sql id="Base_Joins">
+       JOIN QRTZ_TRIGGERS qts ON qts.JOB_NAME = a.JOB_NAME AND qts.JOB_GROUP = a.JOB_GROUP
+       JOIN QRTZ_GROUP qgp ON qgp.GROUP_NAME = a.JOB_GROUP
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.sys.entity.Menu">
+        select
+        <include refid="Base_Column_List"/>
+        from QRTZ_JOB_DETAILS a
+        <include refid="Base_Joins"/>
+        <where>
+            a.DEL_FLAG = 0
+            <if test="organizerId != null ">
+                AND qgp.ORGANIZER_ID = #{organizerId}
+            </if>
+
+            <if test="jobGroup != null and jobGroup!='' ">
+                AND  a.JOB_GROUP = #{jobGroup}
+            </if>
+
+            <if test="jobName != null and jobName!='' ">
+                AND  a.JOB_NAME  like '%${jobName}%'
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -2,34 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aofei.translog.mapper.LogTransStepMapper">
 
-    <!-- 开启二级缓存 -->
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
 
-    <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.aofei.translog.entity.LogTransStep">
-        <id column="STEP_ID" property="stepId" />
-        <result column="TRANS_ID" property="transId" />
-        <result column="CHANNEL_ID" property="channelId" />
-        <result column="LOG_DATE" property="logDate" />
-        <result column="TRANSNAME" property="transname" />
-        <result column="STEPNAME" property="stepname" />
-        <result column="STEP_COPY" property="stepCopy" />
-        <result column="LINES_READ" property="linesRead" />
-        <result column="LINES_WRITTEN" property="linesWritten" />
-        <result column="LINES_UPDATED" property="linesUpdated" />
-        <result column="LINES_INPUT" property="linesInput" />
-        <result column="LINES_OUTPUT" property="linesOutput" />
-        <result column="LINES_REJECTED" property="linesRejected" />
-        <result column="ERRORS" property="errors" />
-        <result column="SETP_LOG" property="setpLog" />
-        <result column="COSTTIME" property="costtime" />
-        <result column="SPEED" property="speed" />
-        <result column="STATUS" property="status" />
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        TRANS_ID AS transId, STEP_ID AS stepId, CHANNEL_ID AS channelId, LOG_DATE AS logDate, TRANSNAME AS transname, STEPNAME AS stepname, STEP_COPY AS stepCopy, LINES_READ AS linesRead, LINES_WRITTEN AS linesWritten, LINES_UPDATED AS linesUpdated, LINES_INPUT AS linesInput, LINES_OUTPUT AS linesOutput, LINES_REJECTED AS linesRejected, ERRORS AS errors, SETP_LOG AS setpLog, COSTTIME AS costtime, SPEED AS speed, STATUS AS status
+          LOG_STEP_ID AS logStepId
+        , LOG_TRANS_ID AS logTransId
+        , CHANNEL_ID AS channelId
+        , LOG_DATE AS logDate
+        , TRANSNAME AS transname
+        , STEPNAME AS stepname
+        , STEP_COPY AS stepCopy
+        , LINES_READ AS linesRead
+        , LINES_WRITTEN AS linesWritten
+        , LINES_UPDATED AS linesUpdated
+        , LINES_INPUT AS linesInput
+        , LINES_OUTPUT AS linesOutput
+        , LINES_REJECTED AS linesRejected
+        , ERRORS AS errors
+        , SETP_LOG AS setpLog
+        , COSTTIME AS costtime
+        , SPEED AS speed
+        , STATUS AS status
     </sql>
 
 </mapper>

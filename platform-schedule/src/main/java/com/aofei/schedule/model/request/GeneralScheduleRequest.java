@@ -4,6 +4,7 @@ package com.aofei.schedule.model.request;
 import com.aofei.base.model.request.BaseRequest;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 普通调度
@@ -84,6 +85,12 @@ public class GeneralScheduleRequest extends BaseRequest {
 
     @ApiModelProperty(value = "transformation or job")
     private String fileType;
+
+    @ApiModelProperty(hidden = true)
+    private Long organizerId;//组织ID
+
+    @ApiModelProperty(hidden = true)
+    private String username;//用户名
 
 //    @ApiModelProperty(value = "参数")
 //    List<ParamRequest> params;

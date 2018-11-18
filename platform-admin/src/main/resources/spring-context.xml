@@ -65,6 +65,7 @@
         <property name="host" value="${mail.smtp.host}"></property>
         <property name="username" value="${mail.smtp.username}"></property>
         <property name="password" value="${mail.smtp.password}"></property>
+        <property name="defaultEncoding" value="UTF-8"/>
         <!-- 相当于javax.mail.Session中的props属性-->
         <property name="javaMailProperties">
             <props>

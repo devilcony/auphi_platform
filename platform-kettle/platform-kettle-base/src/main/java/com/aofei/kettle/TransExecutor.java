@@ -17,13 +17,10 @@ import org.pentaho.di.core.Const;
 import org.pentaho.di.core.Result;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.exception.KettleStepException;
-import org.pentaho.di.core.logging.KettleLogLayout;
-import org.pentaho.di.core.logging.KettleLogStore;
-import org.pentaho.di.core.logging.KettleLoggingEvent;
-import org.pentaho.di.core.logging.LogMessage;
-import org.pentaho.di.core.logging.LoggingRegistry;
+import org.pentaho.di.core.logging.*;
 import org.pentaho.di.core.row.RowMetaInterface;
 import org.pentaho.di.core.row.ValueMetaInterface;
+import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.trans.Trans;
 import org.pentaho.di.trans.TransAdapter;
 import org.pentaho.di.trans.TransExecutionConfiguration;
@@ -38,12 +35,14 @@ import org.pentaho.di.www.SlaveServerTransStatus;
 import org.springframework.util.StringUtils;
 
 public class TransExecutor implements Runnable {
-
+	private static  Class<?> PKG = TransExecutor.class;
 	private String executionId;
 	private TransExecutionConfiguration executionConfiguration;
 	private TransMeta transMeta = null;
 	private Trans trans = null;
 	private Map<StepMeta, String> stepLogMap = new HashMap<StepMeta, String>();
+	public  static final String STRING_TRANSEXECUTOR = "TransExecutor";
+	private static LogChannelInterface log  = new LogChannel(STRING_TRANSEXECUTOR);
 
 	private TransSplitter transSplitter = null;
 
@@ -58,6 +57,8 @@ public class TransExecutor implements Runnable {
 	public static synchronized TransExecutor initExecutor(TransExecutionConfiguration transExecutionConfiguration, TransMeta transMeta) {
 		TransExecutor transExecutor = new TransExecutor(transExecutionConfiguration, transMeta);
 		executors.put(transExecutor.getExecutionId(), transExecutor);
+		log.setLogLevel(transExecutionConfiguration.getLogLevel());
+		log.logMinimal(BaseMessages.getString(PKG,"Pan.Log.Loglevel",log.getLogLevel().getDescription()));
 		return transExecutor;
 	}
 
@@ -78,6 +79,10 @@ public class TransExecutor implements Runnable {
 
 	public long getErrCount() {
 		return errCount;
+	}
+
+	public Trans getTrans() {
+		return trans;
 	}
 
 	@Override
@@ -187,7 +192,7 @@ public class TransExecutor implements Runnable {
 					// the next try...
 					// We don't want to suppress original exception here.
 					try {
-						Trans.cleanupCluster(com.aofei.kettle.App.getInstance().getLog(), transSplitter);
+						Trans.cleanupCluster(log, transSplitter);
 					} catch (Exception ee) {
 						throw new Exception("Error executing transformation and error to clenaup cluster", e);
 					}
@@ -204,10 +209,10 @@ public class TransExecutor implements Runnable {
 //					}
 //				}
 
-				Trans.monitorClusteredTransformation(com.aofei.kettle.App.getInstance().getLog(), transSplitter, null);
+				Trans.monitorClusteredTransformation(log, transSplitter, null);
 
 
-				Result result = Trans.getClusteredTransformationResult(com.aofei.kettle.App.getInstance().getLog(), transSplitter, null);
+				Result result = Trans.getClusteredTransformationResult(log, transSplitter, null);
 				errCount = result.getNrErrors();
 			}
 
@@ -329,7 +334,6 @@ public class TransExecutor implements Runnable {
     			StepStatus stepStatus = new StepStatus(baseStep);
 
     			String[] fields = stepStatus.getTransLogFields();
-
     			JSONArray childArray = new JSONArray();
     			for (int f = 1; f < fields.length; f++) {
     				childArray.add(fields[f]);
@@ -433,6 +437,7 @@ public class TransExecutor implements Runnable {
 				Integer index = stepIndex.get(combi.stepMeta.getName());
 				if(index == null) {
 					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("stepId",combi.stepMeta.getObjectId().getId());
 					jsonObject.put("stepName", combi.stepMeta.getName());
 					int errCount = (int) combi.step.getErrors();
 					jsonObject.put("stepStatus", errCount);
@@ -639,5 +644,10 @@ public class TransExecutor implements Runnable {
 		}
 
 		return jsonObject;
+	}
+
+
+	public TransMeta getTransMeta() {
+		return transMeta;
 	}
 }
