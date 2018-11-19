@@ -3,6 +3,7 @@ package com.aofei.sys.service.impl;
 import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.exception.StatusCode;
 import com.aofei.base.service.impl.BaseService;
+import com.aofei.kettle.App;
 import com.aofei.log.annotation.Log;
 import com.aofei.sys.entity.Organizer;
 import com.aofei.sys.entity.User;
@@ -16,6 +17,9 @@ import com.aofei.utils.BeanCopier;
 import com.aofei.utils.MD5Utils;
 import com.aofei.utils.StringUtils;
 import com.baomidou.mybatisplus.plugins.Page;
+import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.repository.Repository;
+import org.pentaho.di.repository.RepositoryDirectoryInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -196,7 +200,7 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
 
     @Override
     @Transactional
-    public Integer register(RegisterRequest request) {
+    public Integer register(RegisterRequest request) throws KettleException {
 
         Organizer organizer = new Organizer();
         organizer.setName(request.getOrganizerName());
@@ -210,6 +214,9 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
         existing.setPassword(MD5Utils.getStringMD5(request.getPassword()));
         existing.setOrganizerId(organizer.getOrganizerId());
         baseMapper.insert(existing);
+        Repository repository = App.getInstance().getRepository();
+        RepositoryDirectoryInterface path = repository.findDirectory("/");
+        repository.createRepositoryDirectory(path, request.getOrganizerName());
         return 1;
     }
 

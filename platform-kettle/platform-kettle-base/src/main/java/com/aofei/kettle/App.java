@@ -74,10 +74,12 @@ public class App {
 	}
 
 	public void setRepository(Repository repository) {
+
 		this.repository = repository;
 	}
 
 	private Map<String, Repository> repositories = Collections.synchronizedMap(new HashMap<String, Repository>());
+
 
 
 
@@ -165,17 +167,6 @@ public class App {
 
 
 
-	//	public JSONArray encodeVariables() {
-//		Object[] data = variables.getData();
-//		String[] fields = variables.getRowMeta().getFieldNames();
-//		JSONArray jsonArray = new JSONArray();
-//		for (int i = 0; i < fields.length; i++) {
-//			JSONObject jsonObject = new JSONObject();
-//			jsonObject.put("name", fields[i]);
-//			jsonObject.put("value", data[i].toString());
-//			jsonArray.add(jsonObject);
-//		}
-//		return jsonArray;
-//	}
+
 
 }

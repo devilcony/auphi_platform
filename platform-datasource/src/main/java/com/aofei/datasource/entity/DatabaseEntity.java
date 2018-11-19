@@ -35,10 +35,10 @@ public class DatabaseEntity extends Model<DatabaseEntity> {
     private Integer databaseTypeId;
 
     @TableField(exist = false)
-    private Integer databaseTypeName;
+    private String databaseTypeName;
 
     @TableField("ID_DATABASE_CONTYPE")
-    private String databaseContypeId;
+    private Integer databaseContypeId;
 
     @TableField(exist = false)
     private String databaseContypeName;

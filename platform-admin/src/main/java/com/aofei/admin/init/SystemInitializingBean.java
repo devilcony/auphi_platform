@@ -28,15 +28,13 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.aofei.base.common.Const;
 import com.aofei.kettle.App;
 import com.aofei.kettle.core.PropsUI;
-import com.aofei.sys.model.request.RepositoryRequest;
-import com.aofei.sys.model.response.RepositoryDatabaseResponse;
-import com.aofei.sys.model.response.RepositoryResponse;
-import com.aofei.sys.service.IRepositoryDatabaseService;
-import com.aofei.sys.service.IRepositoryService;
 import com.aofei.sys.utils.RepositoryCodec;
 import org.joda.time.DateTime;
 import org.pentaho.di.core.KettleEnvironment;
 import org.pentaho.di.core.Props;
+import org.pentaho.di.core.database.Database;
+import org.pentaho.di.core.exception.KettleDatabaseException;
+import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.logging.KettleLogStore;
 import org.pentaho.di.i18n.LanguageChoice;
 import org.pentaho.di.repository.Repository;
@@ -48,10 +46,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -61,16 +59,13 @@ import java.util.Map;
 @Component
 public class SystemInitializingBean implements InitializingBean, DisposableBean {
 
-    @Autowired
-    private IRepositoryService repositoryService;
 
     @Autowired
     private DruidDataSource dataSource;
 
-    @Autowired
-    private IRepositoryDatabaseService repositoryDatabaseService;
-
     private static Logger logger = LoggerFactory.getLogger(SystemInitializingBean.class);
+
+    private final Timer repositoryTimer = new Timer();
     /**
      * 系统初始化
      * @throws Exception
@@ -88,7 +83,7 @@ public class SystemInitializingBean implements InitializingBean, DisposableBean 
         KettleLogStore.init( 5000, 720 );
         KettleEnvironment.init();
         PropsUI.init( "KettleWebConsole", Props.TYPE_PROPERTIES_KITCHEN );
-        //加载
+        /*//加载
         List<RepositoryResponse> repositorys = repositoryService.getRepositorys(new RepositoryRequest());
         Map<String, Repository> repositoryMap = new HashMap<>();
         for(RepositoryResponse repository : repositorys){
@@ -98,13 +93,18 @@ public class SystemInitializingBean implements InitializingBean, DisposableBean 
             if(repository.getIsDefault()== Const.YES){
                 App.getInstance().setRepository(databaseRepository);
             }
-        }
-        //默认当前系统dataSource为默认资源库
-        if(App.getInstance().getRepository()==null){
-            App.getInstance().setRepository(RepositoryCodec.decodeDefault(dataSource));
-        }
-        App.getInstance().setRepositories(repositoryMap);
+        }*/
+        // App.getInstance().setRepositories(repositoryMap);
 
+        //默认当前系统dataSource为默认资源库
+        /*if(App.getInstance().getRepository()==null){
+            App.getInstance().setRepository(RepositoryCodec.decodeDefault(dataSource));
+        }*/
+        Repository repository = RepositoryCodec.decodeDefault(dataSource);
+        repository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
+        App.getInstance().setRepository(repository);
+        CheckRepositoryTimerTask checkRepositoryTimerTask = new CheckRepositoryTimerTask();
+        repositoryTimer.schedule(checkRepositoryTimerTask,0,1000*60*60);
         long timeSec = (System.currentTimeMillis() - start) / 1000;
         logger.info("********************************************");
         logger.info("平台启动成功[" + DateTime.now().toString() + "]");
@@ -126,6 +126,34 @@ public class SystemInitializingBean implements InitializingBean, DisposableBean 
                     repository.getDatabase().getConnection().close();
                 }
                 logger.info("disconnect=>"+key);
+            }
+        }
+    }
+
+    /**
+     * 检查资源库的连接;连接断开要重新连接的
+     */
+    class CheckRepositoryTimerTask extends TimerTask {
+        private  Logger logger = LoggerFactory.getLogger(CheckRepositoryTimerTask.class);
+
+
+        @Override
+        public void run() {
+            KettleDatabaseRepository repository = (KettleDatabaseRepository) App.getInstance().getRepository();
+            Database database = repository.getDatabase();
+            try {
+                logger.info("==============check repository connect=================");
+                database.openQuery("select 1");
+            } catch (KettleDatabaseException e) {
+                try {
+                    repository.disconnect();
+                    repository.setConnected(false);
+                    repository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
+
+                } catch (KettleException e1) {
+                    e1.printStackTrace();
+                }
+                e.printStackTrace();
             }
         }
     }

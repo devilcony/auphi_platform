@@ -26,7 +26,7 @@ import java.util.Timer;
 public class TransRunner extends QuartzJobBean {
 
 	private static Logger logger = LoggerFactory.getLogger(TransRunner.class);
-
+	private final Timer logTimer = new Timer();
 	@Override
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		try {
@@ -85,7 +85,7 @@ public class TransRunner extends QuartzJobBean {
 			}
 			repository.disconnect();
 		    TransExecutor transExecutor = TransExecutor.initExecutor(executionConfiguration, transMeta);
-			Timer logTimer = new Timer();
+
 
 			Thread tr = new Thread(transExecutor, "TransExecutor_" + transExecutor.getExecutionId());
 		    tr.start();

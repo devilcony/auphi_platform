@@ -6,6 +6,7 @@ import com.aofei.sys.model.request.UserRequest;
 import com.aofei.sys.model.response.UserResponse;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import org.pentaho.di.core.exception.KettleException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -89,5 +90,5 @@ public interface IUserService extends IService<User> {
      */
     Integer modifyPassword(Long userId, String originalPassword, String newPassword);
 
-    Integer register(RegisterRequest request);
+    Integer register(RegisterRequest request) throws KettleException;
 }

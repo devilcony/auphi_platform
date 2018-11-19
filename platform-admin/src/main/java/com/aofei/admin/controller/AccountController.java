@@ -34,7 +34,6 @@ import com.aofei.base.controller.BaseController;
 import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
-import com.aofei.kettle.App;
 import com.aofei.sys.entity.User;
 import com.aofei.sys.exception.SystemError;
 import com.aofei.sys.model.request.RegisterRequest;
@@ -47,7 +46,6 @@ import com.aofei.utils.StringUtils;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.*;
-import org.pentaho.di.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,9 +126,7 @@ public class AccountController extends BaseController {
 
             //存储到redis
             //tokenManager.createRelationship(user.getUsername(), accessToken);
-            Repository repository =  App.getInstance().getRepository();
-            repository.disconnect();
-            repository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
+
 
             return Response.ok(token);
         } else {
