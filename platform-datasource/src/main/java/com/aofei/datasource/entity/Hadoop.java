@@ -40,6 +40,8 @@ public class Hadoop extends DataEntity<Hadoop> {
     @TableField("ORGANIZER_ID")
     private Long organizerId;
 
+    @TableField(exist = false)
+    private String organizerName;
 
 
     @Override

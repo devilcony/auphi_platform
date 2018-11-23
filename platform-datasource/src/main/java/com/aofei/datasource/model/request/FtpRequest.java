@@ -1,16 +1,11 @@
 package com.aofei.datasource.model.request;
 
-import com.aofei.base.entity.DataEntity;
 import com.aofei.base.model.request.BaseRequest;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 
 /**
  * <p>
@@ -38,6 +33,8 @@ public class FtpRequest extends BaseRequest<FtpRequest> {
     @TableField("PASSWORD")
     private String password;
 
+    @ApiModelProperty(hidden = true)
+    private Long organizerId;
 
 
 }

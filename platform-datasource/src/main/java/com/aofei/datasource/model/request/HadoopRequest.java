@@ -4,6 +4,7 @@ import com.aofei.base.model.request.BaseRequest;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.enums.IdType;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -30,4 +31,6 @@ public class HadoopRequest extends BaseRequest<HadoopRequest> {
     @TableField("PASSWORD")
     private String password;
 
+    @ApiModelProperty(hidden = true)
+    private Long organizerId;
 }

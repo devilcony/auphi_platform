@@ -61,18 +61,10 @@ public class GroupService extends BaseService<GroupMapper, Group> implements IGr
     public GroupResponse update(GroupRequest request) {
         Group existing = selectById(request.getGroupId());
         if (existing != null) {
-
-            int count =  baseMapper.selectCount(new EntityWrapper<Group>()
-                    .eq("GROUP_NAME",request.getGroupName())
-                    .ne("ID_GROUP",request.getGroupId()));
-            if(count ==0 ){
-                existing.setGroupName(request.getGroupName());
-                existing.setDescription(request.getDescription());
-                super.insertOrUpdate(existing);
-            }else{
-                throw new ApplicationException(StatusCode.CONFLICT.getCode(), Messages.getString("Schedule.Error.JobGroupExist",request.getGroupName()));
-            }
-
+            existing.setGroupName(request.getGroupName());
+            existing.setDescription(request.getDescription());
+            existing.preUpdate();
+            super.insertOrUpdate(existing);
             return BeanCopier.copy(existing, GroupResponse.class);
         } else {
             //不存在

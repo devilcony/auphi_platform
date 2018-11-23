@@ -15,7 +15,8 @@
         , a.CREATE_USER AS createUser
         , a.UPDATE_USER AS updateUser
         , a.CREATE_TIME AS createTime
-        , a.UPDATE_TIME AS updateTime, DEL_FLAG AS delFlag
+        , a.UPDATE_TIME AS updateTime
+        , DEL_FLAG AS delFlag
     </sql>
 
     <sql id="Base_Joins">
@@ -50,6 +51,20 @@
         where a.DEL_FLAG = 0 and u.C_USER_ID = #{userId}
 
     </select>
+
+    <update id="updateById">
+        update SYS_ROLE a
+        <set>
+              a.C_ROLE_NAME = #{et.roleName}
+            , a.C_DESCRIPTION = #{et.description}
+            , a.C_ORGANIZER_ID = #{et.organizerId}
+            , a.C_PRIVILEDGES = #{et.priviledges}
+            , a.C_ISSYSTEMROLE = #{et.isSystemRole}
+            , a.UPDATE_USER = #{et.updateUser}
+            , a.UPDATE_TIME = #{et.updateTime}
+        </set>
+        where a.SYS_ROLE = #{et.roleId}
+    </update>
 
     <update id="deleteById">
         update SYS_ROLE a set a.DEL_FLAG = 1  where a.C_ROLE_ID = #{id}

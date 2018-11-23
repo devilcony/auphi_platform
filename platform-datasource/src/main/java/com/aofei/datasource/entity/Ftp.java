@@ -42,7 +42,8 @@ public class Ftp extends DataEntity<Ftp> {
     @TableField("ORGANIZER_ID")
     private Long organizerId;
 
-
+    @TableField(exist = false)
+    private String organizerName;
 
     @Override
     protected Serializable pkVal() {

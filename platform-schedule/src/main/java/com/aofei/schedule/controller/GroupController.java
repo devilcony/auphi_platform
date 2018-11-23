@@ -1,6 +1,7 @@
 package com.aofei.schedule.controller;
 
 
+import com.aofei.base.annotation.Authorization;
 import com.aofei.base.annotation.CurrentUser;
 import com.aofei.base.controller.BaseController;
 import com.aofei.base.model.response.CurrentUserResponse;
@@ -29,6 +30,7 @@ import java.util.List;
  * @since 2018-10-05
  */
 @Api(tags = { "调度管理-调度分组" })
+@Authorization
 @RestController
 @RequestMapping("/schedule/group")
 public class GroupController extends BaseController {
@@ -70,6 +72,7 @@ public class GroupController extends BaseController {
     public Response<List<GroupResponse>> list(
             @ApiIgnore GroupRequest request,
             @ApiIgnore @CurrentUser CurrentUserResponse user)  {
+        request.setOrganizerId(user.getOrganizerId());
         List<GroupResponse> list = groupService.getGroups(request);
         return Response.ok(list) ;
     }
@@ -82,8 +85,8 @@ public class GroupController extends BaseController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Response<GroupResponse> add(
-            @RequestBody GroupRequest request)  {
-
+            @RequestBody GroupRequest request,@ApiIgnore @CurrentUser CurrentUserResponse user)  {
+        request.setOrganizerId(user.getOrganizerId());
         return Response.ok(groupService.save(request)) ;
     }
 

@@ -4,7 +4,6 @@ package com.aofei.schedule.model.request;
 import com.aofei.base.model.request.BaseRequest;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 普通调度
@@ -15,7 +14,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class GeneralScheduleRequest extends BaseRequest {
 
     @ApiModelProperty(value = "分组")
-    private String group;
+    private String jobGroup;
 
     @ApiModelProperty(value = "调度名称")
     private String jobName;

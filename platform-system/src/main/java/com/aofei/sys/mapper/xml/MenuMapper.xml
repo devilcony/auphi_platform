@@ -48,6 +48,22 @@
     </select>
 
 
+    <update id="updateById">
+        update SYS_MENU a
+        <set>
+              a.PARENT_ID = #{et.parentId}
+            , a.NAME = #{et.name}
+            , a.URL = #{et.url}
+            , a.PERMS = #{et.perms}
+            , a.TYPE = #{et.type}
+            , a.ICON = #{et.icon}
+            , a.ORDER_NUM = #{et.orderNum}
+            , a.UPDATE_USER = #{et.updateUser}
+            , a.UPDATE_TIME = #{et.updateTime}
+        </set>
+        where a.MENU_ID = #{et.menuId}
+    </update>
+
 
     <update id="deleteById">
         update SYS_MENU a set a.DEL_FLAG = 1  where a.MENU_ID = #{id}

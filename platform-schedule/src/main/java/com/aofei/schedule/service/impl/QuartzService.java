@@ -28,14 +28,12 @@ import com.aofei.base.common.Const;
 import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.exception.StatusCode;
 import com.aofei.log.annotation.Log;
-import com.aofei.schedule.entity.JobOrganizer;
 import com.aofei.schedule.i18n.Messages;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
 import com.aofei.schedule.model.request.ParamRequest;
 import com.aofei.schedule.service.IQuartzService;
 import com.aofei.schedule.util.QuartzUtil;
 import com.aofei.utils.DateUtils;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.joda.time.DateTime;
 import org.quartz.*;
 import org.slf4j.Logger;
@@ -66,11 +64,11 @@ public class QuartzService implements IQuartzService {
      * @param jobExecClass
      * @throws SchedulerException
      */
-    @Log(module = "普通调度",description = "创建调度信息")
+    @Log(module = "周期调度",description = "创建调度信息")
     @Override
     public  void create(GeneralScheduleRequest request,  Class<? extends Job> jobExecClass) throws SchedulerException {
         String jobName = request.getJobName();
-        String group = request.getGroup();
+        String group = request.getJobGroup();
         if(!checkJobExist(jobName,group)){
             // 获取调度器
             Scheduler sched = quartzScheduler;
@@ -130,22 +128,22 @@ public class QuartzService implements IQuartzService {
 
     /**
      * 根据作业名删除作业
-     * @param name
+     * @param jobName
      * @param group
      * @param organizerId
      * @return
      */
-    @Log(module = "普通调度",description = "删除调度信息")
+    @Log(module = "周期调度",description = "删除调度信息")
     @Override
-    public boolean removeJob(String name, String group, Long organizerId) throws SchedulerException {
+    public boolean removeJob(String jobName, String group, Long organizerId) throws SchedulerException {
 
-        TriggerKey tk = TriggerKey.triggerKey(name, group);
+        TriggerKey tk = TriggerKey.triggerKey(jobName, group);
         quartzScheduler.pauseTrigger(tk);//停止触发器  
         quartzScheduler.unscheduleJob(tk);//移除触发器
-        JobKey jobKey = JobKey.jobKey(name, group);
+        JobKey jobKey = JobKey.jobKey(jobName, group);
         quartzScheduler.deleteJob(jobKey);//删除作业
 
-        logger.info("删除作业=> [作业名称：" + name + " 作业组：" + group + "] ");
+        logger.info("删除调度=> [作业名称：" + jobName + " 作业组：" + group + "] ");
         return true;
     }
 
@@ -154,49 +152,50 @@ public class QuartzService implements IQuartzService {
 
     /**
      * 执行调度
-     * @param jobname 调度名称
-     * @param jobgroup
+     * @param jobName 调度名称
+     * @param jobGroup
      * @param params
      * @return
      */
     @Override
-    public  boolean execute(String jobname, String jobgroup, ParamRequest[] params) throws SchedulerException {
+    public  boolean execute(String jobName, String jobGroup, ParamRequest[] params) throws SchedulerException {
 
-        logger.info("执行作业=> [作业名称：" + jobname + " 作业组：" + jobgroup + "] ");
-        JobKey jk = JobKey.jobKey(jobname,jobgroup);
+        logger.info("执行作业=> [作业名称：" + jobName + " 作业组：" + jobGroup + "] ");
+        JobKey jk = JobKey.jobKey(jobName,jobGroup);
         quartzScheduler.triggerJob(jk) ;
+        logger.info("执行调度=> [作业名称：" + jobName + " 作业组：" + jobGroup + "] ");
         return true;
 
     }
 
     /**
      * 暂停调度
-     * @param name
-     * @param jobgrou
+     * @param jobName
+     * @param jobGroup
      * @return
      */
-    @Log(module = "普通调度",description = "暂停调度")
+    @Log(module = "周期调度",description = "暂停调度")
     @Override
-    public  boolean pause(String name, String jobgrou) throws SchedulerException {
-        JobKey jk = JobKey.jobKey(name,jobgrou);
+    public  boolean pause(String jobName, String jobGroup) throws SchedulerException {
+        JobKey jk = JobKey.jobKey(jobName,jobGroup);
         quartzScheduler.pauseJob(jk);
-        logger.info("暂停调度=> [作业名称：" + name + " 作业组：" + jobgrou + "] ");
+        logger.info("暂停调度=> [作业名称：" + jobName + " 作业组：" + jobGroup + "] ");
         return true;
     }
 
     /**
      * 还原调度
-     * @param name
-     * @param jobgrou
+     * @param jobName
+     * @param jobGroup
      * @return
      * @throws SchedulerException
      */
-    @Log(module = "普通调度",description = "还原调度")
+    @Log(module = "周期调度",description = "还原调度")
     @Override
-    public  boolean resume(String name, String jobgrou) throws SchedulerException {
-        JobKey jk = JobKey.jobKey(name,jobgrou);
+    public  boolean resume(String jobName, String jobGroup) throws SchedulerException {
+        JobKey jk = JobKey.jobKey(jobName,jobGroup);
         quartzScheduler.resumeJob(jk);
-
+        logger.info("还原调度=> [作业名称：" + jobName + " 作业组：" + jobGroup + "] ");
         return true;
     }
 
@@ -206,9 +205,9 @@ public class QuartzService implements IQuartzService {
      * @return boolean 调度是否存在
      */
     @Override
-    public  boolean checkJobExist(String jobName, String jobgrou){
+    public  boolean checkJobExist(String jobName, String jobGroup){
         try{
-            JobKey jk = JobKey.jobKey(jobName,jobgrou);
+            JobKey jk = JobKey.jobKey(jobName,jobGroup);
             JobDetail job = quartzScheduler.getJobDetail(jk);
             return job!=null;
         }catch(Exception e){
@@ -223,11 +222,11 @@ public class QuartzService implements IQuartzService {
      * @param quartzExecuteClass
      * @throws SchedulerException
      */
-    @Log(module = "普通调度",description = "更新调度信息")
+    @Log(module = "周期调度",description = "更新调度信息")
     @Override
     public void update(GeneralScheduleRequest request, Class<Job> quartzExecuteClass) throws SchedulerException {
-        if(checkJobExist(request.getJobName(),request.getGroup())){
-            removeJob(request.getJobName(),request.getGroup(), request.getOrganizerId());
+        if(checkJobExist(request.getJobName(),request.getJobGroup())){
+            removeJob(request.getJobName(),request.getJobGroup(), request.getOrganizerId());
             create(request,quartzExecuteClass);
         }else{
             throw new ApplicationException(StatusCode.NOT_FOUND.getCode(), StatusCode.NOT_FOUND.getMessage());

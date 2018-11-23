@@ -1,5 +1,6 @@
 package com.aofei.schedule.controller;
 
+import com.aofei.base.annotation.Authorization;
 import com.aofei.base.annotation.CurrentUser;
 import com.aofei.base.controller.BaseController;
 import com.aofei.base.model.response.CurrentUserResponse;
@@ -29,11 +30,12 @@ import java.text.ParseException;
  * @create 2018-09-22 15:39
  */
 @Api(tags = { "调度管理-周期调度" })
+@Authorization
 @RestController
 @RequestMapping(value = "/schedule/cycle", produces = {"application/json;charset=UTF-8"})
-public class PeriodicSchedulerController extends BaseController {
+public class CycleScheduleController extends BaseController {
 
-    private static Logger logger = LoggerFactory.getLogger(PeriodicSchedulerController.class);
+    private static Logger logger = LoggerFactory.getLogger(CycleScheduleController.class);
 
     @Autowired
     private IQuartzService quartzService;
@@ -58,7 +60,7 @@ public class PeriodicSchedulerController extends BaseController {
     public Response<DataGrid<JobDetailsResponse>> page(
                             @ApiIgnore JobDetailsRequest request,
                             @ApiIgnore @CurrentUser CurrentUserResponse user)  {
-        request.setOrganizerId(request.getOrganizerId());
+        request.setOrganizerId(user.getOrganizerId());
         Page<JobDetailsResponse> page = jobDetailsService.getPage(getPagination(request), request);
         return Response.ok(buildDataGrid(page)) ;
     }
@@ -71,6 +73,7 @@ public class PeriodicSchedulerController extends BaseController {
      * @return
      */
     @ApiOperation(value = "添加普通调度", notes = "" +
+            "<strong>jobGroup</strong> (string): 分组ID ,</br>" +
             "<strong>jobName</strong> (string): 调度名称 ,</br>" +
             "<strong>description</strong> (string): 描述 ,</br>" +
             "<strong>repository</strong> (string): 资源库名称 ,</br>" +
@@ -124,6 +127,7 @@ public class PeriodicSchedulerController extends BaseController {
      * @return
      */
     @ApiOperation(value = "添加普通调度", notes = "" +
+            "<strong>jobGroup</strong> (string): 分组ID ,</br>" +
             "<strong>jobName</strong> (string): 调度名称 ,</br>" +
             "<strong>description</strong> (string): 描述 ,</br>" +
             "<strong>repository</strong> (string): 资源库名称 ,</br>" +
@@ -150,16 +154,16 @@ public class PeriodicSchedulerController extends BaseController {
             "<strong>execType</strong> (integer): 运行方式(1:本地运行,2:远程运行,3:集群运行;4:HA集群运行) </br>" +
             "<strong>file</strong> (string): 执行的转换或者作业名 ,</br>" +
             "<strong>filePath</strong> (string): 执行的转换或者作业path </br>" +
-            "<strong>fileType</strong> (string): transformation or job </br>" +
+            "<strong>fileType</strong> (string): TRANSFORMATION or JOB </br>" +
             "<strong>version</strong> (string): 版本(固定值v3.9) ,</br>" ,httpMethod = "POST")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Response<Boolean> update(
             @RequestBody GeneralScheduleRequest request,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException, ParseException {
         Class quartzExecuteClass = null;
-        if(request.getFile().endsWith("kjb") || request.getFile().endsWith("KJB")){
+        if("JOB".equalsIgnoreCase(request.getFileType())){
             quartzExecuteClass = JobRunner.class;
-        }else if(request.getFile().endsWith("ktr") || request.getFile().endsWith("KTR")){
+        }else if("TRANSFORMATION".equalsIgnoreCase(request.getFileType())){
             quartzExecuteClass = TransRunner.class;
         }
         quartzService.update(request, quartzExecuteClass);
@@ -168,43 +172,43 @@ public class PeriodicSchedulerController extends BaseController {
     }
 
     @ApiOperation(value = "删除调度", notes = "删除调度", httpMethod = "GET")
-    @RequestMapping(value = "/delete/{name}/group/{group}", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{jobName}/group/{jobGroup}", method = RequestMethod.GET)
     public Response<Boolean> delete(
-            @ApiParam(value = "调度名称", required = true)@PathVariable String name,
-            @ApiParam(value = "调度分组名称", required = true)@PathVariable String group,
+            @ApiParam(value = "调度名称", required = true)@PathVariable String jobName,
+            @ApiParam(value = "调度分组名称", required = true)@PathVariable String jobGroup,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
 
-        return Response.ok(quartzService.removeJob(name,group,user.getOrganizerId())) ;
+        return Response.ok(quartzService.removeJob(jobName,jobGroup,user.getOrganizerId())) ;
     }
 
     @ApiOperation(value = "暂停调度", notes = "暂停调度", httpMethod = "GET")
-    @RequestMapping(value = "/pause/{name}/group/{group}", method = RequestMethod.GET)
+    @RequestMapping(value = "/pause/{jobName}/group/{jobGroup}", method = RequestMethod.GET)
     public Response<Boolean> pause(
-            @ApiParam(value = "调度名称", required = true)@PathVariable String name,
-            @ApiParam(value = "调度分组名称", required = true)@PathVariable String group,
+            @ApiParam(value = "调度名称", required = true)@PathVariable String jobName,
+            @ApiParam(value = "调度分组名称", required = true)@PathVariable String jobGroup,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
 
-        return Response.ok(quartzService.pause(name,group)) ;
+        return Response.ok(quartzService.pause(jobName,jobGroup)) ;
     }
 
     @ApiOperation(value = "还原调度", notes = "还原暂停的调度", httpMethod = "GET")
-    @RequestMapping(value = "/resume/{name}/group/{group}", method = RequestMethod.GET)
+    @RequestMapping(value = "/resume/{jobName}/group/{jobGroup}", method = RequestMethod.GET)
     public Response<Integer> resume(
-            @ApiParam(value = "调度名称", required = true)@PathVariable String name,
-            @ApiParam(value = "调度分组名称", required = true)@PathVariable String group,
+            @ApiParam(value = "调度名称", required = true)@PathVariable String jobName,
+            @ApiParam(value = "调度分组名称", required = true)@PathVariable String jobGroup,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
 
-        return Response.ok(quartzService.resume(name,group)) ;
+        return Response.ok(quartzService.resume(jobName,jobGroup)) ;
     }
 
     @ApiOperation(value = "手动执行调度", notes = "手动执行调度", httpMethod = "POST")
-    @RequestMapping(value = "/execute/{name}/group/{group}", method = RequestMethod.POST)
+    @RequestMapping(value = "/execute/{jobName}/group/{jobGroup}", method = RequestMethod.POST)
     public Response<Integer> execute(
-            @ApiParam(value = "调度名称", required = true)@PathVariable String name,
-            @ApiParam(value = "调度分组名称", required = true)@PathVariable String group,
+            @ApiParam(value = "调度名称", required = true)@PathVariable String jobName,
+            @ApiParam(value = "调度分组名称", required = true)@PathVariable String jobGroup,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
 
-        return Response.ok(quartzService.execute(name,group,null)) ;
+        return Response.ok(quartzService.execute(jobName,jobGroup,null)) ;
     }
 
 

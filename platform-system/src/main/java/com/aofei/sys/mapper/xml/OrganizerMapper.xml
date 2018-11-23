@@ -53,6 +53,8 @@
         </where>
     </select>
 
+
+
     <update id="deleteById">
         update SYS_ORGANIZER a set a.DEL_FLAG = 1  where a.ORGANIZER_ID = #{id}
     </update>

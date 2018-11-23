@@ -35,5 +35,5 @@ public class CurrentUserResponse {
     /**
      * 组织ID
      */
-    private Long organizerName;
+    private String organizerName;
 }

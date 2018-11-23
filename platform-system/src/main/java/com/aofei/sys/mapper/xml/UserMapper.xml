@@ -99,6 +99,26 @@
         WHERE C_USER_ID = #{userId}
     </update>
 
+    <update id="updateById">
+        update SYS_USER a
+        <set>
+              a.C_USER_NAME = #{et.username}
+            , a.C_PASSWORD = #{et.password}
+            , a.C_NICK_NAME = #{et.nickName}
+            , a.C_EMAIL = #{et.email}
+            , a.C_MOBILEPHONE = #{et.mobilephone}
+            , a.C_DESCRIPTION = #{et.description}
+            , a.C_IS_SYSTEM_USER = #{et.isSystemUser}
+            , a.C_ORGANIZER_ID = #{et.organizerId}
+            , a.C_USER_STATUS = #{et.userStatus}
+            , a.LAST_LOGIN_TIME = #{et.lastLoginTime}
+            , a.LAST_LOGIN_IP = #{et.lastLoginIp}
+            , a.UPDATE_USER = #{et.updateUser}
+            , a.UPDATE_TIME = #{et.updateTime}
+        </set>
+        where a.C_USER_ID = #{et.userId}
+    </update>
+
     <update id="deleteById">
         update SYS_USER a set a.DEL_FLAG = 1  where a.C_USER_ID = #{id}
     </update>

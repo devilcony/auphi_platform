@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class GroupResponse {
 
-    private Long groupId;
+    private String groupId;
 
     /**
      * 分组名称

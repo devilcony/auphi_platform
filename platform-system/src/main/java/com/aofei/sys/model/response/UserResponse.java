@@ -66,7 +66,7 @@ public class UserResponse {
      * 组织ID
      */
     @ApiModelProperty(value = "组织名称")
-    private Long organizerName;
+    private String organizerName;
 
 
     /**
