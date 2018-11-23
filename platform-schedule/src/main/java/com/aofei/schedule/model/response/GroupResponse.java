@@ -1,5 +1,6 @@
 package com.aofei.schedule.model.response;
 
+import com.aofei.base.model.response.BaseResponse;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ import lombok.Data;
  * @create 2018-10-05 20:44
  */
 @Data
-public class GroupResponse {
+public class GroupResponse extends BaseResponse {
 
     private String groupId;
 

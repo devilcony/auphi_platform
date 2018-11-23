@@ -14,11 +14,11 @@
         , a.IS_UPDATE_DATA AS isUpdateData
         , a.REQUESTS_RECOVERY AS requestsRecovery
         , a.JOB_DATA AS jobData
-        , triggers.NEXT_FIRE_TIME AS nextFireTime
-        , triggers.PREV_FIRE_TIME AS prevFireTime
-        , triggers.START_TIME AS startTime
-        , triggers.END_TIME AS endTime
-        , triggers.TRIGGER_STATE AS triggerState
+        , qts.NEXT_FIRE_TIME AS nextFireTime
+        , qts.PREV_FIRE_TIME AS prevFireTime
+        , qts.START_TIME AS startTime
+        , qts.END_TIME AS endTime
+        , qts.TRIGGER_STATE AS triggerState
     </sql>
 
     <sql id="Base_Joins">
@@ -32,7 +32,7 @@
         from QRTZ_JOB_DETAILS a
         <include refid="Base_Joins"/>
         <where>
-            a.DEL_FLAG = 0
+
             <if test="organizerId != null ">
                 AND qgp.ORGANIZER_ID = #{organizerId}
             </if>

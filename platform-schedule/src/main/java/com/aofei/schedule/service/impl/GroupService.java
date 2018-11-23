@@ -44,7 +44,10 @@ public class GroupService extends BaseService<GroupMapper, Group> implements IGr
     @Log(module = "调度分组管理",description = "新建调度分组信息")
     @Override
     public GroupResponse save(GroupRequest request) {
-        int count =  baseMapper.selectCount(new EntityWrapper<Group>().eq("GROUP_NAME",request.getGroupName()));
+        int count =  baseMapper.selectCount(new EntityWrapper<Group>()
+                .eq("GROUP_NAME",request.getGroupName())
+                .eq("ORGANIZER_ID",request.getOrganizerId())
+                .eq("DEL_FLAG",Group.DEL_FLAG_NORMAL));
         if(count == 0){
             Group Group = BeanCopier.copy(request, Group.class);
             Group.preInsert();

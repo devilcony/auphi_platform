@@ -13,14 +13,14 @@ import lombok.Data;
 @Data
 public class GeneralScheduleRequest extends BaseRequest {
 
-    @ApiModelProperty(value = "分组")
+    @ApiModelProperty(value = "所属组")
     private String jobGroup;
 
     @ApiModelProperty(value = "调度名称")
     private String jobName;
 
 
-    @ApiModelProperty(value = "描述")
+    @ApiModelProperty(value = "备注")
     private String description;
 
     @ApiModelProperty(value = "版本(固定值v3.9)")
@@ -82,7 +82,7 @@ public class GeneralScheduleRequest extends BaseRequest {
     @ApiModelProperty(value = "执行的转换或者作业path")
     private String filePath;
 
-    @ApiModelProperty(value = "transformation or job")
+    @ApiModelProperty(value = "TRANSFORMATION or JOB")
     private String fileType;
 
     @ApiModelProperty(hidden = true)

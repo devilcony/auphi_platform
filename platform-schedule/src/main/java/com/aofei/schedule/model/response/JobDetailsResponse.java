@@ -6,14 +6,14 @@ import java.sql.Blob;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Tony
  * @since 2018-11-18
  */
 @Data
-public class JobDetailsResponse  {
+public class    JobDetailsResponse  {
 
     private static final long serialVersionUID = 1L;
 

@@ -23,12 +23,8 @@
  ******************************************************************************/
 package com.aofei.schedule.service;
 
-import com.aofei.schedule.entity.GeneralSchedule;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
 import com.aofei.schedule.model.request.ParamRequest;
-import com.aofei.schedule.model.response.GeneralScheduleResponse;
-import com.aofei.sys.model.response.RepositoryResponse;
-import com.baomidou.mybatisplus.plugins.Page;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.SchedulerException;

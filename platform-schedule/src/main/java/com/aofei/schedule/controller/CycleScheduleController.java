@@ -129,7 +129,7 @@ public class CycleScheduleController extends BaseController {
     @ApiOperation(value = "添加普通调度", notes = "" +
             "<strong>jobGroup</strong> (string): 分组ID ,</br>" +
             "<strong>jobName</strong> (string): 调度名称 ,</br>" +
-            "<strong>description</strong> (string): 描述 ,</br>" +
+            "<strong>description</strong> (string): 备注 ,</br>" +
             "<strong>repository</strong> (string): 资源库名称 ,</br>" +
             "<strong>startTime</strong> (string): 开始时间(格式:HH:mm:ss) </br>" +
             "<strong>startDate</strong> (string): 开始日期(格式:yyyy-MM-dd) </br>" +
@@ -202,7 +202,7 @@ public class CycleScheduleController extends BaseController {
     }
 
     @ApiOperation(value = "手动执行调度", notes = "手动执行调度", httpMethod = "POST")
-    @RequestMapping(value = "/execute/{jobName}/group/{jobGroup}", method = RequestMethod.POST)
+    @RequestMapping(value = "/execute/{jobName}/group/{jobGroup}", method = RequestMethod.GET)
     public Response<Integer> execute(
             @ApiParam(value = "调度名称", required = true)@PathVariable String jobName,
             @ApiParam(value = "调度分组名称", required = true)@PathVariable String jobGroup,
@@ -212,5 +212,14 @@ public class CycleScheduleController extends BaseController {
     }
 
 
+    @ApiOperation(value = "获取调度详情", notes = "获取调度详情", httpMethod = "POST")
+    @RequestMapping(value = "/{jobName}/group/{jobGroup}", method = RequestMethod.GET)
+    public Response<Integer> get(
+            @ApiParam(value = "调度名称", required = true)@PathVariable String jobName,
+            @ApiParam(value = "调度分组名称", required = true)@PathVariable String jobGroup,
+            @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
+
+        return Response.ok(quartzService.execute(jobName,jobGroup,null)) ;
+    }
 
 }
