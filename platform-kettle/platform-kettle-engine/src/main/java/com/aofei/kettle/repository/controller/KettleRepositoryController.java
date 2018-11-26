@@ -1,5 +1,8 @@
 package com.aofei.kettle.repository.controller;
 
+import com.aofei.base.annotation.CurrentUser;
+import com.aofei.base.model.response.CurrentUserResponse;
+import com.aofei.base.model.response.Response;
 import com.aofei.kettle.App;
 import com.aofei.kettle.PluginFactory;
 import com.aofei.kettle.base.GraphCodec;
@@ -9,6 +12,7 @@ import com.aofei.kettle.cluster.SlaveServerCodec;
 import com.aofei.kettle.core.database.DatabaseCodec;
 import com.aofei.kettle.repository.RepositoryCodec;
 import com.aofei.kettle.repository.beans.DirectoryVO;
+import com.aofei.kettle.repository.beans.RepositoryCascaderVO;
 import com.aofei.kettle.repository.beans.RepositoryNodeType;
 import com.aofei.kettle.repository.beans.RepositoryObjectVO;
 import com.aofei.kettle.utils.*;
@@ -349,12 +353,66 @@ public class KettleRepositoryController {
 		}
 	}
 
+	@RequestMapping(method=RequestMethod.POST, value="/cascader")
+	protected Response<List<RepositoryCascaderVO>> cascader(@CurrentUser CurrentUserResponse user) throws KettleException, IOException {
+		Repository repository = App.getInstance().getRepository();
+		List<RepositoryCascaderVO> list = new ArrayList<>();
+
+		String root = "/"+user.getOrganizerName();
+		RepositoryDirectoryInterface dir = repository.findDirectory(root);
+
+		RepositoryCascaderVO repositoryCascaderVO = new RepositoryCascaderVO(root,root);
+
+		List<RepositoryCascaderVO> childs = getCascaderChildren(repository,dir);
+		if(!childs.isEmpty()){
+			repositoryCascaderVO.setChildren(childs);
+			list.add(repositoryCascaderVO);
+		}
+
+		return Response.ok(list);
+
+	}
+
+	private List<RepositoryCascaderVO> getCascaderChildren(Repository repository, RepositoryDirectoryInterface dir) throws KettleException {
+		List<RepositoryCascaderVO> list = new ArrayList<>();
+		List<RepositoryElementMetaInterface> elements = repository.getTransformationObjects(dir.getObjectId(), false);
+		List<RepositoryDirectoryInterface> directorys = dir.getChildren();
+		if(elements != null) {
+			for(RepositoryElementMetaInterface e : elements) {
+				RepositoryCascaderVO ro = new RepositoryCascaderVO(e,".ktr");
+				list.add(ro);
+			}
+		}
+
+		elements = repository.getJobObjects(dir.getObjectId(), false);
+		if(elements != null) {
+			for(RepositoryElementMetaInterface e : elements) {
+				RepositoryCascaderVO ro = new RepositoryCascaderVO(e,".kjb");
+				list.add(ro);
+			}
+		}
+
+		for(RepositoryDirectoryInterface child : directorys) {
+			RepositoryCascaderVO ro = new RepositoryCascaderVO(child);
+			List<RepositoryCascaderVO> childs = getCascaderChildren(repository,child);
+			if(!childs.isEmpty()){
+				ro.setChildren(childs);
+				list.add(ro);
+			}
+		}
+
+		return list;
+
+
+	}
+
+
 	@RequestMapping(method=RequestMethod.POST, value="/listElements")
-	protected @ResponseBody List<RepositoryObjectVO> listElements(@RequestParam String path) throws KettleException, IOException {
+	protected  List<RepositoryObjectVO> listElements(@RequestParam String path) throws KettleException, IOException {
 		ArrayList list = new ArrayList();
 
 		Repository repository = App.getInstance().getRepository();
-		repository.connect(com.aofei.base.common.Const.REPOSITORY_USERNAME,com.aofei.base.common.Const.REPOSITORY_PASSWORD);
+
 		RepositoryDirectoryInterface dir = null;
 		if(StringUtils.hasText(path))
 			dir = repository.findDirectory(path);
@@ -386,6 +444,7 @@ public class KettleRepositoryController {
 
 		return list;
 	}
+
 
 	/**
 	 * 资源库浏览，生成树结构

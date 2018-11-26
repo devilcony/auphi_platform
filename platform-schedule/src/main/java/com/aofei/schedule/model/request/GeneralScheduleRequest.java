@@ -2,8 +2,11 @@ package com.aofei.schedule.model.request;
 
 
 import com.aofei.base.model.request.BaseRequest;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * 普通调度
@@ -35,11 +38,13 @@ public class GeneralScheduleRequest extends BaseRequest {
     @ApiModelProperty(value = "运行方式(1:本地运行,2:远程运行,3:集群运行;4:HA集群运行)")
     private Integer execType;
 
-    @ApiModelProperty(value = "开始时间(格式:HH:mm:ss)")
-    private String startTime;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @ApiModelProperty(value = "开始时间(格式:yyyy-MM-dd HH:mm:ss)")
+    private Date startTime;
 
-    @ApiModelProperty(value = "开始日期(格式:yyyy-MM-dd)")
-    private String startDate;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @ApiModelProperty(value = "结束日期(格式:yyyy-MM-dd HH:mm:ss);结束日期为空,表示不结束;周期为执行一次结束时间为空")
+    private Date endTime;
 
     @ApiModelProperty(value = "周期(1:执行一次;2:秒;3:分钟;4:小时;5:天;6:周;7:月;8:年;)")
     private Integer cycle;
@@ -50,7 +55,7 @@ public class GeneralScheduleRequest extends BaseRequest {
             "3:分钟:cycleNum为整数;表示几分钟享执行一次\n" +
             "4:小时:cycleNum为整数;表示几小时享执行一次\n" +
             "5:天:cycleNum为整数;表示几天执行一次;-1表示每个工作日执行\n" +
-            "6:周:cycleNum为整数;1-7分别表示 周日-周六(周日开始)\n" +
+            "6:周:cycleNum为字符串;1-7分别表示 周日-周六(周日开始)\n" +
             "7:月:分两种情况,第一种:用1-31表示每月的几号执行,L表示最后一天 第二种: cycleNum为空,用weekNum,dayNum表示每月的第几个星期的星期几 \n" +
             "8:年:分两种情况,第一种:yearType=1;用格式MM-dd表示每年的几月几号执行 第二种:yearType=2;cycleNum为空,用monthNum,weekNum,dayNum表示每年第几个月的第几个星期的星期几")
     private String cycleNum;
@@ -68,13 +73,11 @@ public class GeneralScheduleRequest extends BaseRequest {
     private Integer monthNum;
 
     @ApiModelProperty(value = "第几个星期 1-4表示 L表示最后一个星期")
-    private Integer weekNum;
+    private String weekNum;
 
     @ApiModelProperty(value = "1-7分别表示 周日-周六(周日开始);和weekNum同时使用表示第几个星期的星期几 ")
     private Integer dayNum;
 
-    @ApiModelProperty(value = "结束日期(格式:yyyy-MM-dd);结束日期为空,表示永不结束;周期为执行一次结束时间为空")
-    private String endDate;
 
     @ApiModelProperty(value = "执行的转换或者作业名")
     private String file;

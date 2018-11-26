@@ -28,7 +28,7 @@ public class RepositoryNode extends Ext3Node {
 		this.type = type;
 	}
 
-	public static RepositoryNode initNode(String text, String path) {
+	public static RepositoryNode initNode(String name, String text, String path) {
 		return initNode(text, path, null, false, false, null);
 	}
 

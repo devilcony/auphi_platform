@@ -40,5 +40,10 @@ public class RegisterRequest  {
     @ApiModelProperty(value = "手机")
     private String mobilephone;
 
+    /**
+     * 手机
+     */
+    @ApiModelProperty(value = "短信验证码(短信注册必填)")
+    private String captcha;
 
 }

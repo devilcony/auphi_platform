@@ -25,7 +25,6 @@ package com.aofei.schedule.util;
 
 import com.aofei.base.exception.ApplicationException;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
-import com.aofei.utils.DateUtils;
 import com.aofei.utils.StringUtils;
 import org.quartz.*;
 
@@ -45,8 +44,8 @@ public class QuartzUtil {
 
     public static Trigger getTrigger(GeneralScheduleRequest request, String group){
         String cronString = "";
-        Date satrtDate = getSatrtDate(request);
-        Date endDate = getEndDate(request);
+        Date satrtDate = request.getStartTime();
+        Date endDate = request.getEndTime();
         String name = request.getJobName();
 
         Calendar ca = Calendar.getInstance();
@@ -185,16 +184,6 @@ public class QuartzUtil {
 
     }
 
-    private static Date getEndDate(GeneralScheduleRequest request) {
-        return StringUtils.isEmpty(request.getEndDate()) ? null: DateUtils.format(request.getEndDate()+" 23:59:59");
-    }
 
-    private static Date getSatrtDate(GeneralScheduleRequest request){
-        if(!StringUtils.isEmpty(request.getStartDate()) && !StringUtils.isEmpty(request.getStartTime())){
-          return   DateUtils.format(request.getStartDate() +" "+request.getStartTime());
-        }
-
-        return null;
-    }
 
 }

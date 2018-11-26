@@ -43,6 +43,7 @@ import com.aofei.sys.service.IUserService;
 import com.aofei.utils.BeanCopier;
 import com.aofei.utils.SendMailUtil;
 import com.aofei.utils.StringUtils;
+import com.aofei.utils.TencentSmsSingleSender;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.*;
@@ -77,6 +78,9 @@ public class AccountController extends BaseController {
 
     @Autowired
     private SendMailUtil sendMailUtil;
+
+    @Autowired
+    private TencentSmsSingleSender tencentSmsSingleSender;
 
     /**
      * 登录
@@ -151,19 +155,92 @@ public class AccountController extends BaseController {
             return -1;
         }
     }
-
     /**
-     * 登录
+     * 获取手机注册验证码
      *
      * @return
      */
-    @ApiOperation(value = "用户注册", notes = "用户注册(该接口只发送邮件，用户在邮件点击列表完成注册)", httpMethod = "POST")
+    @ApiOperation(value = "获取手机注册验证码", notes = "获取手机注册验证码", httpMethod = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200013, message = "the phone number is exist"),
+            @ApiResponse(code = 200, message = "success")})
+    @RequestMapping(value = "/{phoneNumber}/getSmsCaptcha", method = RequestMethod.POST)
+    public Response<Integer> sms(@PathVariable String phoneNumber) throws Exception {
+
+        int count = userService.selectCount(new EntityWrapper<User>()
+                .eq("C_MOBILEPHONE",phoneNumber)
+                .eq("DEL_FLAG",User.DEL_FLAG_NORMAL));
+        if(count>0){
+            throw new ApplicationException(SystemError.USERNAME_EXIST.getCode(),"the phone number is exist");
+        }
+        tencentSmsSingleSender.sendSms(phoneNumber);
+        return Response.ok(0);
+    }
+
+    /**
+     * 检查用户名是否存在
+     *
+     * @return
+     */
+    @ApiOperation(value = "检查用户名是否存在", notes = "检查用户名是否存在 0:不存在 1:存在 ", httpMethod = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "success")})
+    @RequestMapping(value = "/{username}/exist", method = RequestMethod.POST)
+    public Response<Integer> checkUsernameIsExist(@PathVariable String username) throws Exception {
+        int count = userService.selectCount(new EntityWrapper<User>()
+                .eq("C_USER_NAME",username)
+                .eq("DEL_FLAG",User.DEL_FLAG_NORMAL));
+        return Response.ok(count);
+    }
+
+    /**
+     * 手机号注册
+     *
+     * @return
+     */
+    @ApiOperation(value = "手机号注册", notes = "手机号注册", httpMethod = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200005, message = "the username is exist"),
+            @ApiResponse(code = 200013, message = "the phone number is exist"),
+            @ApiResponse(code = 200, message = "success")})
+    @RequestMapping(value = "/register/phone", method = RequestMethod.POST)
+    public Response<Integer> phoneRegister(@RequestBody RegisterRequest request) throws Exception {
+
+        int usernameCount = userService.selectCount(new EntityWrapper<User>()
+                .eq("C_USER_NAME",request.getMobilephone())
+                .eq("DEL_FLAG",User.DEL_FLAG_NORMAL));
+        if(usernameCount>0){
+            throw new ApplicationException(SystemError.USERNAME_EXIST.getCode(),"the username is exist");
+        }
+        int mobilephoneCount = userService.selectCount(new EntityWrapper<User>()
+                .eq("C_MOBILEPHONE",request.getMobilephone())
+                .eq("DEL_FLAG",User.DEL_FLAG_NORMAL));
+        if(mobilephoneCount>0){
+            throw new ApplicationException(SystemError.PHONE_NUMBER_EXIST.getCode(),"the phone number is exist");
+        }
+        if(tencentSmsSingleSender.validate(request.getMobilephone(),request.getCaptcha())){
+            userService.register(request);
+        }else{
+            throw new ApplicationException(SystemError.CAPTCHA_ERROR.getCode(),"the captcha error");
+        }
+
+        return Response.ok(0);
+    }
+
+
+    /**
+     * 邮箱用户注册(该接口只发送邮件，用户在邮件点击列表完成注册)
+     *
+     * @return
+     */
+
+    @ApiOperation(value = "邮箱用户注册", notes = "邮箱用户注册(该接口只发送邮件，用户在邮件点击列表完成注册)", httpMethod = "POST")
     @ApiResponses(value = {
             @ApiResponse(code = 200005, message = "username is exist"),
             @ApiResponse(code = 200011, message = "email is exist"),
             @ApiResponse(code = 200, message = "success")})
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public Response<Integer> register(@RequestBody RegisterRequest request) throws Exception {
+    @RequestMapping(value = "/register/email", method = RequestMethod.POST)
+    public Response<Integer> emailRegister(@RequestBody RegisterRequest request) throws Exception {
 
         int usernameCount = userService.selectCount(new EntityWrapper<User>().eq("C_USER_NAME",request.getUsername()));
         if(usernameCount>0){
@@ -188,7 +265,7 @@ public class AccountController extends BaseController {
     }
 
     /**
-     * 登录
+     * 邮箱验证
      *
      * @return
      */
@@ -196,9 +273,11 @@ public class AccountController extends BaseController {
     @ApiResponses(value = {
             @ApiResponse(code = 200012, message = "mail overdue"),
             @ApiResponse(code = 200, message = "success")})
-    @RequestMapping(value = "/active", method = RequestMethod.POST)
+    @RequestMapping(value = "/register/active", method = RequestMethod.POST)
     public Response<Integer> active(
             @ApiParam(value = "验证码", required = true)String auth_code) throws Exception {
+
+
 
         Claims claims = jwtTokenBuilder.decodeToken(auth_code, jwtConfig.getBase64Secret());
         if(claims==null){
