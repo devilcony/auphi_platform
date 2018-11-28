@@ -56,11 +56,14 @@
         </bean>
     </mvc:interceptors>
 
+    <!--解决fastJson 转换long型，精度丢失的问题-->
+    <bean id="fastJsonConfigExt" class="com.aofei.admin.config.FastJsonConfigExt"/>
     <!-- 自定义JSON转换器 -->
     <mvc:annotation-driven>
         <mvc:message-converters>
 
             <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="fastJsonConfig" ref="fastJsonConfigExt" />
                 <property name="supportedMediaTypes" value="application/json;text/plain;charset=UTF-8"/>
                 <property name="features">
                     <array>

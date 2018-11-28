@@ -1,10 +1,15 @@
 package com.aofei.schedule.job;
 
 
+import com.alibaba.fastjson.JSON;
+import com.aofei.base.common.Const;
+import com.aofei.joblog.entity.LogJob;
 import com.aofei.joblog.task.JobLogTimerTask;
 import com.aofei.kettle.App;
 import com.aofei.kettle.JobExecutor;
 
+import com.aofei.schedule.model.request.GeneralScheduleRequest;
+import com.aofei.translog.entity.LogTrans;
 import org.pentaho.di.core.RowMetaAndData;
 import org.pentaho.di.core.logging.DefaultLogLevel;
 import org.pentaho.di.job.JobExecutionConfiguration;
@@ -15,6 +20,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -24,9 +30,12 @@ public class JobRunner extends QuartzJobBean {
 	@Override
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		try {
-			String path = context.getJobDetail().getKey().getName();
-			String dir = path.substring(0, path.lastIndexOf("/"));
-			String name = path.substring(path.lastIndexOf("/") + 1);
+			String json = (String) context.getJobDetail().getJobDataMap().get(Const.GENERAL_SCHEDULE_KEY);
+
+			GeneralScheduleRequest request = JSON.parseObject(json,GeneralScheduleRequest.class);
+
+			String dir = request.getFilePath();
+			String name = request.getFile();
 
 			Repository repository = App.getInstance().getRepository();
 			RepositoryDirectoryInterface directory = repository.findDirectory(dir);
@@ -34,7 +43,6 @@ public class JobRunner extends QuartzJobBean {
 				directory = repository.getUserHomeDirectory();
 
 			JobMeta jobMeta = repository.loadJob(name, directory, null, null);
-
 
 			JobExecutionConfiguration executionConfiguration = App.getInstance().getJobExecutionConfiguration();
 
@@ -70,7 +78,16 @@ public class JobRunner extends QuartzJobBean {
 		    Thread tr = new Thread(jobExecutor, "JobExecutor_" + jobExecutor.getExecutionId());
 		    tr.start();
 
-			JobLogTimerTask jobLogTimerTask = new JobLogTimerTask(jobExecutor);
+			LogJob logJob  = new LogJob();
+			logJob.setStartdate(new Date());
+			logJob.setStatus("start");
+			logJob.setQrtzJobGroup(context.getJobDetail().getKey().getGroup());
+			logJob.setQrtzJobName(context.getJobDetail().getKey().getName());
+			logJob.setJobName(jobExecutor.getJob().getName());
+			logJob.setChannelId(jobExecutor.getExecutionId());
+			logJob.setJobCnName(jobExecutor.getJob().getName());
+
+			JobLogTimerTask jobLogTimerTask = new JobLogTimerTask(jobExecutor,logJob);
 			Timer logTimer = new Timer();
 			logTimer.schedule(jobLogTimerTask, 0,1000);
 

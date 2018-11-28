@@ -265,4 +265,8 @@ public class JobExecutor implements Runnable {
 
 	}
 
+
+	public Job getJob() {
+		return job;
+	}
 }

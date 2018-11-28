@@ -6,6 +6,7 @@ import com.aofei.base.common.Const;
 import com.aofei.kettle.App;
 import com.aofei.kettle.TransExecutor;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
+import com.aofei.translog.entity.LogTrans;
 import com.aofei.translog.task.TransLogTimerTask;
 import org.pentaho.di.core.RowMetaAndData;
 import org.pentaho.di.core.logging.DefaultLogLevel;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -34,11 +36,12 @@ public class TransRunner extends QuartzJobBean {
 
             GeneralScheduleRequest request = JSON.parseObject(json,GeneralScheduleRequest.class);
 
+
 			String dir = request.getFilePath();
 			String name = request.getFile();
 
 			Repository repository = App.getInstance().getRepository();
-			repository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
+
 			RepositoryDirectoryInterface directory = repository.findDirectory(dir);
 			if(directory == null)
 				directory = repository.getUserHomeDirectory();
@@ -83,13 +86,20 @@ public class TransRunner extends QuartzJobBean {
 			for (String key : paramNames) {
 				params.put(key, "");
 			}
-			repository.disconnect();
 		    TransExecutor transExecutor = TransExecutor.initExecutor(executionConfiguration, transMeta);
-
 
 			Thread tr = new Thread(transExecutor, "TransExecutor_" + transExecutor.getExecutionId());
 		    tr.start();
-            TransLogTimerTask transTimerTask = new TransLogTimerTask(transExecutor);
+			LogTrans logTrans  = new LogTrans();
+			logTrans.setStartdate(new Date());
+			logTrans.setStatus("start");
+			logTrans.setQrtzJobGroup(context.getJobDetail().getKey().getGroup());
+			logTrans.setQrtzJobName(context.getJobDetail().getKey().getName());
+			logTrans.setTransname(transExecutor.getTransMeta().getName());
+			logTrans.setChannelId(transExecutor.getExecutionId());
+			logTrans.setTransCnName(transExecutor.getTransMeta().getName());
+
+            TransLogTimerTask transTimerTask = new TransLogTimerTask(transExecutor,logTrans);
 			logTimer.schedule(transTimerTask, 0,10000);
 		} catch(Exception e) {
 			throw new JobExecutionException(e);

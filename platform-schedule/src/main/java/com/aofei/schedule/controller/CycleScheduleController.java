@@ -1,7 +1,9 @@
 package com.aofei.schedule.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.aofei.base.annotation.Authorization;
 import com.aofei.base.annotation.CurrentUser;
+import com.aofei.base.common.Const;
 import com.aofei.base.controller.BaseController;
 import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
@@ -10,12 +12,14 @@ import com.aofei.schedule.job.JobRunner;
 import com.aofei.schedule.job.TransRunner;
 import com.aofei.schedule.model.request.GeneralScheduleRequest;
 import com.aofei.schedule.model.request.JobDetailsRequest;
+import com.aofei.schedule.model.response.GeneralScheduleResponse;
 import com.aofei.schedule.model.response.JobDetailsResponse;
 import com.aofei.schedule.service.IJobDetailsService;
 import com.aofei.schedule.service.IQuartzService;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import io.swagger.annotations.*;
+import org.quartz.JobDetail;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -156,8 +160,8 @@ public class CycleScheduleController extends BaseController {
             "<strong>filePath</strong> (string): 执行的转换或者作业path </br>" +
             "<strong>fileType</strong> (string): TRANSFORMATION or JOB </br>" +
             "<strong>version</strong> (string): 版本(固定值v3.9) ,</br>" ,httpMethod = "POST")
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Response<Boolean> update(
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public Response<Boolean> edit(
             @RequestBody GeneralScheduleRequest request,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException, ParseException {
         Class quartzExecuteClass = null;
@@ -171,8 +175,8 @@ public class CycleScheduleController extends BaseController {
         return Response.ok(true) ;
     }
 
-    @ApiOperation(value = "删除调度", notes = "删除调度", httpMethod = "GET")
-    @RequestMapping(value = "/delete/{jobName}/group/{jobGroup}", method = RequestMethod.GET)
+    @ApiOperation(value = "删除调度", notes = "删除调度", httpMethod = "DELETE")
+    @RequestMapping(value = "/delete/{jobName}/group/{jobGroup}", method = RequestMethod.DELETE)
     public Response<Boolean> delete(
             @ApiParam(value = "调度名称", required = true)@PathVariable String jobName,
             @ApiParam(value = "调度分组名称", required = true)@PathVariable String jobGroup,
@@ -214,12 +218,18 @@ public class CycleScheduleController extends BaseController {
 
     @ApiOperation(value = "获取调度详情", notes = "获取调度详情", httpMethod = "POST")
     @RequestMapping(value = "/{jobName}/group/{jobGroup}", method = RequestMethod.GET)
-    public Response<Integer> get(
+    public Response<GeneralScheduleResponse> get(
             @ApiParam(value = "调度名称", required = true)@PathVariable String jobName,
             @ApiParam(value = "调度分组名称", required = true)@PathVariable String jobGroup,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws SchedulerException {
 
-        return Response.ok(quartzService.execute(jobName,jobGroup,null)) ;
+        JobDetail jobDetail = quartzService.findByName(jobName,jobGroup);
+
+        String json = (String) jobDetail.getJobDataMap().get(Const.GENERAL_SCHEDULE_KEY);
+
+        GeneralScheduleResponse response = JSON.parseObject(json,GeneralScheduleResponse.class);
+
+        return Response.ok(response) ;
     }
 
 }

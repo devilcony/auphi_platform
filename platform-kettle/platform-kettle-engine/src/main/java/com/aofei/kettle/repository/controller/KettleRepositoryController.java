@@ -361,7 +361,7 @@ public class KettleRepositoryController {
 		String root = "/"+user.getOrganizerName();
 		RepositoryDirectoryInterface dir = repository.findDirectory(root);
 
-		RepositoryCascaderVO repositoryCascaderVO = new RepositoryCascaderVO(root,root);
+		RepositoryCascaderVO repositoryCascaderVO = new RepositoryCascaderVO(user.getOrganizerName(),user.getOrganizerName());
 
 		List<RepositoryCascaderVO> childs = getCascaderChildren(repository,dir);
 		if(!childs.isEmpty()){

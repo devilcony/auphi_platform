@@ -6,29 +6,33 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-          LOG_TRANS_ID AS logTransId
-        , TRANS_CONFIG_ID AS transConfigId
-        , CHANNEL_ID AS channelId
-        , TRANSNAME AS transname
-        , STATUS AS status
-        , LINES_READ AS linesRead
-        , LINES_WRITTEN AS linesWritten
-        , LINES_UPDATED AS linesUpdated
-        , LINES_INPUT AS linesInput
-        , LINES_OUTPUT AS linesOutput
-        , LINES_REJECTED AS linesRejected
-        , ERRORS AS errors
-        , STARTDATE AS startdate
-        , ENDDATE AS enddate
-        , LOGDATE AS logdate
-        , DEPDATE AS depdate
-        , REPLAYDATE AS replaydate
-        , LOG_FIELD AS logField
-        , EXECUTING_SERVER AS executingServer
-        , EXECUTING_USER AS executingUser
-        , EXCUTOR_TYPE AS excutorType
-        , LOGINFO AS loginfo
-        , TRANS_CN_NAME AS transCnName
+          a.LOG_TRANS_ID AS logTransId
+        , a.TRANS_CONFIG_ID AS transConfigId
+        , a.CHANNEL_ID AS channelId
+        , a.TRANSNAME AS transname
+        , a.STATUS AS status
+        , a.LINES_READ AS linesRead
+        , a.LINES_WRITTEN AS linesWritten
+        , a.LINES_UPDATED AS linesUpdated
+        , a.LINES_INPUT AS linesInput
+        , a.LINES_OUTPUT AS linesOutput
+        , a.LINES_REJECTED AS linesRejected
+        , a.ERRORS AS errors
+        , a.STARTDATE AS startdate
+        , a.ENDDATE AS enddate
+        , a.LOGDATE AS logdate
+        , a.DEPDATE AS depdate
+        , a.REPLAYDATE AS replaydate
+        , a.LOG_FIELD AS logField
+        , a.EXECUTING_SERVER AS executingServer
+        , a.EXECUTING_USER AS executingUser
+        , a.EXCUTOR_TYPE AS excutorType
+        , a.LOGINFO AS loginfo
+        , a.TRANS_CN_NAME AS transCnName
+        , a.QRTZ_JOB_NAME AS qrtzJobName
+        , a.QRTZ_JOB_GROUP AS qrtzJobGroup
     </sql>
+
+
 
 </mapper>

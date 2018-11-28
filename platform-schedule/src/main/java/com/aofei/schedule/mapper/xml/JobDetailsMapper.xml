@@ -7,6 +7,7 @@
           a.SCHED_NAME AS schedName
         , a.JOB_NAME AS jobName
         , a.JOB_GROUP AS jobGroup
+        , qgp.GROUP_NAME  AS groupName
         , a.DESCRIPTION AS description
         , a.JOB_CLASS_NAME AS jobClassName
         , a.IS_DURABLE AS isDurable
@@ -23,10 +24,10 @@
 
     <sql id="Base_Joins">
        JOIN QRTZ_TRIGGERS qts ON qts.JOB_NAME = a.JOB_NAME AND qts.JOB_GROUP = a.JOB_GROUP
-       JOIN QRTZ_GROUP qgp ON qgp.GROUP_NAME = a.JOB_GROUP
+       JOIN QRTZ_GROUP qgp ON qgp.ID_GROUP = a.JOB_GROUP and qgp.DEL_FLAG = 0
     </sql>
 
-    <select id="findList"  resultType="com.aofei.sys.entity.Menu">
+    <select id="findList"  resultType="com.aofei.schedule.entity.JobDetails">
         select
         <include refid="Base_Column_List"/>
         from QRTZ_JOB_DETAILS a

@@ -21,6 +21,8 @@ public class    JobDetailsResponse  {
 
     private String jobName;
 
+    private String groupName;
+
     private String jobGroup;
 
     private String description;

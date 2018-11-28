@@ -6,7 +6,31 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        LOG_JOB_ID AS logJobId, JOB_CONFIG_ID AS jobConfigId, CHANNEL_ID AS channelId, JOB_NAME AS jobName, JOB_CN_NAME AS jobCnName, STATUS AS status, LINES_READ AS linesRead, LINES_WRITTEN AS linesWritten, LINES_UPDATED AS linesUpdated, LINES_INPUT AS linesInput, LINES_OUTPUT AS linesOutput, LINES_REJECTED AS linesRejected, ERRORS AS errors, STARTDATE AS startdate, ENDDATE AS enddate, LOGDATE AS logdate, DEPDATE AS depdate, REPLAYDATE AS replaydate, LOG_FIELD AS logField, EXECUTING_SERVER AS executingServer, EXECUTING_USER AS executingUser, EXCUTOR_TYPE AS excutorType, JOB_LOG AS jobLog
+          a.LOG_JOB_ID AS logJobId
+        , a.JOB_CONFIG_ID AS jobConfigId
+        , a.CHANNEL_ID AS channelId
+        , a.JOB_NAME AS jobName
+        , a.JOB_CN_NAME AS jobCnName
+        , a.STATUS AS status
+        , a.LINES_READ AS linesRead
+        , a.LINES_WRITTEN AS linesWritten
+        , a.LINES_UPDATED AS linesUpdated
+        , a.LINES_INPUT AS linesInput
+        , a.LINES_OUTPUT AS linesOutput
+        , a.LINES_REJECTED AS linesRejected
+        , a.ERRORS AS errors
+        , a.STARTDATE AS startdate
+        , a.ENDDATE AS enddate
+        , a.LOGDATE AS logdate
+        , a.DEPDATE AS depdate
+        , a.REPLAYDATE AS replaydate
+        , a.LOG_FIELD AS logField
+        , a.EXECUTING_SERVER AS executingServer
+        , a.EXECUTING_USER AS executingUser
+        , a.EXCUTOR_TYPE AS excutorType
+        , a.JOB_LOG AS jobLog
+        , a.QRTZ_JOB_NAME AS qrtzJobName
+        , a.QRTZ_JOB_GROUP AS qrtzJobGroup
     </sql>
 
 </mapper>

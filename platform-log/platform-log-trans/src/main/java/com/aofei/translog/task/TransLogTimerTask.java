@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
@@ -22,8 +23,9 @@ public class TransLogTimerTask extends TimerTask {
     private boolean first = true;
     private LogTrans logTrans;
     private List<LogTransStep> logTransSteps;
-    public TransLogTimerTask(TransExecutor transExecutor){
+    public TransLogTimerTask(TransExecutor transExecutor,LogTrans logTrans){
         this.transExecutor = transExecutor;
+        this.logTrans = logTrans;
     }
 
     @Override
@@ -33,24 +35,14 @@ public class TransLogTimerTask extends TimerTask {
 
             if(transExecutor!=null){
 
-
                 if(first){
                     first = false;
                     logTransSteps = new ArrayList<>();
-
-                    logTrans = new LogTrans();
                     logTrans.setTransConfigId(Long.valueOf(transExecutor.getTransMeta().getObjectId().getId()));
-                    logTrans.setTransname(transExecutor.getTransMeta().getName());
-                    logTrans.setChannelId(transExecutor.getExecutionId());
-                    logTrans.setTransCnName(transExecutor.getTransMeta().getName());
-                    logTrans.setStatus("start");
                     logTrans.insertAllColumn();
 
                 }else{
                     logTrans.setTransConfigId(Long.valueOf(transExecutor.getTransMeta().getObjectId().getId()));
-                    logTrans.setTransname(transExecutor.getTransMeta().getName());
-                    logTrans.setChannelId(transExecutor.getExecutionId());
-                    logTrans.setTransCnName(transExecutor.getTransMeta().getName());
                     logTrans.setLoginfo(transExecutor.getExecutionLog());
                     logTrans.updateById();
                     JSONArray jsonArray = transExecutor.getStepMeasure();
@@ -94,7 +86,6 @@ public class TransLogTimerTask extends TimerTask {
                     }
                     logTrans.setEnddate(transExecutor.getTrans().getEndDate());
                     logTrans.setErrors(transExecutor.getErrCount());
-                    logTrans.setEnddate(transExecutor.getTrans().getEndDate());
                     logTrans.setLoginfo(transExecutor.getExecutionLog());
                     logTrans.updateById();
                     cancel();

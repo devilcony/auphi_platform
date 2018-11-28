@@ -90,6 +90,11 @@ public class LogJob extends Model<LogJob> {
     private String jobLog;
 
 
+    @TableField("QRTZ_JOB_NAME")
+    private String qrtzJobName;
+    @TableField("QRTZ_JOB_GROUP")
+    private String qrtzJobGroup;
+
     @Override
     protected Serializable pkVal() {
         return this.logJobId;

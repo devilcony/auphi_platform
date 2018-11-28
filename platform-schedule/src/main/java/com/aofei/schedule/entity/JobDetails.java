@@ -30,8 +30,13 @@ public class JobDetails extends Model<JobDetails> {
     private String schedName;
     @TableField("JOB_NAME")
     private String jobName;
+
+    @TableField(exist = false)
+    private String groupName;
+
     @TableField("JOB_GROUP")
     private String jobGroup;
+
     @TableField("DESCRIPTION")
     private String description;
     @TableField("JOB_CLASS_NAME")

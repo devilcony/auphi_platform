@@ -85,6 +85,11 @@ public class LogTrans extends Model<LogTrans> {
     @TableField("TRANS_CN_NAME")
     private String transCnName;
 
+    @TableField("QRTZ_JOB_NAME")
+    private String qrtzJobName;
+    @TableField("QRTZ_JOB_GROUP")
+    private String qrtzJobGroup;
+
 
     @Override
     protected Serializable pkVal() {
