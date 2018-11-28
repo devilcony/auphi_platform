@@ -6,11 +6,15 @@ import com.aofei.base.controller.BaseController;
 import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
 import com.aofei.base.model.vo.DataGrid;
+import com.aofei.joblog.entity.LogJob;
+import com.aofei.joblog.service.ILogJobService;
 import com.aofei.schedule.model.request.JobDetailsRequest;
 import com.aofei.schedule.model.request.MonitorRequest;
 import com.aofei.schedule.model.response.JobDetailsResponse;
 import com.aofei.schedule.model.response.MonitorResponse;
 import com.aofei.schedule.service.IMonitorService;
+import com.aofei.translog.entity.LogTrans;
+import com.aofei.translog.service.ILogTransService;
 import com.baomidou.mybatisplus.plugins.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -19,6 +23,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +40,11 @@ public class MonitorController extends BaseController {
     @Autowired
     private IMonitorService monitorService;
 
+    @Autowired
+    private ILogJobService logJobService;
 
+    @Autowired
+    private ILogTransService logTransService;
     /**
      * 资源库列表(分页查询)
      * @param request
@@ -56,6 +65,29 @@ public class MonitorController extends BaseController {
         request.setOrganizerId(user.getOrganizerId());
         Page<MonitorResponse> page = monitorService.getPage(getPagination(request), request);
         return Response.ok(buildDataGrid(page)) ;
+    }
+
+    /**
+     * 调度执行日志日志
+     * @param id
+     * @param type
+     * @return
+     */
+    @ApiOperation(value = "", notes = "调度执行日志日志", httpMethod = "GET")
+
+    @RequestMapping(value = "/info/{id}/type/{type}", method = RequestMethod.GET)
+    public Response<String> info(@PathVariable Long id, @PathVariable String type)  {
+        String str = "";
+
+        if("JOB".equalsIgnoreCase(type)){
+            LogJob logJob = logJobService.selectById(id);
+            str = logJob.getJobLog();
+
+        }else if("TRANSFORMATION".equalsIgnoreCase(type)){
+            LogTrans logTrans = logTransService.selectById(id);
+            str = logTrans.getLoginfo();
+        }
+        return Response.ok(str);
     }
 
 }
