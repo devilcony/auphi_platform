@@ -146,7 +146,7 @@ public class AccountController extends BaseController {
      */
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Integer logout(@RequestHeader(name = "Authorization") String token) {
-        //TODO 操蛋的JWT不能从服务端destroy token， logout目前只能在客户端的cookie 或 localStorage/sessionStorage  remove token
+        //TODO JWT不能从服务端destroy token， logout目前只能在客户端的cookie 或 localStorage/sessionStorage  remove token
         //TODO 准备用jwt生成永久的token，再结合redis来实现Logout。具体是把token的生命周期交给redis来管理，jwt只负责生成token
         try {
 
@@ -218,11 +218,11 @@ public class AccountController extends BaseController {
         if(mobilephoneCount>0){
             throw new ApplicationException(SystemError.PHONE_NUMBER_EXIST.getCode(),"the phone number is exist");
         }
-        if(tencentSmsSingleSender.validate(request.getMobilephone(),request.getCaptcha())){
+        //if(tencentSmsSingleSender.validate(request.getMobilephone(),request.getCaptcha())){
             userService.register(request);
-        }else{
-            throw new ApplicationException(SystemError.CAPTCHA_ERROR.getCode(),"the captcha error");
-        }
+       // }else{
+        //    throw new ApplicationException(SystemError.CAPTCHA_ERROR.getCode(),"the captcha error");
+        //}
 
         return Response.ok(0);
     }

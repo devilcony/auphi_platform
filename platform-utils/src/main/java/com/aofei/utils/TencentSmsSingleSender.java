@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONException;
 import com.github.qcloudsms.SmsSingleSender;
 import com.github.qcloudsms.SmsSingleSenderResult;
 import com.github.qcloudsms.httpclient.HTTPException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,8 @@ import java.util.Map;
 
 @Component
 public class TencentSmsSingleSender {
+
+    private static Logger logger = LoggerFactory.getLogger(TencentSmsSingleSender.class);
 
     private static Map<String,VerificationCode> captchas = new HashMap<>();
 
@@ -59,6 +63,7 @@ public class TencentSmsSingleSender {
         int a = (int)((Math.random()*9+1)*100000) ;//6为随机数
 
         String captcha = String.valueOf(a);
+        logger.info("captcha=>"+captcha);
         VerificationCode verificationCode = new VerificationCode(captcha,phoneNumber,System.currentTimeMillis());
         captchas.put(phoneNumber,verificationCode);
 
@@ -73,7 +78,7 @@ public class TencentSmsSingleSender {
      * @return
      */
     public boolean validate(String phoneNumber,String captcha){
-        VerificationCode verificationCode = captchas.get("phoneNumber");
+        VerificationCode verificationCode = captchas.get(phoneNumber);
         long now  = System.currentTimeMillis();
 
         if(verificationCode!=null && now - verificationCode.getCreateTime() < valid ){
