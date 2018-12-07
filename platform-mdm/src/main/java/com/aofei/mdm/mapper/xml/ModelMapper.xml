@@ -13,6 +13,8 @@
         , a.MODEL_AUTHOR AS modelAuthor
         , a.MODEL_NOTE AS modelNote
         , a.MODEL_CODE AS modelCode
+        , a.ORGANIZER_ID AS organizerId
+        , b.ORGANIZER_NAME AS organizerName
         , a.CREATE_USER AS createUser
         , a.UPDATE_USER AS updateUser
         , a.CREATE_TIME AS createTime
@@ -20,47 +22,42 @@
         , a.DEL_FLAG AS delFlag
     </sql>
 
+    <sql id="Base_Joins">
+        LEFT JOIN SYS_ORGANIZER b ON b.ORGANIZER_ID = a.ORGANIZER_ID
+    </sql>
 
 
     <select id="findList"  resultType="com.aofei.mdm.entity.Model">
         select
         <include refid="Base_Column_List"/>
         from MDM_MODEL a
+        <include refid="Base_Joins"/>
         <where>
             a.DEL_FLAG = 0
+            <if test="organizerId !=null  ">
+                AND  a.ORGANIZER_ID  = #{organizerId}
+            </if>
             <if test="modelName !=null and modelName !='' ">
                 AND  a.MODEL_NAME  like '%${modelName}%'
             </if>
         </where>
     </select>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="modelId">
-        INSERT INTO MDM_MODEL(
-              MODEL_NAME
-            , MODEL_DESC
-            , MODEL_STATUS
-            , MODEL_AUTHOR
-            , MODEL_NOTE
-            , MODEL_CODE
-            , CREATE_USER
-            , UPDATE_USER
-            , CREATE_TIME
-            , UPDATE_TIME
-            , DEL_FLAG
-        )VALUES (
-              #{modelName}
-            , #{modelDesc}
-            , #{modelStatus}
-            , #{modelAuthor}
-            , #{modelNote}
-            , #{modelCode}
-            , #{createUser}
-            , #{updateUser}
-            , #{createTime}
-            , #{updateTime}
-            , #{delFlag}
-        )
-    </insert>
+    <update id="updateById">
+        update MDM_MODEL a
+        <set>
+              a.MODEL_NAME  = #{et.modelName}
+            , a.MODEL_DESC  = #{et.modelDesc}
+            , a.MODEL_STATUS = #{et.modelStatus}
+            , a.MODEL_AUTHOR = #{et.modelAuthor}
+            , a.MODEL_NOTE = #{et.modelNote}
+            , a.MODEL_CODE = #{et.modelCode}
+            , a.UPDATE_USER = #{et.updateUser}
+            , a.UPDATE_TIME = #{et.updateTime}
+        </set>
+        where a.ID_MODEL = #{et.modelId}
+    </update>
+
 
     <update id="deleteById">
         update MDM_MODEL a set a.DEL_FLAG = 1  where a.ID_MODEL = #{id}

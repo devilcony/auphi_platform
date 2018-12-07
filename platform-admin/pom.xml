@@ -67,6 +67,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!--数据质量管理-->
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-mdm</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!--调度-->
         <dependency>
             <groupId>com.aofei</groupId>

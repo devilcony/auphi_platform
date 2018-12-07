@@ -2,11 +2,13 @@ package com.aofei.mdm.model.response;
 
 import com.aofei.base.model.response.BaseResponse;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * @auther Tony
  * @create 2018-11-07 12:36
  */
+@Data
 public class ModelConstaintResponse extends BaseResponse {
 
     @ApiModelProperty(value = "序号")

@@ -13,7 +13,7 @@ import lombok.Data;
  * @since 2018-10-25
  */
 @Data
-public class ModelConstaintRequest extends BaseRequest<ModelConstaintRequest> {
+public class  ModelConstaintRequest extends BaseRequest<ModelConstaintRequest> {
 
     private static final long serialVersionUID = 1L;
 

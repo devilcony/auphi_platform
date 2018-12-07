@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -41,7 +42,15 @@ public class Model extends DataEntity<Model> {
     private String modelNote;
     @TableField("MODEL_CODE")
     private String modelCode;
+    /**
+     * 组织ID
+     */
+    @TableField("ORGANIZER_ID")
+    private Long organizerId;
 
+
+    @TableField(exist = false)
+    private String organizerName;
 
 
     @Override

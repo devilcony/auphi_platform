@@ -2,6 +2,7 @@ package com.aofei.mdm.model.response;
 
 import com.aofei.base.model.response.BaseResponse;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * @auther Tony
  * @create 2018-11-07 12:28
  */
+@Data
 public class ModelAttributeResponse extends BaseResponse {
 
     private Long attributeId;

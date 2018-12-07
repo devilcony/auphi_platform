@@ -20,9 +20,11 @@ import com.baomidou.mybatisplus.plugins.Page;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.repository.RepositoryDirectoryInterface;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -35,6 +37,9 @@ import java.util.List;
  */
 @Service
 public class UserService extends BaseService<UserMapper, User> implements IUserService {
+
+    @Value("#{propertiesReader['disk.root.dir']}")
+    private String rootDir  ; //磁盘根目录
 
     /**
      * 更新用户登录信息
@@ -217,7 +222,17 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
         Repository repository = App.getInstance().getRepository();
         RepositoryDirectoryInterface path = repository.findDirectory("/");
         repository.createRepositoryDirectory(path, request.getOrganizerName());
+
+        File file=new File(getRootPath(request));
+        if(!file.exists()){//如果文件夹不存在
+            file.mkdir();//创建文件夹
+        }
+
         return 1;
+    }
+
+    String getRootPath(RegisterRequest request){
+        return rootDir+ File.separator+request.getOrganizerName();
     }
 
     /**

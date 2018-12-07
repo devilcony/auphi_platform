@@ -8,7 +8,7 @@
     <sql id="Base_Column_List">
           a.ID_TABLE AS tableId
         , a.ID_MODEL AS modelId
-        , model.MODEL_NAME AS modelName
+        , b.MODEL_NAME AS modelName
         , a.REPOSITORY_NAME AS repositoryName
         , a.ID_DATABASE AS databaseId
         , a.SCHEMA_NAME AS schemaName
@@ -21,7 +21,7 @@
     </sql>
 
     <sql id="Base_Joins">
-        LEFT JOIN MDM_MODEL model ON model.ID_MODEL = a.ID_MODEL
+        JOIN MDM_MODEL b ON b.ID_MODEL = a.ID_MODEL
     </sql>
 
     <select id="findList"  resultType="com.aofei.mdm.entity.Table">
@@ -31,6 +31,9 @@
         <include refid="Base_Joins"/>
         <where>
             a.DEL_FLAG = 0
+            <if test="organizerId !=null ">
+                AND  b.ORGANIZER_ID  = #{organizerId}
+            </if>
             <if test="modelId !=null ">
                 AND  a.ID_MODEL  = #{modelId}
             </if>
@@ -39,6 +42,22 @@
             </if>
         </where>
     </select>
+
+    <update id="updateById">
+        update MDM_TABLE a
+        <set>
+              a.ID_MODEL AS modelId
+            , a.REPOSITORY_NAME AS repositoryName
+            , a.ID_DATABASE AS databaseId
+            , a.SCHEMA_NAME AS schemaName
+            , a.TABLE_NAME AS tableName
+            , a.CREATE_USER AS createUser
+            , a.UPDATE_USER AS updateUser
+            , a.CREATE_TIME AS createTime
+            , a.UPDATE_TIME AS updateTime
+        </set>
+        where a.ID_TABLE = #{et.tableId}
+    </update>
 
     <update id="deleteById">
         update MDM_TABLE a set a.DEL_FLAG = 1  where a.ID_TABLE = #{id}

@@ -1,6 +1,9 @@
 package com.aofei.mdm.controller;
 
+import com.aofei.base.annotation.Authorization;
+import com.aofei.base.annotation.CurrentUser;
 import com.aofei.base.controller.BaseController;
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
 import com.aofei.base.model.vo.DataGrid;
 import com.aofei.mdm.model.request.ModelRequest;
@@ -26,6 +29,7 @@ import java.util.List;
  * @since 2018-10-05
  */
 @Api(tags = { "主数据管理-数据模型" })
+@Authorization
 @RestController
 @RequestMapping("/mdm/model")
 public class MdmModelController extends BaseController {
@@ -45,7 +49,8 @@ public class MdmModelController extends BaseController {
             @ApiImplicitParam(name = "tableName", value = "名称(模糊查询)", paramType = "query", dataType = "String")
     })
     @RequestMapping(value = "/listPage", method = RequestMethod.GET)
-    public Response<DataGrid<ModelResponse>> page(@ApiIgnore ModelRequest request)  {
+    public Response<DataGrid<ModelResponse>> page(@ApiIgnore ModelRequest request,@ApiIgnore @CurrentUser CurrentUserResponse user)  {
+        request.setOrganizerId(user.getOrganizerId());
         Page<ModelResponse> page = modelService.getPage(getPagination(request), request);
         return Response.ok(buildDataGrid(page)) ;
     }
@@ -57,7 +62,8 @@ public class MdmModelController extends BaseController {
      */
     @ApiOperation(value = "所有数据模型列表", notes = "所有数据模型列表", httpMethod = "GET")
     @RequestMapping(value = "/listAll", method = RequestMethod.GET)
-    public Response<List<ModelResponse>> list(@ApiIgnore ModelRequest request)  {
+    public Response<List<ModelResponse>> list(@ApiIgnore ModelRequest request,@ApiIgnore @CurrentUser CurrentUserResponse user)  {
+        request.setOrganizerId(user.getOrganizerId());
         List<ModelResponse> list = modelService.getModels(request);
         return Response.ok(list) ;
     }
@@ -70,8 +76,8 @@ public class MdmModelController extends BaseController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Response<ModelResponse> add(
-            @RequestBody ModelRequest request)  {
-
+            @RequestBody ModelRequest request,@ApiIgnore @CurrentUser CurrentUserResponse user)  {
+        request.setOrganizerId(user.getOrganizerId());
         return Response.ok(modelService.save(request)) ;
     }
 

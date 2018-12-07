@@ -49,6 +49,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.*;
 import java.util.*;
@@ -354,7 +355,7 @@ public class KettleRepositoryController {
 	}
 
 	@RequestMapping(method=RequestMethod.POST, value="/cascader")
-	protected Response<List<RepositoryCascaderVO>> cascader(@CurrentUser CurrentUserResponse user) throws KettleException, IOException {
+	protected Response<List<RepositoryCascaderVO>> cascader(@ApiIgnore @CurrentUser CurrentUserResponse user) throws KettleException, IOException {
 		Repository repository = App.getInstance().getRepository();
 		List<RepositoryCascaderVO> list = new ArrayList<>();
 

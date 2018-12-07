@@ -195,7 +195,7 @@
             <value>UTF-8</value>
         </property>
         <property name="maxUploadSize">
-            <value>1048576000</value><!-- 总上传文件大小限制为1000M，31*1024*1024 -->
+            <value>1048576000</value><!-- 总上传文件大小限制为1G，31*1024*1024 -->
         </property>
         <property name="maxInMemorySize">
             <value>4096</value>

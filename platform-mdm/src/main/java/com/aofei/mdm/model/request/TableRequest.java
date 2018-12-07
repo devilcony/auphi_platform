@@ -39,7 +39,11 @@ public class TableRequest extends BaseRequest<TableRequest> {
     @ApiModelProperty(value = "表名")
     private String tableName;
 
-
+    /**
+     * 组织ID
+     */
+    @ApiModelProperty(hidden = true,value = "组织ID")
+    private Long organizerId;
 
 
 }

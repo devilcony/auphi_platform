@@ -43,4 +43,11 @@ public class ModelRequest extends BaseRequest<ModelRequest> {
     @ApiModelProperty(value = "模型属性列表")
     List<ModelAttributeRequest> attributes;
 
+    /**
+     * 组织ID
+     */
+    @ApiModelProperty(hidden = true,value = "组织ID")
+    private Long organizerId;
+
+
 }

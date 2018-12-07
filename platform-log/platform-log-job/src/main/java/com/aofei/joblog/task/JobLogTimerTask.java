@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
@@ -31,6 +32,7 @@ public class JobLogTimerTask extends TimerTask {
     public void run() {
 
         try {
+            Date now =   new Date();
             if(jobExecutor !=null){
                 if(first){
                     first = false;
@@ -43,6 +45,7 @@ public class JobLogTimerTask extends TimerTask {
 
                     logJob.setChannelId(jobExecutor.getExecutionId());
                     logJob.setJobLog(jobExecutor.getExecutionLog());
+                    logJob.setLogdate(new Date());
                     logJob.updateById();
                     JSONArray jsonArray = jobExecutor.getJobMeasure();
                     for(int i = 0;i< jsonArray.size();i++ ){
@@ -60,7 +63,7 @@ public class JobLogTimerTask extends TimerTask {
                             logJobStep.setLinesUpdated(Long.valueOf(childArray.get(6).toString()));
                             logJobStep.setLinesRejected(Long.valueOf(childArray.get(7).toString()));
                             logJobStep.setErrors(Long.valueOf(childArray.get(8).toString()));
-
+                            logJobStep.setLogDate(now);
 
                             logJobStep.insertOrUpdate();
                         }
@@ -81,6 +84,7 @@ public class JobLogTimerTask extends TimerTask {
                     logJob.setEnddate(jobExecutor.getJob().getEndDate());
                     logJob.setErrors(jobExecutor.getErrCount());
                     logJob.setJobLog(jobExecutor.getExecutionLog());
+                    logJob.setLogdate(now);
                     logJob.updateById();
                     cancel();
                 }

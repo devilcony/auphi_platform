@@ -2,11 +2,13 @@ package com.aofei.mdm.model.response;
 
 import com.aofei.base.model.response.BaseResponse;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * @auther Tony
  * @create 2018-11-07 12:11
  */
+@Data
 public class TableResponse extends BaseResponse {
 
     private Long tableId;
