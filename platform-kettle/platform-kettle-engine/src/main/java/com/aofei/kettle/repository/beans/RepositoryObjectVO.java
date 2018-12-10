@@ -1,9 +1,10 @@
 package com.aofei.kettle.repository.beans;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
+
 import org.pentaho.di.repository.RepositoryElementMetaInterface;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class RepositoryObjectVO {
 
@@ -14,20 +15,23 @@ public class RepositoryObjectVO {
 	private String modifiedUser;
 	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	private Date modifiedDate;
-
+	
 	public RepositoryObjectVO() {
-
+		
 	}
-
+	
 	public RepositoryObjectVO(RepositoryElementMetaInterface re) {
-		id = re.getObjectId().getId();
+		String path2 = re.getRepositoryDirectory().getPath();
+		path2 = path2.endsWith("/") ? path2 : path2 + '/';
+		
+		id = path2 + re.getName() + re.getObjectType().getExtension();
 		name = re.getName();
 		type = re.getObjectType().getExtension();
 		path = re.getRepositoryDirectory().getPath();
 	  	modifiedUser = re.getModifiedUser();
 	  	modifiedDate = re.getModifiedDate();
 	}
-
+	
 	public String getId() {
 		return id;
 	}
@@ -75,5 +79,5 @@ public class RepositoryObjectVO {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-
+	
 }
