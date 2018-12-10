@@ -2,10 +2,6 @@ package com.aofei.kettle.trans.step;
 
 import java.util.List;
 
-import com.aofei.kettle.trans.step.StepDecoder;
-import com.aofei.kettle.trans.step.StepEncoder;
-import com.aofei.kettle.trans.step.StepErrorMetaCodec;
-import com.aofei.kettle.trans.step.StepPartitioningMetaCodec;
 import com.aofei.kettle.utils.JSONObject;
 import com.aofei.kettle.utils.StringEscapeHelper;
 import org.pentaho.di.cluster.ClusterSchema;

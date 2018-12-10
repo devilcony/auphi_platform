@@ -9,9 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.aofei.kettle.App;
-import com.aofei.kettle.utils.JSONArray;
-import com.aofei.kettle.utils.JSONObject;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.exception.KettleStepException;
@@ -36,6 +33,9 @@ import org.pentaho.di.trans.step.StepMetaDataCombi;
 import org.pentaho.di.trans.step.StepStatus;
 import org.springframework.util.StringUtils;
 
+import com.aofei.kettle.utils.JSONArray;
+import com.aofei.kettle.utils.JSONObject;
+
 public class TransDebugExecutor implements Runnable {
 
 	private String executionId;
@@ -44,34 +44,34 @@ public class TransDebugExecutor implements Runnable {
 	private TransDebugMeta transDebugMeta = null;
 	private Trans trans = null;
 	private Map<StepMeta, String> stepLogMap = new HashMap<StepMeta, String>();
-
+	
 	private TransDebugExecutor(TransExecutionConfiguration transExecutionConfiguration, TransMeta transMeta) {
 		this.executionId = UUID.randomUUID().toString().replaceAll("-", "");
 		this.executionConfiguration = transExecutionConfiguration;
 		this.transMeta = transMeta;
 	}
-
+	
 	private static Hashtable<String, TransDebugExecutor> executors = new Hashtable<String, TransDebugExecutor>();
-
+	
 	public static synchronized TransDebugExecutor initExecutor(TransExecutionConfiguration transExecutionConfiguration, TransMeta transMeta, TransDebugMeta transDebugMeta) {
 		TransDebugExecutor transExecutor = new TransDebugExecutor(transExecutionConfiguration, transMeta);
 		transExecutor.transDebugMeta = transDebugMeta;
 		executors.put(transExecutor.getExecutionId(), transExecutor);
 		return transExecutor;
 	}
-
+	
 	public static TransDebugExecutor getExecutor(String executionId) {
 		return executors.get(executionId);
 	}
-
+	
 	public static void remove(String executionId) {
 		executors.remove(executionId);
 	}
-
+	
 	public String getExecutionId() {
 		return executionId;
 	}
-
+	
 	private boolean finished = false;
 	private long errCount;
 
@@ -104,14 +104,14 @@ public class TransDebugExecutor implements Runnable {
 	        }
 	        boolean initialized = false;
 	        trans = new Trans( transMeta );
-
+	        
 	        trans.setPreview(true);
 	        trans.setSafeModeEnabled( executionConfiguration.isSafeModeEnabled() );
 	        trans.setGatheringMetrics( executionConfiguration.isGatheringMetrics() );
 	        trans.setLogLevel( executionConfiguration.getLogLevel() );
 	        trans.setReplayDate( executionConfiguration.getReplayDate() );
 	        trans.setRepository( executionConfiguration.getRepository() );
-
+	        
 	        try {
 	            trans.prepareExecution( args );
 				capturePreviewData(trans, transMeta.getSteps());
@@ -120,32 +120,32 @@ public class TransDebugExecutor implements Runnable {
 	        	e.printStackTrace();
 	            checkErrorVisuals();
 	        }
-
+	        
 	        transDebugMeta.addRowListenersToTransformation( trans );
 	        transDebugMeta.addBreakPointListers( new BreakPointListener() {
 	            public void breakPointHit( TransDebugMeta transDebugMeta, StepDebugMeta stepDebugMeta, RowMetaInterface rowBufferMeta, List<Object[]> rowBuffer ) {
 	            	showPreview( transDebugMeta, stepDebugMeta, rowBufferMeta, rowBuffer );
 	            }
 	        });
-
+	        
 	        if ( trans.isReadyToStart() && initialized) {
 				trans.addTransListener(new TransAdapter() {
 					public void transFinished(Trans trans) {
 						checkErrorVisuals();
 					}
 				});
-
+	        	
 				trans.startThreads();
-
+				
 				while(!trans.isFinished())
 					Thread.sleep(500);
-
+				
 				errCount = trans.getErrors();
 	        } else {
 	        	checkErrorVisuals();
 	        	errCount = trans.getErrors();
 	        }
-
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			App.getInstance().getLog().logError("执行失败！", e);
@@ -153,7 +153,7 @@ public class TransDebugExecutor implements Runnable {
 			finished = true;
 		}
 	}
-
+	
 	public void capturePreviewData(Trans trans, List<StepMeta> stepMetas) {
 		final StringBuffer loggingText = new StringBuffer();
 
@@ -206,15 +206,15 @@ public class TransDebugExecutor implements Runnable {
 			}
 		});
 	}
-
+	
 	protected Map<StepMeta, RowMetaInterface> previewMetaMap = new HashMap<StepMeta, RowMetaInterface>();
 	protected Map<StepMeta, List<Object[]>> previewDataMap = new HashMap<StepMeta, List<Object[]>>();
 	protected Map<StepMeta, StringBuffer> previewLogMap = new HashMap<StepMeta, StringBuffer>();
-
+	
 	private void checkErrorVisuals() {
 		if (trans.getErrors() > 0) {
 			stepLogMap.clear();
-
+			
 			for (StepMetaDataCombi combi : trans.getSteps()) {
 				if (combi.step.getErrors() > 0) {
 					String channelId = combi.step.getLogChannel().getLogChannelId();
@@ -237,14 +237,14 @@ public class TransDebugExecutor implements Runnable {
 			stepLogMap.clear();
 		}
 	}
-
+	
 	public boolean isFinished() {
 		return finished;
 	}
-
+	
 	public JSONArray getStepMeasure() throws Exception {
     	JSONArray jsonArray = new JSONArray();
-
+    	
     	if(executionConfiguration.isExecutingLocally()) {
     		for (int i = 0; i < trans.nrSteps(); i++) {
     			StepInterface baseStep = trans.getRunThread(i);
@@ -259,12 +259,12 @@ public class TransDebugExecutor implements Runnable {
     			jsonArray.add(childArray);
     		}
     	}
-
+    	
     	return jsonArray;
 	}
-
+	
 	public String getExecutionLog() throws Exception {
-
+		
 		if(executionConfiguration.isExecutingLocally()) {
 			StringBuffer sb = new StringBuffer();
 			KettleLogLayout logLayout = new KettleLogLayout( true );
@@ -277,13 +277,13 @@ public class TransDebugExecutor implements Runnable {
 			 }
 			 return sb.toString();
     	}
-
+		
 		return "";
 	}
-
+	
 	public JSONArray getStepStatus() throws Exception {
 		JSONArray jsonArray = new JSONArray();
-
+		
 		HashMap<String, Integer> stepIndex = new HashMap<String, Integer>();
 		if(executionConfiguration.isExecutingLocally()) {
 			for (StepMetaDataCombi combi : trans.getSteps()) {
@@ -293,7 +293,7 @@ public class TransDebugExecutor implements Runnable {
 					jsonObject.put("stepName", combi.stepMeta.getName());
 					int errCount = (int) combi.step.getErrors();
 					jsonObject.put("stepStatus", errCount);
-
+					
 					if(errCount > 0) {
 						StringBuilder logText = new StringBuilder();
 						String channelId = combi.step.getLogChannel().getLogChannelId();
@@ -309,7 +309,7 @@ public class TransDebugExecutor implements Runnable {
 						}
 						jsonObject.put("logText", logText.toString());
 					}
-
+					
 					stepIndex.put(combi.stepMeta.getName(), jsonArray.size());
 					jsonArray.add(jsonObject);
 				} else {
@@ -319,23 +319,23 @@ public class TransDebugExecutor implements Runnable {
 				}
 			}
     	}
-
+		
 		return jsonArray;
 	}
-
+	
 	public void stop() {
 		trans.stopAll();
 	}
-
+	
 	public void resume() {
 		trans.resumeRunning();
 	}
-
+	
 	private JSONObject jsonObject = new JSONObject();
-
+	
 	public synchronized void showPreview(TransDebugMeta transDebugMeta, StepDebugMeta stepDebugMeta, RowMetaInterface rowMeta, List<Object[]> rowsData) {
 		List<ValueMetaInterface> valueMetas = rowMeta.getValueMetaList();
-
+		
 		JSONArray columns = new JSONArray();
 		JSONObject metaData = new JSONObject();
 		JSONArray fields = new JSONArray();
@@ -343,7 +343,7 @@ public class TransDebugExecutor implements Runnable {
 			ValueMetaInterface valueMeta = rowMeta.getValueMeta(i);
 			fields.add(valueMeta.getName());
 			String header = valueMeta.getComments() == null ? valueMeta.getName() : valueMeta.getComments();
-
+			
 			JSONObject column = new JSONObject();
 			column.put("dataIndex", valueMeta.getName());
 			column.put("header", header);
@@ -352,7 +352,7 @@ public class TransDebugExecutor implements Runnable {
 		}
 		metaData.put("fields", fields);
 		metaData.put("root", "firstRecords");
-
+		
 		JSONArray firstRecords = new JSONArray();
 		for (int rowNr = 0; rowNr < rowsData.size(); rowNr++) {
 			Object[] rowData = rowsData.get(rowNr);
@@ -373,28 +373,28 @@ public class TransDebugExecutor implements Runnable {
 				}
 				if(!StringUtils.hasText(string))
 					string = "&lt;null&gt;";
-
+				
 				ValueMetaInterface valueMeta = rowMeta.getValueMeta( colNr );
 				row.put(valueMeta.getName(), string);
 			}
 			firstRecords.add(row);
 		}
-
+		
 		jsonObject.put("metaData", metaData);
 		jsonObject.put("columns", columns);
 		jsonObject.put("firstRecords", firstRecords);
-
+		
 		rowsData.clear();
 	}
-
+	
 	public boolean isPreviewed() {
 		return jsonObject.size() == 3;
 	}
-
+	
 	public void clearPreview() {
 		jsonObject.clear();
 	}
-
+	
 	public JSONObject getPreviewData() {
 		return jsonObject;
 	}

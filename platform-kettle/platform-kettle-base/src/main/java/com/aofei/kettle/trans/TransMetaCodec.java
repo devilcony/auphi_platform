@@ -11,7 +11,6 @@ import com.aofei.kettle.base.BaseGraphCodec;
 import com.aofei.kettle.base.GraphCodec;
 import com.aofei.kettle.cluster.SlaveServerCodec;
 import com.aofei.kettle.core.PropsUI;
-import com.aofei.kettle.trans.TransHopMetaCodec;
 import com.aofei.kettle.trans.step.StepDecoder;
 import com.aofei.kettle.trans.step.StepEncoder;
 import com.aofei.kettle.trans.step.StepErrorMetaCodec;

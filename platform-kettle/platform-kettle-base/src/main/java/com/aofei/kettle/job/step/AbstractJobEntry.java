@@ -2,8 +2,6 @@ package com.aofei.kettle.job.step;
 
 import java.util.List;
 
-import com.aofei.kettle.job.step.JobEntryDecoder;
-import com.aofei.kettle.job.step.JobEntryEncoder;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.plugins.JobEntryPluginType;
