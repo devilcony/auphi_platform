@@ -1,5 +1,8 @@
 package com.aofei.kettle.core;
 
+import com.aofei.base.annotation.Authorization;
+import com.aofei.base.annotation.CurrentUser;
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.kettle.PluginFactory;
 import com.aofei.kettle.bean.Ext3Node;
 import com.aofei.kettle.core.row.ValueMetaAndDataCodec;
@@ -46,6 +49,7 @@ import org.pentaho.di.trans.steps.textfileoutput.TextFileOutputMeta;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -687,13 +691,19 @@ public class SystemMainController {
 		return FileNodeType.toList(extension);
 	}
 
+	@Authorization
 	@ApiOperation(value = "浏览文件系统文件", httpMethod = "POST")
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "path", value = "文件系统路径", paramType="query", dataType = "string"),
         @ApiImplicitParam(name = "extension", value = "扩展名集合", paramType="query", dataType = "string")
 	})
 	@RequestMapping(method=RequestMethod.POST, value="/fileexplorer")
-	protected @ResponseBody List fileexplorer(@RequestParam String path, @RequestParam int extension) throws Exception {
+	protected @ResponseBody List fileexplorer(@RequestParam String path, @RequestParam int extension, @ApiIgnore @CurrentUser CurrentUserResponse user) throws Exception {
+		if(StringUtils.isEmpty(path)){
+			path = com.aofei.base.common.Const.getUserDir(user.getOrganizerId());
+		}
+
+
 		LinkedList directorys = new LinkedList();
 		LinkedList leafs = new LinkedList();
 		if(StringUtils.hasText(path)) {

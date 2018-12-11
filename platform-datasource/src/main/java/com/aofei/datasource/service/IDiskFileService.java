@@ -13,7 +13,7 @@ public interface IDiskFileService  {
 
     boolean mkdir(DiskFileCreateRequest request);
 
-    String getRootPath(String organizerName);
+
 
     boolean deleteFile(String path) throws FileSystemException;
 

@@ -35,7 +35,7 @@ public class RepositoryCodec extends com.aofei.kettle.repository.RepositoryCodec
 		return databaseRepository;
 	}
 
-	public static Repository decodeDefault(DruidDataSource dataSource) throws KettlePluginException {
+	public static KettleDatabaseRepository decodeDefault(DruidDataSource dataSource) throws KettlePluginException {
 		GenericDatabaseMeta nativeMeta = new GenericDatabaseMeta();
 		nativeMeta.setAccessType(DatabaseMeta.TYPE_ACCESS_NATIVE);
 		nativeMeta.setUsername(dataSource.getUsername());

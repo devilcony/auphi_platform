@@ -1,26 +1,27 @@
 package com.aofei.kettle.repository.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
+import com.aofei.base.annotation.Authorization;
+import com.aofei.base.annotation.CurrentUser;
+import com.aofei.base.controller.BaseController;
+import com.aofei.base.model.response.CurrentUserResponse;
+import com.aofei.base.model.response.Response;
+import com.aofei.kettle.App;
+import com.aofei.kettle.PluginFactory;
+import com.aofei.kettle.base.GraphCodec;
+import com.aofei.kettle.bean.RepositoryCheckNode;
+import com.aofei.kettle.bean.RepositoryNode;
+import com.aofei.kettle.cluster.SlaveServerCodec;
+import com.aofei.kettle.core.database.DatabaseCodec;
+import com.aofei.kettle.repository.beans.DirectoryVO;
+import com.aofei.kettle.repository.beans.RepositoryCascaderVO;
+import com.aofei.kettle.repository.beans.RepositoryNodeType;
+import com.aofei.kettle.repository.beans.RepositoryObjectVO;
+import com.aofei.kettle.utils.*;
+import com.google.common.collect.Lists;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.pentaho.di.cluster.SlaveServer;
@@ -32,50 +33,31 @@ import org.pentaho.di.core.xml.XMLHandler;
 import org.pentaho.di.job.JobMeta;
 import org.pentaho.di.job.entries.missing.MissingEntry;
 import org.pentaho.di.job.entry.JobEntryCopy;
-import org.pentaho.di.repository.ObjectId;
-import org.pentaho.di.repository.Repository;
-import org.pentaho.di.repository.RepositoryDirectoryInterface;
-import org.pentaho.di.repository.RepositoryElementMetaInterface;
-import org.pentaho.di.repository.RepositoryObjectType;
+import org.pentaho.di.repository.*;
 import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.di.trans.steps.missing.MissingTrans;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import springfox.documentation.annotations.ApiIgnore;
 
-import com.aofei.kettle.App;
-import com.aofei.kettle.PluginFactory;
-import com.aofei.kettle.base.GraphCodec;
-import com.aofei.kettle.bean.RepositoryCheckNode;
-import com.aofei.kettle.bean.RepositoryNode;
-import com.aofei.kettle.cluster.SlaveServerCodec;
-import com.aofei.kettle.core.database.DatabaseCodec;
-import com.aofei.kettle.repository.beans.DirectoryVO;
-import com.aofei.kettle.repository.beans.RepositoryNodeType;
-import com.aofei.kettle.repository.beans.RepositoryObjectVO;
-import com.aofei.kettle.utils.JSONArray;
-import com.aofei.kettle.utils.JSONObject;
-import com.aofei.kettle.utils.JsonUtils;
-import com.aofei.kettle.utils.RepositoryUtils;
-import com.aofei.kettle.utils.ServerChecker;
-import com.aofei.kettle.utils.StringEscapeHelper;
-import com.google.common.collect.Lists;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
-@Controller
+@RestController
 @RequestMapping("/repository")
 @Api(tags = "资源库接口api")
-public class KettleRepositoryController {
+public class KettleRepositoryController extends BaseController {
 
 	@ApiOperation(value = "创建一个资源库目录")
 	@ApiImplicitParams({
@@ -84,7 +66,8 @@ public class KettleRepositoryController {
 	})
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "/createDir")
-	protected void createDir(@RequestParam String dir, @RequestParam String name) throws KettleException, IOException {
+	protected void createDir(@RequestParam String dir, @RequestParam String name,@ApiIgnore @CurrentUser CurrentUserResponse user) throws KettleException, IOException {
+		dir = com.aofei.base.common.Const.getUserPath(user.getOrganizerId(),dir);
 		Repository repository = App.getInstance().getRepository();
 		RepositoryDirectoryInterface path = repository.findDirectory(dir);
 		if(path == null)
@@ -107,7 +90,10 @@ public class KettleRepositoryController {
 	})
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "/createTrans")
-	protected void createTrans(@RequestParam String dir, @RequestParam String transName) throws KettleException, IOException {
+	protected void createTrans(@RequestParam String dir, @RequestParam String transName,@ApiIgnore @CurrentUser CurrentUserResponse user) throws KettleException, IOException {
+
+		dir = com.aofei.base.common.Const.getUserPath(user.getOrganizerId(),dir);
+
 		Repository repository = App.getInstance().getRepository();
 		RepositoryDirectoryInterface directory = repository.findDirectory(dir);
 		if(directory == null)
@@ -275,21 +261,25 @@ public class KettleRepositoryController {
 			JsonUtils.success(StringEscapeHelper.encode(graphXml));
 		}
 	}
-	
+
+	@Authorization
 	@RequestMapping(method=RequestMethod.POST, value="/listElements")
-	protected @ResponseBody List listElements(@RequestParam String path) throws KettleException, IOException {
+	protected  List<RepositoryObjectVO> listElements(@RequestParam String path,@ApiIgnore @CurrentUser CurrentUserResponse user) throws KettleException, IOException {
 		ArrayList list = new ArrayList();
-		
+		String root = com.aofei.base.common.Const.getRootPath(user.getOrganizerId());
 		Repository repository = App.getInstance().getRepository();
 		RepositoryDirectoryInterface dir = null;
-		if(StringUtils.hasText(path))
+		if(StringUtils.hasText(path) && !"/".equalsIgnoreCase(path)){
+			path = com.aofei.base.common.Const.getUserPath(user.getOrganizerId(),path);
 			dir = repository.findDirectory(path);
-		else
-			dir = repository.getUserHomeDirectory();
+		}
+		else{
+			dir = repository.findDirectory(root);
+		}
 		
 		List<RepositoryDirectoryInterface> directorys = dir.getChildren();
 		for(RepositoryDirectoryInterface child : directorys) {
-			DirectoryVO directory = new DirectoryVO(child);
+			DirectoryVO directory = new DirectoryVO(child,root);
 			list.add(directory);
 		}
 		
@@ -297,7 +287,7 @@ public class KettleRepositoryController {
 		List<RepositoryElementMetaInterface> elements = repository.getTransformationObjects(dir.getObjectId(), false);
 		if(elements != null) {
 			for(RepositoryElementMetaInterface e : elements) {
-				RepositoryObjectVO ro = new RepositoryObjectVO(e);
+				RepositoryObjectVO ro = new RepositoryObjectVO(e,root);
 				list.add(ro);
 			}
 		}
@@ -305,7 +295,7 @@ public class KettleRepositoryController {
 		elements = repository.getJobObjects(dir.getObjectId(), false);
 		if(elements != null) {
 			for(RepositoryElementMetaInterface e : elements) {
-				RepositoryObjectVO ro = new RepositoryObjectVO(e);
+				RepositoryObjectVO ro = new RepositoryObjectVO(e,root);
 				list.add(ro);
 			}
 		}
@@ -627,6 +617,60 @@ public class KettleRepositoryController {
 		
 		return list;
 	}
+
+	@RequestMapping(method=RequestMethod.POST, value="/cascader")
+	protected Response<List<RepositoryCascaderVO>> cascader(@ApiIgnore @CurrentUser CurrentUserResponse user) throws KettleException, IOException {
+		Repository repository = App.getInstance().getRepository();
+		List<RepositoryCascaderVO> list = new ArrayList<>();
+
+		String root = com.aofei.base.common.Const.getRootPath(user.getOrganizerId());
+		RepositoryDirectoryInterface dir = repository.findDirectory(root);
+
+		RepositoryCascaderVO repositoryCascaderVO = new RepositoryCascaderVO(user.getOrganizerName(),user.getOrganizerName());
+
+		List<RepositoryCascaderVO> childs = getCascaderChildren(repository,dir);
+		if(!childs.isEmpty()){
+			repositoryCascaderVO.setChildren(childs);
+			list.add(repositoryCascaderVO);
+		}
+
+		return Response.ok(list);
+
+	}
+
+	private List<RepositoryCascaderVO> getCascaderChildren(Repository repository, RepositoryDirectoryInterface dir) throws KettleException {
+		List<RepositoryCascaderVO> list = new ArrayList<>();
+		List<RepositoryElementMetaInterface> elements = repository.getTransformationObjects(dir.getObjectId(), false);
+		List<RepositoryDirectoryInterface> directorys = dir.getChildren();
+		if(elements != null) {
+			for(RepositoryElementMetaInterface e : elements) {
+				RepositoryCascaderVO ro = new RepositoryCascaderVO(e,".ktr");
+				list.add(ro);
+			}
+		}
+
+		elements = repository.getJobObjects(dir.getObjectId(), false);
+		if(elements != null) {
+			for(RepositoryElementMetaInterface e : elements) {
+				RepositoryCascaderVO ro = new RepositoryCascaderVO(e,".kjb");
+				list.add(ro);
+			}
+		}
+
+		for(RepositoryDirectoryInterface child : directorys) {
+			RepositoryCascaderVO ro = new RepositoryCascaderVO(child);
+			List<RepositoryCascaderVO> childs = getCascaderChildren(repository,child);
+			if(!childs.isEmpty()){
+				ro.setChildren(childs);
+				list.add(ro);
+			}
+		}
+
+		return list;
+
+
+	}
+
 	
 	@RequestMapping(method=RequestMethod.POST, value="/exptree")
 	protected @ResponseBody List exptree(@RequestParam int loadElement) throws KettleException, IOException {

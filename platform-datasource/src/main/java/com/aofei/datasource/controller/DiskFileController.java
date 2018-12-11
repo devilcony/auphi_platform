@@ -2,6 +2,7 @@ package com.aofei.datasource.controller;
 
 import com.aofei.base.annotation.Authorization;
 import com.aofei.base.annotation.CurrentUser;
+import com.aofei.base.common.Const;
 import com.aofei.base.controller.BaseController;
 import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.model.response.CurrentUserResponse;
@@ -87,7 +88,7 @@ public class DiskFileController extends BaseController {
             HttpServletRequest request,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws IOException {
 
-        String path = ServletRequestUtils.getStringParameter(request,"path",diskFileService.getRootPath(user.getOrganizerName()));
+        String path = ServletRequestUtils.getStringParameter(request,"path", Const.getUserDir(user.getOrganizerId()));
         //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
         CommonsMultipartResolver multipartResolver=new CommonsMultipartResolver(request.getSession().getServletContext());
         if(multipartResolver.isMultipart(request)) {

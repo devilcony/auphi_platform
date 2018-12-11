@@ -36,7 +36,7 @@ public class DiskFileService implements IDiskFileService {
         List<DiskFileResponse> list = new LinkedList<>();
         String path = request.getPath();
         if(StringUtils.isEmpty(path)){
-            path = getRootPath(request.getOrganizerName());
+            path = Const.getUserDir(request.getOrganizerId());
         }
         logger.info("path==>"+path);
         File[] files = new File(path).listFiles();
@@ -70,7 +70,7 @@ public class DiskFileService implements IDiskFileService {
     public boolean mkdir(DiskFileCreateRequest request) {
         String path = request.getPath();
         if(StringUtils.isEmpty(path)){
-            path = getRootPath(request.getOrganizerName());
+            path = Const.getUserDir(request.getOrganizerId());
         }
         path = path+File.separator+request.getName();
         File file = new File(path);
@@ -83,11 +83,7 @@ public class DiskFileService implements IDiskFileService {
 
     }
 
-    @Override
-    public String getRootPath(String organizerName){
 
-        return rootDir+File.separator + organizerName;
-    }
 
     @Override
     public boolean deleteFile(String path) throws FileSystemException {

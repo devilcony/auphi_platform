@@ -2,6 +2,7 @@ package com.aofei.base.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.aofei.base.model.request.PageRequest;
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.vo.DataGrid;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.validation.BindingResult;
@@ -63,4 +64,6 @@ public abstract class BaseController {
         page.setOrderByField(pageRequest.getSort());//排序字段名称
         return page;
     }
+
+
 }

@@ -4,6 +4,7 @@ import com.aofei.utils.PropertiesLoader;
 import com.aofei.utils.StringUtils;
 import com.google.common.collect.Maps;
 
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -50,6 +51,20 @@ public class Const {
             map.put(key, value != null ? value : StringUtils.EMPTY);
         }
         return value;
+    }
+
+    public static String getRootPath(Long organizerId){
+        return "/"+organizerId;
+    }
+
+    public static String getUserPath(Long organizerId,String path){
+        return getRootPath(organizerId) +(path.startsWith("/") ? "" : "/")  + path;
+    }
+
+
+    public static String getUserDir(Long organizerId){
+
+        return getConfig("disk.root.dir")+ File.separator +organizerId;
     }
 
 

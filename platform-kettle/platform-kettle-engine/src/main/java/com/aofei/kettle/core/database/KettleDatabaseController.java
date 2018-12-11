@@ -1,27 +1,27 @@
 package com.aofei.kettle.core.database;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.aofei.base.annotation.Authorization;
+import com.aofei.base.annotation.CurrentUser;
+import com.aofei.base.controller.BaseController;
+import com.aofei.base.model.response.CurrentUserResponse;
+import com.aofei.kettle.App;
+import com.aofei.kettle.bean.DatabaseNode;
+import com.aofei.kettle.repository.RepositoryCodec;
+import com.aofei.kettle.utils.JSONArray;
+import com.aofei.kettle.utils.JSONObject;
+import com.aofei.kettle.utils.JsonUtils;
+import com.aofei.kettle.utils.StringEscapeHelper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.log4j.Log4j;
 import org.apache.commons.io.IOUtils;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.DBCache;
 import org.pentaho.di.core.RowMetaAndData;
 import org.pentaho.di.core.database.Database;
-import org.pentaho.di.core.database.DatabaseMeta;
-import org.pentaho.di.core.database.DatabaseMetaInformation;
-import org.pentaho.di.core.database.PartitionDatabaseMeta;
-import org.pentaho.di.core.database.SqlScriptStatement;
+import org.pentaho.di.core.database.*;
 import org.pentaho.di.core.exception.KettleDatabaseException;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.exception.KettleValueException;
@@ -45,30 +45,23 @@ import org.pentaho.di.ui.repository.dialog.RepositoryDialogInterface;
 import org.pentaho.ui.database.Messages;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.aofei.kettle.App;
-import com.aofei.kettle.bean.DatabaseNode;
-import com.aofei.kettle.repository.RepositoryCodec;
-import com.aofei.kettle.utils.JSONArray;
-import com.aofei.kettle.utils.JSONObject;
-import com.aofei.kettle.utils.JsonUtils;
-import com.aofei.kettle.utils.StringEscapeHelper;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.*;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
-@Controller
-@RequestMapping(value="/database")
-@Api(tags = "数据源连接 - 接口api")
-public class KettleDatabaseController {
+@Log4j
+@Api(tags = { "数据源连接 - 接口api" })
+@Authorization
+@RestController
+@RequestMapping(value = "/database", produces = {"application/json;charset=UTF-8"})
+public class KettleDatabaseController extends BaseController {
 	
 	@ApiOperation(value = "该方法返回所有全局的数据库连接名称，只返回连接名称", httpMethod = "POST")
 	@ResponseBody
@@ -209,23 +202,28 @@ public class KettleDatabaseController {
 	    
 	    JsonUtils.success(fragment);
 	}
-	
-	@ApiOperation(value = "测试数据库", httpMethod = "POST")
+
+	@ApiOperation(value = "校验数据库连接，如果校验无误就保存，失败就返回失败信息", httpMethod = "POST")
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "databaseInfo", value = "数据库信息", required=true, paramType="query", dataType = "string")
+			@ApiImplicitParam(name = "databaseInfo", value = "数据库连接信息，JSON串", paramType="query", dataType = "string")
 	})
-	@ResponseBody
-	@RequestMapping(method=RequestMethod.POST, value="/test")
-	public void test(@RequestParam String databaseInfo) throws IOException, KettleDatabaseException {
-	    JSONObject jsonObject = JSONObject.fromObject(databaseInfo);
-	    DatabaseMeta dbinfo = DatabaseCodec.decode(jsonObject);
-	    String[] remarks = dbinfo.checkParameters();
-	    if ( remarks.length == 0 ) {
-	    	String reportMessage = dbinfo.testConnection();
-			JsonUtils.success(StringEscapeHelper.encode(reportMessage));
-	    } else {
-	    	System.out.println("====");
-	    }
+	@RequestMapping("/checkAndSave")
+	public @ResponseBody void checkAndSave(@RequestParam String databaseInfo, @CurrentUser CurrentUserResponse user ) throws IOException, KettleException {
+
+		JSONObject result = new JSONObject();
+
+		DatabaseMeta databaseMeta = checkDatabase(databaseInfo, result);
+		if(result.size() > 0) {
+			JsonUtils.fail(result.toString());
+			return;
+		}
+		databaseMeta.setOrganizerId(user.getOrganizerId());
+		databaseMeta.setCreateUser(user.getUsername());
+		databaseMeta.setUpdateUser(user.getUsername());
+		Repository repository = App.getInstance().getRepository();
+		repository.save(databaseMeta, "add database", null);
+
+		JsonUtils.success(result.toString());
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/features")
@@ -356,26 +354,7 @@ public class KettleDatabaseController {
 	    JsonUtils.success(result.toString());
 	}
 	
-	@ApiOperation(value = "校验数据库连接，如果校验无误就保存，失败就返回失败信息", httpMethod = "POST")
-	@ApiImplicitParams({
-        @ApiImplicitParam(name = "databaseInfo", value = "数据库连接信息，JSON串", paramType="query", dataType = "string")
-	})
-	@RequestMapping("/checkAndSave")
-	public @ResponseBody void checkAndSave(@RequestParam String databaseInfo) throws IOException, KettleException {
-		
-		JSONObject result = new JSONObject();
-		
-		DatabaseMeta databaseMeta = checkDatabase(databaseInfo, result);
-	    if(result.size() > 0) {
-	    	JsonUtils.fail(result.toString());
-			return;
-	    }
-	    
-	    Repository repository = App.getInstance().getRepository();
-	    repository.save(databaseMeta, "add database", null);
-	    
-	    JsonUtils.success(result.toString());
-	}
+
 	
 	@ApiOperation(value = "持久化数据库信息，注意这里是持久化到全局，而不是资源库中", httpMethod = "POST")
 	@ApiImplicitParams({

@@ -100,7 +100,8 @@ public class SystemInitializingBean implements InitializingBean, DisposableBean 
         /*if(App.getInstance().getRepository()==null){
             App.getInstance().setRepository(RepositoryCodec.decodeDefault(dataSource));
         }*/
-        Repository repository = RepositoryCodec.decodeDefault(dataSource);
+        KettleDatabaseRepository repository =  RepositoryCodec.decodeDefault(dataSource);
+        repository.getDatabase().getDatabaseMeta().setSupportsBooleanDataType(true);
         repository.connect(Const.REPOSITORY_USERNAME,Const.REPOSITORY_PASSWORD);
         App.getInstance().setRepository(repository);
         CheckRepositoryTimerTask checkRepositoryTimerTask = new CheckRepositoryTimerTask();

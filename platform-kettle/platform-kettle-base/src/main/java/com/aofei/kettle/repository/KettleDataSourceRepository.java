@@ -409,7 +409,7 @@ public class KettleDataSourceRepository extends AbstractRepository {
     return directoryDelegate.createRepositoryDirectory( parentDirectory, directoryPath );
   }
 
-  public synchronized ObjectId getRootDirectoryID() throws KettleException {
+  public synchronized ObjectId getRootPathectoryID() throws KettleException {
     RowMetaAndData result =
       connectionDelegate.getOneRow( "SELECT "
         + quote( KettleDatabaseRepository.FIELD_DIRECTORY_ID_DIRECTORY ) + " FROM "

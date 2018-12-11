@@ -7,6 +7,7 @@ public class DirectoryVO {
 	private String id;
 	private String name;
 	private String path;
+	private String userPath;
 	private String type = "dir";
 
 	public DirectoryVO() {
@@ -17,6 +18,11 @@ public class DirectoryVO {
 		name = rdi.getName();
 		path = rdi.getParent().getPath();
 		id = rdi.getObjectId().getId();
+	}
+
+	public DirectoryVO(RepositoryDirectoryInterface rdi,String replace) {
+		this(rdi);
+		userPath = getPath().replace(replace,"/");
 	}
 
 	public String getId() {
@@ -51,4 +57,11 @@ public class DirectoryVO {
 		this.type = type;
 	}
 
+	public String getUserPath() {
+		return userPath;
+	}
+
+	public void setUserPath(String userPath) {
+		this.userPath = userPath;
+	}
 }
