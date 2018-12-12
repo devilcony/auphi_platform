@@ -8,9 +8,9 @@ import java.util.List;
 @Data
 public class RunCountResponse {
 
-    private List<String> datetimes  = new ArrayList<>();
+    private List<Object> datetimes  = new ArrayList<>();
 
-    private List<String> errors  = new ArrayList<>();
+    private List<Object> errors  = new ArrayList<>();
 
-    private List<String> finishs  = new ArrayList<>();
+    private List<Object> finishs  = new ArrayList<>();
 }

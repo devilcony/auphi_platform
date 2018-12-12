@@ -15,7 +15,8 @@
     <context:annotation-config />
 
     <!-- 设置扫描使用注解的类所在的包 -->
-    <context:component-scan base-package="com.aofei"/>
+    <!-- 设置扫描使用注解的类所在的包 -->
+    <context:component-scan base-package="com.aofei.**.controller, com.aofei.**.router,com.aofei.kettle.**"/>
     <!-- 对静态资源文件的访问， 将无法mapping到Controller的path交给default servlet handler处理 -->
 
     <!-- 配置默认的访问页面 -->

@@ -10,9 +10,13 @@ import com.aofei.base.model.response.Response;
 import com.aofei.datasource.model.request.DiskFileCreateRequest;
 import com.aofei.datasource.model.request.DiskFileDeleteRequest;
 import com.aofei.datasource.model.request.DiskFileRequest;
+import com.aofei.datasource.model.response.DiskFileListResponse;
 import com.aofei.datasource.model.response.DiskFileResponse;
 import com.aofei.datasource.service.IDiskFileService;
+import com.aofei.utils.StringUtils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,14 +54,22 @@ public class DiskFileController extends BaseController {
      * @return
      */
     @ApiOperation(value = "服务器文件列表", notes = "服务器文件列表", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "path", value = "目录", paramType = "query", dataType = "String"),
+    })
     @RequestMapping(value = "/explorer", method = RequestMethod.POST)
-    public Response<List<DiskFileResponse>> list(
-            @RequestBody DiskFileRequest request,
+    public Response<List<DiskFileListResponse>> explorer(
+            @ApiIgnore DiskFileRequest request,
             @ApiIgnore @CurrentUser CurrentUserResponse user)  {
         request.setOrganizerId(user.getOrganizerId());
         request.setOrganizerName(user.getOrganizerName());
+
         List<DiskFileResponse> list = diskFileService.getFileExplorer(request);
-        return Response.ok(list) ;
+
+        DiskFileListResponse response = new DiskFileListResponse();
+        response.setList(list);
+        response.setPath(request.getPath());
+        return Response.ok(response) ;
     }
 
 
@@ -89,6 +101,9 @@ public class DiskFileController extends BaseController {
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws IOException {
 
         String path = ServletRequestUtils.getStringParameter(request,"path", Const.getUserDir(user.getOrganizerId()));
+        if(StringUtils.isEmpty(path) || "/".equalsIgnoreCase(path)){
+            path = Const.getUserDir(user.getOrganizerId());
+        }
         //将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
         CommonsMultipartResolver multipartResolver=new CommonsMultipartResolver(request.getSession().getServletContext());
         if(multipartResolver.isMultipart(request)) {

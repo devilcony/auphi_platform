@@ -1,5 +1,6 @@
 package com.aofei.sys.service.impl;
 
+import com.aofei.base.common.Const;
 import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.exception.StatusCode;
 import com.aofei.base.service.impl.BaseService;
@@ -221,9 +222,9 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
         baseMapper.insert(existing);
         Repository repository = App.getInstance().getRepository();
         RepositoryDirectoryInterface path = repository.findDirectory("/");
-        repository.createRepositoryDirectory(path, request.getOrganizerName());
+        repository.createRepositoryDirectory(path, String.valueOf(organizer.getOrganizerId()));
 
-        File file=new File(getRootPath(request));
+        File file=new File(Const.getUserDir(organizer.getOrganizerId()));
         if(!file.exists()){//如果文件夹不存在
             file.mkdir();//创建文件夹
         }
@@ -231,9 +232,7 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
         return 1;
     }
 
-    String getRootPath(RegisterRequest request){
-        return rootDir+ File.separator+request.getOrganizerName();
-    }
+
 
     /**
      * 查询角色下的用户列表

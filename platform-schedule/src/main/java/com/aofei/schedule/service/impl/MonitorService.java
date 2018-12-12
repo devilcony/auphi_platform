@@ -1,5 +1,6 @@
 package com.aofei.schedule.service.impl;
 
+import com.aofei.base.common.Const;
 import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.service.impl.BaseService;
 import com.aofei.kettle.App;
@@ -51,8 +52,8 @@ public class MonitorService extends BaseService<MonitorMapper, Monitor> implemen
 
         List<Map<String,Object>> list1 = baseMapper.getTimeConsumingTop5(page,user.getOrganizerId());
         for(Map<String,Object> map : list1){
-            runTimes.getNames().add((String) map.get("NAME"));
-            runTimes.getTimes().add((Long)map.get("TIME"));
+            runTimes.getNames().add(map.get("NAME"));
+            runTimes.getTimes().add(map.get("TIME"));
         }
         response.setRunTimes(runTimes);
 
@@ -60,9 +61,9 @@ public class MonitorService extends BaseService<MonitorMapper, Monitor> implemen
         List<Map<String,Object>> list2 = baseMapper.get7DayErrorsAndFinishs(user.getOrganizerId());
         RunCountResponse runCounts = new RunCountResponse();
         for(Map<String,Object> map : list2){
-            runCounts.getDatetimes().add((String) map.get("DATETIME"));
-            runCounts.getErrors().add((String) map.get("ERROR"));
-            runCounts.getFinishs().add((String) map.get("FINISH"));
+            runCounts.getDatetimes().add(map.get("DATETIME"));
+            runCounts.getErrors().add( map.get("ERROR"));
+            runCounts.getFinishs().add( map.get("FINISH"));
         }
         response.setRunCounts(runCounts);
 
@@ -73,7 +74,7 @@ public class MonitorService extends BaseService<MonitorMapper, Monitor> implemen
     private int getAllCount(CurrentUserResponse user) throws KettleException {
         int count = 0;
         Repository repository = App.getInstance().getRepository();
-        String root = "/"+user.getOrganizerName();
+        String root = Const.getRootPath(user.getOrganizerId());
         RepositoryDirectoryInterface dir = repository.findDirectory(root);
 
         return countChildren(count,repository,dir);

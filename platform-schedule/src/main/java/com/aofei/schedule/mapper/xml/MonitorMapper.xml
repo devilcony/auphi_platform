@@ -73,7 +73,7 @@
 
     <select id="get7DayErrorsAndFinishs" resultType="java.util.HashMap">
       select
-        a.click_date AS datetime , ifnull(b.count,0)  AS finish , ifnull(c.count,0) AS error
+       DATE_FORMAT(a.click_date,'%Y-%m-%d') AS DATETIME , ifnull(b.count,0)  AS FINISH , ifnull(c.count,0) AS ERROR
       from (
         SELECT curdate() as click_date
         union all
@@ -109,27 +109,27 @@
     </select>
 
     <select id="countRuning" resultType="java.lang.Integer">
-        select COUNT(*)  (
-			select NAME ,TIME ,QRTZ_JOB_GROUP from (
+        select COUNT(*)  from (
+			select NAME  ,QRTZ_JOB_GROUP from (
 				  select
 					  CONCAT(TRANSNAME,'.ktr')  AS NAME ,QRTZ_JOB_GROUP  from  LOG_TRANS WHERE STATUS = 'start'
 				  UNION ALL
 				  select
 					  CONCAT(JOB_NAME,'.kjb') AS NAME ,QRTZ_JOB_GROUP  from LOG_JOB WHERE STATUS = 'start'
-			) a order by a.TIME
-		) b JOIN  QRTZ_GROUP gp on gp.DEL_FLAG =0 and gp.ID_GROUP = b.QRTZ_JOB_GROUP WHERE gp.ORGANIZER_ID = #{organizerId}
+			) a
+		) b JOIN  QRTZ_GROUP gp on gp.DEL_FLAG =0 and gp.ID_GROUP = b.QRTZ_JOB_GROUP WHERE gp.ORGANIZER_ID =  #{organizerId}
     </select>
 
     <select id="countFinish" resultType="java.lang.Integer">
-        select COUNT(*)  (
-			select NAME ,TIME ,QRTZ_JOB_GROUP from (
+		select COUNT(*)  from (
+			select NAME  ,QRTZ_JOB_GROUP from (
 				  select
 					  CONCAT(TRANSNAME,'.ktr')  AS NAME ,QRTZ_JOB_GROUP  from  LOG_TRANS WHERE STATUS = 'end'
 				  UNION ALL
 				  select
 					  CONCAT(JOB_NAME,'.kjb') AS NAME ,QRTZ_JOB_GROUP  from LOG_JOB WHERE STATUS = 'end'
-			) a order by a.TIME
-		) b JOIN  QRTZ_GROUP gp on gp.DEL_FLAG =0 and gp.ID_GROUP = b.QRTZ_JOB_GROUP WHERE gp.ORGANIZER_ID = #{organizerId}
+			) a
+		) b JOIN  QRTZ_GROUP gp on gp.DEL_FLAG =0 and gp.ID_GROUP = b.QRTZ_JOB_GROUP WHERE gp.ORGANIZER_ID =  #{organizerId}
     </select>
 
     <select id="countError" resultType="java.lang.Integer">
@@ -147,8 +147,8 @@
 			  from (
 			    select SUM(COALESCE(ERRORS,0))  AS COUNT , QRTZ_JOB_GROUP
 			    from  LOG_JOB GROUP BY QRTZ_JOB_GROUP
-			  ) b JOIN  QRTZ_GROUP gp on gp.DEL_FLAG =0 and gp.ID_GROUP = b.QRTZ_JOB_GROUP WHERE gp.ORGANIZER_ID  = #{organizerId})a
-		)
+			  ) b JOIN  QRTZ_GROUP gp on gp.DEL_FLAG =0 and gp.ID_GROUP = b.QRTZ_JOB_GROUP WHERE gp.ORGANIZER_ID  = #{organizerId}
+		) d
     </select>
 
 </mapper>
