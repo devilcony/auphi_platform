@@ -4,14 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.aofei.kettle.PluginFactory;
-import com.aofei.kettle.base.BaseGraphCodec;
-import com.aofei.kettle.base.GraphCodec;
-import com.aofei.kettle.core.PropsUI;
-import com.aofei.kettle.job.JobHopMetaCodec;
-import com.aofei.kettle.job.step.JobEntryDecoder;
-import com.aofei.kettle.job.step.JobEntryEncoder;
-import com.aofei.kettle.utils.SvgImageUrl;
 import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.database.DatabaseMeta;
@@ -31,6 +23,13 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.aofei.kettle.PluginFactory;
+import com.aofei.kettle.base.BaseGraphCodec;
+import com.aofei.kettle.base.GraphCodec;
+import com.aofei.kettle.core.PropsUI;
+import com.aofei.kettle.job.step.JobEntryDecoder;
+import com.aofei.kettle.job.step.JobEntryEncoder;
+import com.aofei.kettle.utils.SvgImageUrl;
 import com.mxgraph.io.mxCodec;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxUtils;
@@ -43,23 +42,24 @@ public class JobMetaCodec extends BaseGraphCodec {
 	@Override
 	public String encode(AbstractMeta meta) throws Exception {
 		JobMeta jobMeta = (JobMeta) meta;
-
+		
 		mxGraph graph = new mxGraph();
 		graph.getModel().beginUpdate();
 		mxCell parent = (mxCell) graph.getDefaultParent();
-
+		
 		try {
 			Document doc = mxUtils.createDocument();
 			Element e = super.encodeCommRootAttr(jobMeta, doc);
 			e.setAttribute("job_version", jobMeta.getJobversion());
 			e.setAttribute("job_status", String.valueOf(jobMeta.getJobstatus()));
-
+			e.setAttribute("pass_batchid", jobMeta.isBatchIdPassed() ? "Y" : "N");
+			
 		    encodeDatabases(e, jobMeta);
 		    encodeSlaveServers(e, jobMeta);
 		    parent.setValue(e);
-
+		    
 		    encodeNote(doc, graph, jobMeta);
-
+		    
 		    // encode steps and hops
 			HashMap<JobEntryCopy, Object> cells = new HashMap<JobEntryCopy, Object>();
 			for(int i=0; i<jobMeta.nrJobEntries(); i++) {
@@ -67,21 +67,21 @@ public class JobMetaCodec extends BaseGraphCodec {
 				Point p = jge.getLocation();
 				String pluginId = jge.getEntry().getPluginId();
 				JobEntryEncoder stepEncoder = (JobEntryEncoder) PluginFactory.getBean(jge.getEntry().getPluginId());
-
+				
 				PluginInterface plugin = PluginRegistry.getInstance().getPlugin(JobEntryPluginType.class, pluginId);
 				String image = SvgImageUrl.getUrl(plugin);
 				if(jge.isDummy())
 					image = SvgImageUrl.getUrl(BasePropertyHandler.getProperty( "DUM_image" ));
 				if(jge.isStart())
 					image = SvgImageUrl.getUrl(BasePropertyHandler.getProperty( "STR_image" ));
-
+				
 				Object cell = graph.insertVertex(parent, null, stepEncoder.encodeStep(jge), p.x, p.y, PropsUI.STEP_SIZE, PropsUI.STEP_SIZE, "icon;image=" + image);
 				cells.put(jge, cell);
 			}
-
+			
 			for(int i=0; i<jobMeta.nrJobHops(); i++) {
 				JobHopMeta jobHopMeta = jobMeta.getJobHop(i);
-
+				
 				mxCell source = (mxCell) cells.get(jobHopMeta.getFromEntry());
 				mxCell target = (mxCell) cells.get(jobHopMeta.getToEntry());
 
@@ -93,7 +93,7 @@ public class JobMetaCodec extends BaseGraphCodec {
 		} finally {
 			graph.getModel().endUpdate();
 		}
-
+		
 		mxCodec codec = new mxCodec();
 		return mxUtils.getPrettyXml(codec.encode(graph.getModel()));
 	}
@@ -105,19 +105,19 @@ public class JobMetaCodec extends BaseGraphCodec {
 		Document doc = mxUtils.parseXml(graphXml);
 		codec.decode(doc.getDocumentElement(), graph.getModel());
 		mxCell root = (mxCell) graph.getDefaultParent();
-
+		
 		JobMeta jobMeta = new JobMeta();
 		decodeCommRootAttr(root, jobMeta);
 		jobMeta.setJobversion(root.getAttribute("job_version"));
 		int jobStatus = Const.toInt(root.getAttribute("job_status"), -1);
 		if(jobStatus >= 0)
 			jobMeta.setJobstatus(jobStatus);
-
-
+		jobMeta.setBatchIdPassed("Y".equalsIgnoreCase(root.getAttribute("pass_batchid")));
+		
 		decodeDatabases(root, jobMeta);
 		decodeNote(graph, jobMeta);
 		decodeSlaveServers(root, jobMeta);
-
+		
 		int count = graph.getModel().getChildCount(root);
 		for(int i=0; i<count; i++) {
 			mxCell cell = (mxCell) graph.getModel().getChildAt(root, i);
@@ -163,7 +163,7 @@ public class JobMetaCodec extends BaseGraphCodec {
 				jobMeta.addJobHop(hopinf);
 			}
 		}
-
+		
 		return jobMeta;
 	}
 
@@ -187,7 +187,7 @@ public class JobMetaCodec extends BaseGraphCodec {
 		for (LogTableInterface logTable : jobMeta.getExtraLogTables()) {
 			databaseMetas.add(logTable.getDatabaseMeta());
 		}
-
+	    
 		return databaseMetas.contains(databaseMeta);
 	}
 

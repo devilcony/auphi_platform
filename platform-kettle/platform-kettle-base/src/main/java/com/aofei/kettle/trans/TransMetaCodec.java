@@ -5,18 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
-import com.aofei.kettle.App;
-import com.aofei.kettle.PluginFactory;
-import com.aofei.kettle.base.BaseGraphCodec;
-import com.aofei.kettle.base.GraphCodec;
-import com.aofei.kettle.cluster.SlaveServerCodec;
-import com.aofei.kettle.core.PropsUI;
-import com.aofei.kettle.trans.step.StepDecoder;
-import com.aofei.kettle.trans.step.StepEncoder;
-import com.aofei.kettle.trans.step.StepErrorMetaCodec;
-import com.aofei.kettle.utils.JSONArray;
-import com.aofei.kettle.utils.JSONObject;
-import com.aofei.kettle.utils.SvgImageUrl;
 import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.cluster.ClusterSchema;
 import org.pentaho.di.cluster.SlaveServer;
@@ -33,6 +21,7 @@ import org.pentaho.di.partition.PartitionSchema;
 import org.pentaho.di.repository.HasRepositoryInterface;
 import org.pentaho.di.repository.ObjectId;
 import org.pentaho.di.repository.Repository;
+import org.pentaho.di.trans.TransDependency;
 import org.pentaho.di.trans.TransHopMeta;
 import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.trans.TransMeta.TransformationType;
@@ -47,11 +36,25 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.aofei.kettle.App;
+import com.aofei.kettle.PluginFactory;
+import com.aofei.kettle.base.BaseGraphCodec;
+import com.aofei.kettle.base.GraphCodec;
+import com.aofei.kettle.cluster.SlaveServerCodec;
+import com.aofei.kettle.core.PropsUI;
+import com.aofei.kettle.trans.step.StepDecoder;
+import com.aofei.kettle.trans.step.StepEncoder;
+import com.aofei.kettle.trans.step.StepErrorMetaCodec;
+import com.aofei.kettle.utils.JSONArray;
+import com.aofei.kettle.utils.JSONObject;
+import com.aofei.kettle.utils.SvgImageUrl;
 import com.mxgraph.io.mxCodec;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxGraph;
 
+@Component(GraphCodec.TRANS_CODEC)
+@Scope("prototype")
 public class TransMetaCodec extends BaseGraphCodec {
 
 	@Override
@@ -202,7 +205,7 @@ public class TransMetaCodec extends BaseGraphCodec {
 		    e.setAttribute("feedback_shown", transMeta.isFeedbackShown() ? "Y" : "N");
 		    e.setAttribute("feedback_size", String.valueOf(transMeta.getFeedbackSize()));
 		    e.setAttribute("unique_connections", transMeta.isUsingUniqueConnections() ? "Y" : "N");
-		    e.setAttribute("shared_objects_file", transMeta.getSharedObjectsFile());
+//		    e.setAttribute("shared_objects_file", transMeta.getSharedObjectsFile());
 		    e.setAttribute("using_thread_priorities", transMeta.isUsingThreadPriorityManagment() ? "Y" : "N");
 		    e.setAttribute("trans_type", transMeta.getTransformationType().getCode());
 		    
@@ -211,6 +214,20 @@ public class TransMetaCodec extends BaseGraphCodec {
 		    e.setAttribute("capture_step_performance", transMeta.isCapturingStepPerformanceSnapShots() ? "Y" : "N");
 		    e.setAttribute("step_performance_capturing_delay", String.valueOf(transMeta.getStepPerformanceCapturingDelay()));
 		    e.setAttribute("step_performance_capturing_size_limit", transMeta.getStepPerformanceCapturingSizeLimit());
+		    
+		    List<TransDependency> dependencies = transMeta.getDependencies();
+		    jsonArray = new JSONArray();
+		    if(dependencies != null) {
+		    	for (TransDependency transDependency : dependencies) {
+					DatabaseMeta databaseMeta = transDependency.getDatabase();
+					JSONObject dependencyJson = new JSONObject();
+					dependencyJson.put("database", databaseMeta == null ? "" : databaseMeta.getName());
+					dependencyJson.put("tablename", transDependency.getTablename());
+					dependencyJson.put("fieldname", transDependency.getFieldname());
+					jsonArray.add(dependencyJson);
+				}
+		    }
+		    e.setAttribute("dependencies", jsonArray.toString());
 		    
 		    super.encodeSlaveServers(e, transMeta);
 		    encodeClusterSchema(e, transMeta);
@@ -527,7 +544,7 @@ public class TransMetaCodec extends BaseGraphCodec {
 		transMeta.setFeedbackShown(!"N".equalsIgnoreCase( root.getAttribute( "feedback_shown" ) ));
         transMeta.setFeedbackSize(Const.toInt( root.getAttribute( "feedback_size" ), Const.ROWS_UPDATE ));
         transMeta.setUsingUniqueConnections("Y".equalsIgnoreCase( root.getAttribute( "unique_connections" ) ));
-        transMeta.setSharedObjectsFile(root.getAttribute("shared_objects_file"));
+//        transMeta.setSharedObjectsFile(root.getAttribute("shared_objects_file"));
         transMeta.setUsingThreadPriorityManagment(!"N".equalsIgnoreCase( root.getAttribute( "using_thread_priorities" ) ));
         transMeta.setTransformationType(TransformationType.getTransformationTypeByCode( root.getAttribute( "trans_type" ) ));
         
@@ -537,6 +554,29 @@ public class TransMetaCodec extends BaseGraphCodec {
         transMeta.setCapturingStepPerformanceSnapShots("Y".equalsIgnoreCase( root.getAttribute( "capture_step_performance" ) ));
         transMeta.setStepPerformanceCapturingDelay(Const.toLong( root.getAttribute( "step_performance_capturing_delay" ), 1000 ));
         transMeta.setStepPerformanceCapturingSizeLimit(root.getAttribute( "step_performance_capturing_size_limit" ));
+	    
+        Repository repository = App.getInstance().getRepository();
+	    String dependencies = root.getAttribute( "dependencies" );
+	    if(StringUtils.hasText(dependencies)) {
+	    	jsonArray = JSONArray.fromObject(dependencies);
+	    	for(int i=0; i<jsonArray.size(); i++) {
+	    		JSONObject dependencyJson = jsonArray.getJSONObject(i);
+	    		TransDependency td = new TransDependency();
+	    		
+	    		String database = dependencyJson.optString("database");
+	    		if(StringUtils.hasText(database)) {
+	    			ObjectId id_database = repository.getDatabaseID(database);
+	    			if(id_database != null) {
+	    				DatabaseMeta databaseMeta = repository.loadDatabaseMeta(id_database, null);
+	    				td.setDatabase(databaseMeta);
+	    			}
+	    		}
+	    		td.setTablename(dependencyJson.optString("tablename"));
+	    		td.setFieldname(dependencyJson.optString("fieldname"));
+	    		transMeta.addDependency(td);
+	    	}
+	    }
+        
 
 	    transMeta.setKey(XMLHandler.stringToBinary( root.getAttribute( "key_for_session_key" ) ));
 	    transMeta.setPrivateKey("Y".equals( root.getAttribute( "is_key_private" ) ));
