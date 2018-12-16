@@ -756,6 +756,27 @@ public class KettleRepositoryController extends BaseController {
 		JsonUtils.response(jsonArray);
 	}
 	
+	@ApiOperation(value = "返回资源库中所有的分区数据库连接信息", httpMethod = "POST")
+	@RequestMapping("/partitionDatabases")
+	protected @ResponseBody void partitionDatabases() throws IOException, KettleException {
+		Repository repository = App.getInstance().getRepository();
+		
+		ObjectId[] databaseIds = repository.getDatabaseIDs(false);
+		JSONArray jsonArray = new JSONArray();
+		for(ObjectId databaseId: databaseIds) {
+			DatabaseMeta databaseMeta = repository.loadDatabaseMeta(databaseId, null);
+			
+			if(databaseMeta.isPartitioned()) {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("name", databaseMeta.getName());
+				jsonArray.add(jsonObject);
+			}
+			
+		}
+		
+		JsonUtils.response(jsonArray);
+	}
+	
 	@ApiOperation(value = "返回资源库中所有的数据库连接信息，包含连接是否可用的状态", httpMethod = "POST")
 	@RequestMapping("/databaseStatus")
 	protected @ResponseBody Collection databaseStatus() throws IOException, KettleException, InterruptedException, ExecutionException {
