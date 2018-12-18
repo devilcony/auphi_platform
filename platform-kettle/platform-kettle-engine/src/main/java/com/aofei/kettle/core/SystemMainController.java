@@ -713,9 +713,13 @@ public class SystemMainController {
 					if(file.isHidden())
 						continue;
 					if(file.isDirectory()) {
-						directorys.addLast(Ext3Node.initNode(file.getAbsolutePath(), file.getName()));
+						Ext3Node node = Ext3Node.initNode(file.getAbsolutePath(), file.getName());
+						node.setShowName(com.aofei.base.common.Const.getUserFilePath(user.getOrganizerId(),file.getAbsolutePath()));
+						directorys.addLast(node);
 					} else if(file.isFile() && FileNodeType.match(FileNodeType.getExtension(file.getName()), extension)){
-						leafs.addLast(Ext3Node.initNode(file.getAbsolutePath(), file.getName(), true));
+						Ext3Node node = Ext3Node.initNode(file.getAbsolutePath(), file.getName(), true);
+						node.setShowName(com.aofei.base.common.Const.getUserFilePath(user.getOrganizerId(),file.getAbsolutePath()));
+						leafs.addLast(node);
 					}
 				}
 			}
@@ -725,7 +729,9 @@ public class SystemMainController {
 				if(file.isDirectory()) {
 					directorys.addLast(Ext3Node.initNode(file.getAbsolutePath(), file.getCanonicalPath()));
 				} else if(file.isFile() && FileNodeType.match(FileNodeType.getExtension(file.getName()), extension)){
-					leafs.addLast(Ext3Node.initNode(file.getAbsolutePath(), file.getCanonicalPath(), true));
+					Ext3Node node = Ext3Node.initNode(file.getAbsolutePath(), file.getCanonicalPath(), true);
+					node.setShowName(com.aofei.base.common.Const.getUserFilePath(user.getOrganizerId(),file.getAbsolutePath()));
+					leafs.addLast(node);
 				}
 			}
 		}

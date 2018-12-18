@@ -1,23 +1,19 @@
 package com.aofei.kettle.trans.step;
 
-import java.util.List;
-
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.kettle.utils.JSONObject;
 import com.aofei.kettle.utils.StringEscapeHelper;
+import com.mxgraph.model.mxCell;
 import org.pentaho.di.cluster.ClusterSchema;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.core.plugins.StepPluginType;
-import org.pentaho.di.trans.step.RowDistributionInterface;
-import org.pentaho.di.trans.step.RowDistributionPluginType;
-import org.pentaho.di.trans.step.StepMeta;
-import org.pentaho.di.trans.step.StepMetaInterface;
-import org.pentaho.di.trans.step.StepPartitioningMeta;
+import org.pentaho.di.trans.step.*;
 import org.pentaho.metastore.api.IMetaStore;
 import org.w3c.dom.Element;
 
-import com.mxgraph.model.mxCell;
+import java.util.List;
 
 public abstract class AbstractStep implements StepEncoder, StepDecoder {
 
@@ -95,8 +91,8 @@ public abstract class AbstractStep implements StepEncoder, StepDecoder {
 	}
 
 	@Override
-	public Element encodeStep(StepMeta stepMeta) throws Exception {
-		Element e = encode(stepMeta.getStepMetaInterface());
+	public Element encodeStep(StepMeta stepMeta, CurrentUserResponse user) throws Exception {
+		Element e = encode(stepMeta.getStepMetaInterface(),user);
 
 		e.setAttribute("label", stepMeta.getName());
 		e.setAttribute("ctype", stepMeta.getTypeId());
@@ -123,6 +119,6 @@ public abstract class AbstractStep implements StepEncoder, StepDecoder {
 	}
 
 	public abstract void decode(StepMetaInterface stepMetaInterface, mxCell cell, List<DatabaseMeta> databases, IMetaStore metaStore) throws Exception;
-	public abstract Element encode(StepMetaInterface stepMetaInterface) throws Exception;
+	public abstract Element encode(StepMetaInterface stepMetaInterface, CurrentUserResponse user) throws Exception;
 
 }

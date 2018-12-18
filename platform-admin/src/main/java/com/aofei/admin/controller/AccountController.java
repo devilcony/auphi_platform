@@ -36,7 +36,8 @@ import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
 import com.aofei.sys.entity.User;
 import com.aofei.sys.exception.SystemError;
-import com.aofei.sys.model.request.RegisterRequest;
+import com.aofei.sys.model.request.EmailRegisterRequest;
+import com.aofei.sys.model.request.PhoneRegisterRequest;
 import com.aofei.sys.model.request.UserRequest;
 import com.aofei.sys.model.response.UserResponse;
 import com.aofei.sys.service.IUserService;
@@ -87,7 +88,7 @@ public class AccountController extends BaseController {
      *
      * @return
      */
-    @ApiOperation(value = "用户登录", notes = "用户登录返回Token,后期访问接口在head中添加Authorization={Token}", httpMethod = "POST")
+    @ApiOperation(value = "用户名登录", notes = "用户登录返回Token,后期访问接口在head中添加Authorization={Token}", httpMethod = "POST")
     @ApiResponses(value = {
             @ApiResponse(code = 200001, message = "invalid username or password"),
             @ApiResponse(code = 200002, message = "captcha error"),
@@ -140,6 +141,63 @@ public class AccountController extends BaseController {
 
 
     /**
+     * 登录
+     *
+     * @return
+     */
+    @ApiOperation(value = "手机号验证码登录", notes = "用户登录返回Token,后期访问接口在head中添加Authorization={Token}", httpMethod = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200001, message = "invalid username or password"),
+            @ApiResponse(code = 200002, message = "captcha error"),
+            @ApiResponse(code = 200, message = "success")})
+    @RequestMapping(value = "/login/phone", method = RequestMethod.POST)
+    @ResponseBody
+    public Response<Token> login_phone(
+            @ApiParam(value = "国家代码", required = true)  @RequestParam(value = "countryCode") String countryCode,
+            @ApiParam(value = "手机号",   required = true)  @RequestParam(value = "mobilephone") String mobilephone,
+            @ApiParam(value = "验证码", required = true)  @RequestParam(value = "captcha") String captcha) throws Exception {
+
+        if(tencentSmsSingleSender.validate(countryCode,mobilephone,captcha)){
+
+            User user = userService.selectOne(new EntityWrapper<User>()
+                    .eq("C_MOBILEPHONE",countryCode)
+                    .eq("C_COUNTRY_CODE",mobilephone)
+                    .eq("DEL_FLAG",User.DEL_FLAG_NORMAL));
+
+            UserUtil.setSessionUser(BeanCopier.copy(user, CurrentUserResponse.class));
+            String host = StringUtils.getRemoteAddr();
+            UserRequest userRequest = new UserRequest(user.getUserId());
+            userRequest.setLastLoginIp(host);
+            userRequest.setLastLoginTime(new Date());
+            userService.updateLogin(userRequest);
+
+
+            Map map = new HashMap();
+            map.put(Const.TOKEN_KEY, user.getUsername());
+            String subject = JwtTokenBuilder.buildSubject(map);
+
+            String accessToken = jwtTokenBuilder.buildToken(subject, jwtConfig.getExpiresSecond(), jwtConfig.getBase64Secret());
+            //String refreshToken = jwtTokenBuilder.buildToken(subject, jwtConfig.getRefreshExpiresSecond(), jwtConfig.getRefreshBase64Secret());
+            Token token = new Token();
+            token.setAccess_token(accessToken);
+            //token.setRefresh_token(refreshToken);
+            token.setToken_type("bearer");
+            token.setExpires_in(jwtConfig.getExpiresSecond());
+
+            //存储到redis
+            //tokenManager.createRelationship(user.getUsername(), accessToken);
+
+
+            return Response.ok(token);
+
+        }else{
+            throw new ApplicationException(SystemError.CAPTCHA_ERROR.getCode(),"the captcha error");
+        }
+
+    }
+
+
+    /**
      * 注销
      *
      * @return
@@ -155,27 +213,12 @@ public class AccountController extends BaseController {
             return -1;
         }
     }
-    /**
-     * 获取手机注册验证码
-     *
-     * @return
-     */
-    @ApiOperation(value = "获取手机注册验证码", notes = "获取手机注册验证码", httpMethod = "POST")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200013, message = "the phone number is exist"),
-            @ApiResponse(code = 200, message = "success")})
-    @RequestMapping(value = "/{phoneNumber}/getSmsCaptcha", method = RequestMethod.POST)
-    public Response<Integer> sms(@PathVariable String phoneNumber) throws Exception {
 
-        int count = userService.selectCount(new EntityWrapper<User>()
-                .eq("C_MOBILEPHONE",phoneNumber)
-                .eq("DEL_FLAG",User.DEL_FLAG_NORMAL));
-        if(count>0){
-            throw new ApplicationException(SystemError.USERNAME_EXIST.getCode(),"the phone number is exist");
-        }
-        tencentSmsSingleSender.sendSms(phoneNumber);
-        return Response.ok(0);
-    }
+
+
+
+
+
 
     /**
      * 检查用户名是否存在
@@ -204,7 +247,7 @@ public class AccountController extends BaseController {
             @ApiResponse(code = 200013, message = "the phone number is exist"),
             @ApiResponse(code = 200, message = "success")})
     @RequestMapping(value = "/register/phone", method = RequestMethod.POST)
-    public Response<Integer> phoneRegister(@RequestBody RegisterRequest request) throws Exception {
+    public Response<Integer> phoneRegister(@RequestBody PhoneRegisterRequest request) throws Exception {
 
         int usernameCount = userService.selectCount(new EntityWrapper<User>()
                 .eq("C_USER_NAME",request.getMobilephone())
@@ -214,15 +257,16 @@ public class AccountController extends BaseController {
         }
         int mobilephoneCount = userService.selectCount(new EntityWrapper<User>()
                 .eq("C_MOBILEPHONE",request.getMobilephone())
+                .eq("C_COUNTRY_CODE",request.getCountryCode())
                 .eq("DEL_FLAG",User.DEL_FLAG_NORMAL));
         if(mobilephoneCount>0){
             throw new ApplicationException(SystemError.PHONE_NUMBER_EXIST.getCode(),"the phone number is exist");
         }
-        //if(tencentSmsSingleSender.validate(request.getMobilephone(),request.getCaptcha())){
+        if(tencentSmsSingleSender.validate(request.getCountryCode(),request.getMobilephone(),request.getCaptcha())){
             userService.register(request);
-       // }else{
-        //    throw new ApplicationException(SystemError.CAPTCHA_ERROR.getCode(),"the captcha error");
-        //}
+        }else{
+          throw new ApplicationException(SystemError.CAPTCHA_ERROR.getCode(),"the captcha error");
+        }
 
         return Response.ok(0);
     }
@@ -240,7 +284,7 @@ public class AccountController extends BaseController {
             @ApiResponse(code = 200011, message = "email is exist"),
             @ApiResponse(code = 200, message = "success")})
     @RequestMapping(value = "/register/email", method = RequestMethod.POST)
-    public Response<Integer> emailRegister(@RequestBody RegisterRequest request) throws Exception {
+    public Response<Integer> emailRegister(@RequestBody EmailRegisterRequest request) throws Exception {
 
         int usernameCount = userService.selectCount(new EntityWrapper<User>().eq("C_USER_NAME",request.getUsername()));
         if(usernameCount>0){
@@ -284,7 +328,7 @@ public class AccountController extends BaseController {
             throw  new ApplicationException(SystemError.ACTIVE_OVERDUE.getCode(),"mail overdue");
         }else{
             String subject = claims.getSubject();//用户信息
-            RegisterRequest request = JSON.parseObject(subject, new TypeReference<RegisterRequest>() {});
+            PhoneRegisterRequest request = JSON.parseObject(subject, new TypeReference<PhoneRegisterRequest>() {});
             userService.register(request);
         }
 

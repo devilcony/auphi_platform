@@ -20,6 +20,7 @@ public enum StatusCode {
     UNAUTHORIZED(401, "unauthorized"),//未授权
     NOT_FOUND(404, "not found"),//请求的资源不存在、数据不存在
     CONFLICT(409, "conflict"),//资源存在冲突、数据已存在
+    MAXIMUM_UPLOAD(511, "Maximum upload size of 1G exceeded"),//上传文件超过规定大小
     DATA_INTEGRITY_VIOLATION_EXCEPTION(424, "data integrity violation exception");//违背数据完整性、当插入、删除和修改数据的时候，违背的数据完整性约束抛出的异常。例如：主键重复异常、存在外键关联数据依赖等
 
     /*状态码*/

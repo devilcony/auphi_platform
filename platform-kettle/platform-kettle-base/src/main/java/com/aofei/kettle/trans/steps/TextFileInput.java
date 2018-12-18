@@ -1,5 +1,6 @@
 package com.aofei.kettle.trans.steps;
 
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.kettle.core.PropsUI;
 import com.aofei.kettle.trans.step.AbstractStep;
 import com.aofei.kettle.utils.JSONArray;
@@ -28,7 +29,7 @@ public class TextFileInput extends AbstractStep {
 
 	@Override
 	public void decode(StepMetaInterface stepMetaInterface, mxCell cell, List<DatabaseMeta> databases,
-			IMetaStore metaStore) throws Exception {
+					   IMetaStore metaStore) throws Exception {
 		TextFileInputMeta textFileInputMeta = (TextFileInputMeta) stepMetaInterface;
 
 		// file tab
@@ -161,7 +162,7 @@ public class TextFileInput extends AbstractStep {
 	}
 
 	@Override
-	public Element encode(StepMetaInterface stepMetaInterface) throws Exception {
+	public Element encode(StepMetaInterface stepMetaInterface, CurrentUserResponse user) throws Exception {
 		TextFileInputMeta textFileInputMeta = (TextFileInputMeta) stepMetaInterface;
 		Document doc = mxUtils.createDocument();
 		Element e = doc.createElement(PropsUI.TRANS_STEP_NAME);
@@ -177,6 +178,7 @@ public class TextFileInput extends AbstractStep {
 		for (int j = 0; j < fileName.length; j++) {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("name", fileName[j]);
+			jsonObject.put("showName", com.aofei.base.common.Const.getUserFilePath(user.getOrganizerId(),fileName[j]));
 			jsonObject.put("filemask", fileMask[j]);
 			jsonObject.put("excludeFileMask", excludeFileMask[j]);
 			jsonObject.put("fileRequired", fileRequired[j]);

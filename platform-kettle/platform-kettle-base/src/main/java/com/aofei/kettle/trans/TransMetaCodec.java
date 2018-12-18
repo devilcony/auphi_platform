@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import com.aofei.base.model.response.CurrentUserResponse;
 import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.cluster.ClusterSchema;
 import org.pentaho.di.cluster.SlaveServer;
@@ -58,9 +59,9 @@ import com.mxgraph.view.mxGraph;
 public class TransMetaCodec extends BaseGraphCodec {
 
 	@Override
-	public String encode(AbstractMeta meta) throws Exception {
+	public String encode(AbstractMeta meta, CurrentUserResponse user) throws Exception {
 		TransMeta transMeta = (TransMeta) meta;
-		
+
 		mxGraph graph = new mxGraph();
 		graph.getModel().beginUpdate();
 		mxCell parent = (mxCell) graph.getDefaultParent();
@@ -262,7 +263,7 @@ public class TransMetaCodec extends BaseGraphCodec {
 				StepEncoder stepEncoder = (StepEncoder) PluginFactory.getBean(stepMeta.getStepID());
 				
 				PluginInterface plugin = PluginRegistry.getInstance().getPlugin(StepPluginType.class, stepMeta.getStepID());
-				Object cell = graph.insertVertex(parent, null, stepEncoder.encodeStep(stepMeta), p.x, p.y, PropsUI.STEP_SIZE, PropsUI.STEP_SIZE, "icon;image=" + SvgImageUrl.getUrl(plugin));
+				Object cell = graph.insertVertex(parent, null, stepEncoder.encodeStep(stepMeta,user), p.x, p.y, PropsUI.STEP_SIZE, PropsUI.STEP_SIZE, "icon;image=" + SvgImageUrl.getUrl(plugin));
 				cells.put(stepMeta, cell);
 			}
 			

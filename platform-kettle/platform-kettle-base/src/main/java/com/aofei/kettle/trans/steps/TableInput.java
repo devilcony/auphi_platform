@@ -1,10 +1,11 @@
 package com.aofei.kettle.trans.steps;
 
-import java.util.List;
-
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.kettle.core.PropsUI;
 import com.aofei.kettle.trans.step.AbstractStep;
 import com.aofei.kettle.utils.StringEscapeHelper;
+import com.mxgraph.model.mxCell;
+import com.mxgraph.util.mxUtils;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.trans.step.StepMetaInterface;
 import org.pentaho.di.trans.step.errorhandling.StreamInterface;
@@ -15,8 +16,7 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.mxgraph.model.mxCell;
-import com.mxgraph.util.mxUtils;
+import java.util.List;
 
 @Component("TableInput")
 @Scope("prototype")
@@ -41,7 +41,7 @@ public class TableInput extends AbstractStep {
 	}
 
 	@Override
-	public Element encode(StepMetaInterface stepMetaInterface) throws Exception {
+	public Element encode(StepMetaInterface stepMetaInterface, CurrentUserResponse user) throws Exception {
 		TableInputMeta tableInputMeta = (TableInputMeta) stepMetaInterface;
 
 		Document doc = mxUtils.createDocument();

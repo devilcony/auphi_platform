@@ -68,5 +68,19 @@ public class Const {
     }
 
 
+    public static String getUserFilePath(Long organizerId, String path) {
+        if(path!=null && organizerId!=null){
+            String root = getUserDir(organizerId);
+            return path.replace(root,"");
+        }
+        return "";
+    }
 
+
+
+    public static void main(String[] args) {
+        String s1 = "/Users/Tony/1068523747487088641/傲飞数据整合平台_V3.4.0下载地址.txt";
+        String s2 = "/Users/Tony/1068523747487088641";
+        System.out.println();
+    }
 }

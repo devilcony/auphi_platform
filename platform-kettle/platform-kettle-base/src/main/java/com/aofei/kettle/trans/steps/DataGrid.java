@@ -1,12 +1,12 @@
 package com.aofei.kettle.trans.steps;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.kettle.core.PropsUI;
 import com.aofei.kettle.trans.step.AbstractStep;
 import com.aofei.kettle.utils.JSONArray;
 import com.aofei.kettle.utils.JSONObject;
+import com.mxgraph.model.mxCell;
+import com.mxgraph.util.mxUtils;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.trans.step.StepMetaInterface;
 import org.pentaho.di.trans.steps.datagrid.DataGridMeta;
@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.mxgraph.model.mxCell;
-import com.mxgraph.util.mxUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component("DataGrid")
 @Scope("prototype")
@@ -74,7 +74,7 @@ public class DataGrid extends AbstractStep {
 	}
 
 	@Override
-	public Element encode(StepMetaInterface stepMetaInterface) throws Exception {
+	public Element encode(StepMetaInterface stepMetaInterface, CurrentUserResponse user) throws Exception {
 		Document doc = mxUtils.createDocument();
 		Element e = doc.createElement(PropsUI.TRANS_STEP_NAME);
 		DataGridMeta dataGridMeta = (DataGridMeta) stepMetaInterface;

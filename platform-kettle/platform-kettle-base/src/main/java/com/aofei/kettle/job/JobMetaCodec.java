@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.aofei.base.model.response.CurrentUserResponse;
 import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.database.DatabaseMeta;
@@ -40,7 +41,7 @@ import com.mxgraph.view.mxGraph;
 public class JobMetaCodec extends BaseGraphCodec {
 
 	@Override
-	public String encode(AbstractMeta meta) throws Exception {
+	public String encode(AbstractMeta meta, CurrentUserResponse user) throws Exception {
 		JobMeta jobMeta = (JobMeta) meta;
 		
 		mxGraph graph = new mxGraph();

@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class RegisterRequest  {
+public class EmailRegisterRequest {
 
 
     /**
@@ -29,21 +29,17 @@ public class RegisterRequest  {
      */
     @ApiModelProperty(value = "组织名称")
     private String organizerName;
+
     /**
      * 邮箱
      */
     @ApiModelProperty(value = "邮箱")
     private String email;
-    /**
-     * 手机
-     */
-    @ApiModelProperty(value = "手机")
-    private String mobilephone;
 
     /**
      * 手机
      */
-    @ApiModelProperty(value = "短信验证码(短信注册必填)")
+    @ApiModelProperty(value = "邮箱验证码)")
     private String captcha;
 
 }

@@ -2,6 +2,7 @@ package com.aofei.kettle.trans.steps;
 
 import java.util.List;
 
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.kettle.core.PropsUI;
 import com.aofei.kettle.trans.step.AbstractStep;
 import org.pentaho.di.core.database.DatabaseMeta;
@@ -29,7 +30,7 @@ public class Abort extends AbstractStep {
 	}
 
 	@Override
-	public Element encode(StepMetaInterface stepMetaInterface) throws Exception {
+	public Element encode(StepMetaInterface stepMetaInterface, CurrentUserResponse user) throws Exception {
 		Document doc = mxUtils.createDocument();
 		Element e = doc.createElement(PropsUI.TRANS_STEP_NAME);
 		AbortMeta abortMeta = (AbortMeta) stepMetaInterface;

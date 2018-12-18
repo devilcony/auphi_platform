@@ -35,7 +35,11 @@ public class RepositoryObjectVO {
 	public RepositoryObjectVO(RepositoryElementMetaInterface re,String replace) {
 
 		this(re);
-		userPath = getPath().replace(replace+"/","/");
+		userPath = getPath().replace(replace,"");
+		if("".equals(userPath)){
+			userPath = "/";
+		}
+
 	}
 	
 	public String getId() {

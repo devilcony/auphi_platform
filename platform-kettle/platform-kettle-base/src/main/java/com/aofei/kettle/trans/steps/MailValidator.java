@@ -1,12 +1,12 @@
 package com.aofei.kettle.trans.steps;
 
-import java.util.List;
-
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.kettle.core.PropsUI;
 import com.aofei.kettle.trans.step.AbstractStep;
+import com.mxgraph.model.mxCell;
+import com.mxgraph.util.mxUtils;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.trans.step.StepMetaInterface;
-import org.pentaho.di.trans.steps.abort.AbortMeta;
 import org.pentaho.di.trans.steps.mailvalidator.MailValidatorMeta;
 import org.pentaho.metastore.api.IMetaStore;
 import org.springframework.context.annotation.Scope;
@@ -14,8 +14,7 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.mxgraph.model.mxCell;
-import com.mxgraph.util.mxUtils;
+import java.util.List;
 
 @Component("MailValidator")
 @Scope("prototype")
@@ -41,7 +40,7 @@ public class MailValidator extends AbstractStep {
 	}
 
 	@Override
-	public Element encode(StepMetaInterface stepMetaInterface) throws Exception {
+	public Element encode(StepMetaInterface stepMetaInterface, CurrentUserResponse user) throws Exception {
 		Document doc = mxUtils.createDocument();
 		Element e = doc.createElement(PropsUI.TRANS_STEP_NAME);
 		MailValidatorMeta mailValidatorMeta = (MailValidatorMeta) stepMetaInterface;

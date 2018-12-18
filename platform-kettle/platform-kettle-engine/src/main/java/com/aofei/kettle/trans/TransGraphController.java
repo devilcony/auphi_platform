@@ -1,26 +1,24 @@
 package com.aofei.kettle.trans;
 
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Toolkit;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.aofei.base.annotation.CurrentUser;
+import com.aofei.base.model.response.CurrentUserResponse;
+import com.aofei.kettle.App;
+import com.aofei.kettle.PluginFactory;
+import com.aofei.kettle.TransDebugExecutor;
+import com.aofei.kettle.TransExecutor;
+import com.aofei.kettle.base.GraphCodec;
+import com.aofei.kettle.core.ConditionCodec;
+import com.aofei.kettle.core.PropsUI;
+import com.aofei.kettle.core.database.DatabaseCodec;
+import com.aofei.kettle.trans.step.StepEncoder;
+import com.aofei.kettle.utils.*;
+import com.mxgraph.util.mxUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.pentaho.di.base.AbstractMeta;
-import org.pentaho.di.core.CheckResultInterface;
-import org.pentaho.di.core.CheckResultSourceInterface;
-import org.pentaho.di.core.Condition;
-import org.pentaho.di.core.Const;
-import org.pentaho.di.core.RowMetaAndData;
-import org.pentaho.di.core.SQLStatement;
+import org.pentaho.di.core.*;
 import org.pentaho.di.core.database.Database;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.logging.DefaultLogLevel;
@@ -52,29 +50,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.w3c.dom.Element;
 
-import com.aofei.kettle.App;
-import com.aofei.kettle.PluginFactory;
-import com.aofei.kettle.TransDebugExecutor;
-import com.aofei.kettle.TransExecutor;
-import com.aofei.kettle.base.GraphCodec;
-import com.aofei.kettle.core.ConditionCodec;
-import com.aofei.kettle.core.PropsUI;
-import com.aofei.kettle.core.database.DatabaseCodec;
-import com.aofei.kettle.trans.step.StepEncoder;
-import com.aofei.kettle.utils.GetSQLProgress;
-import com.aofei.kettle.utils.JSONArray;
-import com.aofei.kettle.utils.JSONObject;
-import com.aofei.kettle.utils.JsonUtils;
-import com.aofei.kettle.utils.SearchFieldsProgress;
-import com.aofei.kettle.utils.StringEscapeHelper;
-import com.aofei.kettle.utils.SvgImageUrl;
-import com.aofei.kettle.utils.TransPreviewProgress;
-import com.mxgraph.util.mxUtils;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.net.URLDecoder;
+import java.util.*;
+import java.util.List;
 
 @Controller
 @RequestMapping(value="/trans")
@@ -510,7 +491,7 @@ public class TransGraphController {
 	})
 	@ResponseBody
 	@RequestMapping(method=RequestMethod.POST, value="/newStep")
-	protected void newStep(@RequestParam String graphXml, @RequestParam String pluginId, @RequestParam String name) throws Exception {
+	protected void newStep(@RequestParam String graphXml, @RequestParam String pluginId, @RequestParam String name, @CurrentUser CurrentUserResponse user) throws Exception {
 		GraphCodec codec = (GraphCodec) PluginFactory.getBean(GraphCodec.TRANS_CODEC);
 		TransMeta transMeta = (TransMeta) codec.decode(graphXml);
 		
@@ -533,7 +514,7 @@ public class TransGraphController {
 			stepMeta.drawStep();
 			
 			StepEncoder encoder = (StepEncoder) PluginFactory.getBean(pluginId);
-			Element e = encoder.encodeStep(stepMeta);
+			Element e = encoder.encodeStep(stepMeta,user);
 			
 			JsonUtils.responseXml(XMLHandler.getXMLHeader() + mxUtils.getXml(e));
 		}
@@ -546,7 +527,7 @@ public class TransGraphController {
 	})
 	@ResponseBody
 	@RequestMapping("/newStep2")
-	protected void newStep2(@RequestParam String pluginId, @RequestParam String name) throws Exception {
+	protected void newStep2(@RequestParam String pluginId, @RequestParam String name, @CurrentUser CurrentUserResponse user) throws Exception {
 		PluginRegistry registry = PluginRegistry.getInstance();
 		PluginInterface stepPlugin = registry.findPluginWithId( StepPluginType.class, pluginId );
 		if (stepPlugin != null) {
@@ -556,7 +537,7 @@ public class TransGraphController {
 			stepMeta.drawStep();
 			
 			StepEncoder encoder = (StepEncoder) PluginFactory.getBean(pluginId);
-			Element e = encoder.encodeStep(stepMeta);
+			Element e = encoder.encodeStep(stepMeta,user);
 			
 			JsonUtils.responseXml(XMLHandler.getXMLHeader() + mxUtils.getXml(e));
 		}

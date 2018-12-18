@@ -6,6 +6,7 @@ public class Ext3Node {
 
 	private String id;
 	private String text;
+	private String showName;
 	private String iconCls = "imageFolder";
 	private String cls="node-24";
 	private boolean expanded = false;
@@ -66,6 +67,14 @@ public class Ext3Node {
 
 	public void setLeaf(boolean leaf) {
 		this.leaf = leaf;
+	}
+
+	public String getShowName() {
+		return showName;
+	}
+
+	public void setShowName(String showName) {
+		this.showName = showName;
 	}
 
 	public static Ext3Node initNode(String id, String text) {

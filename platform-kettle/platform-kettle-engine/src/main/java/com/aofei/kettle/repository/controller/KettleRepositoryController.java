@@ -198,7 +198,7 @@ public class KettleRepositoryController extends BaseController {
 	
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "/open")
-	protected void open(@RequestParam String path, @RequestParam String type) throws Exception {
+	protected void open(@RequestParam String path, @RequestParam String type,@CurrentUser CurrentUserResponse user) throws Exception {
 		String dir = path.substring(0, path.lastIndexOf("/"));
 		String name = path.substring(path.lastIndexOf("/") + 1);
 		
@@ -212,7 +212,7 @@ public class KettleRepositoryController extends BaseController {
 			transMeta.setRepositoryDirectory(directory);
 	    	
 			GraphCodec codec = (GraphCodec) PluginFactory.getBean(GraphCodec.TRANS_CODEC);
-			String graphXml = codec.encode(transMeta);
+			String graphXml = codec.encode(transMeta,user);
 			
 			JsonUtils.responseXml(StringEscapeHelper.encode(graphXml));
 		} else if(RepositoryObjectType.JOB.getTypeDescription().equals(type)) {
@@ -220,7 +220,7 @@ public class KettleRepositoryController extends BaseController {
 	    	jobMeta.setRepositoryDirectory(directory);
 	    	
 	    	GraphCodec codec = (GraphCodec) PluginFactory.getBean(GraphCodec.JOB_CODEC);
-			String graphXml = codec.encode(jobMeta);
+			String graphXml = codec.encode(jobMeta,user);
 			
 			JsonUtils.responseXml(StringEscapeHelper.encode(graphXml));
 		}
@@ -233,7 +233,7 @@ public class KettleRepositoryController extends BaseController {
 	})
 	@ResponseBody
 	@RequestMapping("/open2")
-	protected void open2(@RequestParam String path, @RequestParam String type) throws Exception {
+	protected void open2(@RequestParam String path, @RequestParam String type,@CurrentUser CurrentUserResponse user) throws Exception {
 		String dir = path.substring(0, path.lastIndexOf("/"));
 		String name = path.substring(path.lastIndexOf("/") + 1);
 		
@@ -247,7 +247,7 @@ public class KettleRepositoryController extends BaseController {
 			transMeta.setRepositoryDirectory(directory);
 	    	
 			GraphCodec codec = (GraphCodec) PluginFactory.getBean(GraphCodec.TRANS_CODEC);
-			String graphXml = codec.encode(transMeta);
+			String graphXml = codec.encode(transMeta, user);
 			
 			JsonUtils.success(StringEscapeHelper.encode(graphXml));
 		} else if(RepositoryObjectType.JOB.getTypeDescription().equals(type)) {
@@ -256,7 +256,7 @@ public class KettleRepositoryController extends BaseController {
 	    	jobMeta.setRepositoryDirectory(directory);
 	    	
 	    	GraphCodec codec = (GraphCodec) PluginFactory.getBean(GraphCodec.JOB_CODEC);
-			String graphXml = codec.encode(jobMeta);
+			String graphXml = codec.encode(jobMeta, user);
 			
 			JsonUtils.success(StringEscapeHelper.encode(graphXml));
 		}

@@ -106,6 +106,7 @@
             , a.C_PASSWORD = #{et.password}
             , a.C_NICK_NAME = #{et.nickName}
             , a.C_EMAIL = #{et.email}
+            , a.C_COUNTRY_CODE = #{et.countryCode}
             , a.C_MOBILEPHONE = #{et.mobilephone}
             , a.C_DESCRIPTION = #{et.description}
             , a.C_IS_SYSTEM_USER = #{et.isSystemUser}

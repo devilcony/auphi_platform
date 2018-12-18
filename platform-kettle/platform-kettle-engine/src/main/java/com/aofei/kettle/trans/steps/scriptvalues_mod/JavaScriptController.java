@@ -1,5 +1,7 @@
 package com.aofei.kettle.trans.steps.scriptvalues_mod;
 
+import com.aofei.base.annotation.CurrentUser;
+import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.kettle.PluginFactory;
 import com.aofei.kettle.base.GraphCodec;
 import com.aofei.kettle.trans.steps.RowGenerator;
@@ -347,7 +349,7 @@ public class JavaScriptController {
 	})
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST, value = "/testData")
-	protected void testData(@RequestParam String graphXml, @RequestParam String stepName) throws Exception {
+	protected void testData(@RequestParam String graphXml, @RequestParam String stepName, @CurrentUser CurrentUserResponse user) throws Exception {
 		GraphCodec codec = (GraphCodec) PluginFactory.getBean(GraphCodec.TRANS_CODEC);
 		TransMeta transMeta = (TransMeta) codec.decode(graphXml);
 
@@ -408,7 +410,7 @@ public class JavaScriptController {
 			}
 
 			RowGenerator rg = (RowGenerator) PluginFactory.getBean("RowGenerator");
-			Element e = rg.encode(genMeta);
+			Element e = rg.encode(genMeta,user);
 			e.setAttribute("label", "## TEST DATA ##");
 			e.setAttribute("ctype", "RowGenerator");
 			e.setAttribute("copies", "1");

@@ -10,7 +10,7 @@ import com.aofei.sys.entity.Organizer;
 import com.aofei.sys.entity.User;
 import com.aofei.sys.exception.SystemError;
 import com.aofei.sys.mapper.UserMapper;
-import com.aofei.sys.model.request.RegisterRequest;
+import com.aofei.sys.model.request.PhoneRegisterRequest;
 import com.aofei.sys.model.request.UserRequest;
 import com.aofei.sys.model.response.UserResponse;
 import com.aofei.sys.service.IUserService;
@@ -206,16 +206,16 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
 
     @Override
     @Transactional
-    public Integer register(RegisterRequest request) throws KettleException {
+    public Integer register(PhoneRegisterRequest request) throws KettleException {
 
         Organizer organizer = new Organizer();
         organizer.setName(request.getOrganizerName());
         organizer.setStatus(1);
-        organizer.setEmail(request.getEmail());
         organizer.setMobile(request.getMobilephone());
         organizer.insert();
         User existing = new User();
-        existing.setEmail(request.getEmail());
+        existing.setCountryCode(request.getCountryCode());
+        existing.setMobilephone(request.getMobilephone());
         existing.setUsername(request.getUsername());
         existing.setPassword(MD5Utils.getStringMD5(request.getPassword()));
         existing.setOrganizerId(organizer.getOrganizerId());

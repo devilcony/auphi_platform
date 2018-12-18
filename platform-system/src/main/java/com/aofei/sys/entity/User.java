@@ -57,6 +57,12 @@ public class User extends DataEntity<User> {
      */
     @TableField("C_EMAIL")
     private String email;
+
+    /**
+     * 手机国家代码
+     */
+    @TableField("C_COUNTRY_CODE")
+    private String countryCode;
     /**
      * 手机
      */
