@@ -35,6 +35,7 @@ import org.pentaho.di.job.entry.JobEntryCopy;
 import org.pentaho.di.laf.BasePropertyHandler;
 import org.pentaho.di.trans.step.StepMetaInterface;
 import org.pentaho.di.trans.step.StepPartitioningMeta;
+import org.pentaho.di.trans.steps.calculator.CalculatorMetaFunction;
 import org.pentaho.di.trans.steps.denormaliser.DenormaliserTargetField;
 import org.pentaho.di.trans.steps.excelinput.SpreadSheetType;
 import org.pentaho.di.trans.steps.exceloutput.ExcelOutputMeta;
@@ -1092,6 +1093,21 @@ public class SystemMainController {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("value", ResultFile.fileTypeCode[i]);
 			jsonObject.put("text", ResultFile.fileTypeDesc[i]);
+			jsonArray.add(jsonObject);
+		}
+		
+		JsonUtils.response(jsonArray);
+	}
+	
+	@ResponseBody
+	@RequestMapping(method=RequestMethod.POST, value="/calcFunctions")
+	protected void calcFunctions() throws Exception{
+		JSONArray jsonArray = new JSONArray();
+		
+		for(int i=0;i<CalculatorMetaFunction.calc_desc.length;i++){
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("code", CalculatorMetaFunction.calc_desc[i]);
+			jsonObject.put("desc", CalculatorMetaFunction.calcLongDesc[i]);
 			jsonArray.add(jsonObject);
 		}
 		
