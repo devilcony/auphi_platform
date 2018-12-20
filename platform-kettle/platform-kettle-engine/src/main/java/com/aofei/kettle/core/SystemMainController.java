@@ -40,6 +40,7 @@ import org.pentaho.di.trans.steps.denormaliser.DenormaliserTargetField;
 import org.pentaho.di.trans.steps.excelinput.SpreadSheetType;
 import org.pentaho.di.trans.steps.exceloutput.ExcelOutputMeta;
 import org.pentaho.di.trans.steps.excelwriter.ExcelWriterStepMeta;
+import org.pentaho.di.trans.steps.groupby.GroupByMeta;
 import org.pentaho.di.trans.steps.multimerge.MultiMergeJoinMeta;
 import org.pentaho.di.trans.steps.mysqlbulkloader.MySQLBulkLoaderMeta;
 import org.pentaho.di.trans.steps.pgbulkloader.PGBulkLoaderMeta;
@@ -1108,6 +1109,21 @@ public class SystemMainController {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("code", CalculatorMetaFunction.calc_desc[i]);
 			jsonObject.put("desc", CalculatorMetaFunction.calcLongDesc[i]);
+			jsonArray.add(jsonObject);
+		}
+		
+		JsonUtils.response(jsonArray);
+	}
+	
+	@ResponseBody
+	@RequestMapping(method=RequestMethod.POST, value="/groupByType")
+	protected void groupByType() throws Exception{
+		JSONArray jsonArray = new JSONArray();
+		
+		for(int i=0;i<GroupByMeta.typeGroupCode.length;i++){
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("code", GroupByMeta.typeGroupCode[i]);
+			jsonObject.put("desc", GroupByMeta.typeGroupLongDesc[i]);
 			jsonArray.add(jsonObject);
 		}
 		
