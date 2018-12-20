@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.pentaho.di.core.Condition;
 import org.pentaho.di.core.Const;
+import org.pentaho.di.core.ResultFile;
 import org.pentaho.di.core.compress.CompressionProviderFactory;
 import org.pentaho.di.core.logging.LogLevel;
 import org.pentaho.di.core.plugins.*;
@@ -1079,6 +1080,21 @@ public class SystemMainController {
 			jsonArray.add(jsonObject);
 		}
 
+		JsonUtils.response(jsonArray);
+	}
+	
+	@ResponseBody
+	@RequestMapping(method=RequestMethod.POST, value="/filetypes")
+	protected void filetypes() throws Exception{
+		JSONArray jsonArray = new JSONArray();
+		
+		for(int i=0;i<ResultFile.fileTypeCode.length;i++){
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("value", ResultFile.fileTypeCode[i]);
+			jsonObject.put("text", ResultFile.fileTypeDesc[i]);
+			jsonArray.add(jsonObject);
+		}
+		
 		JsonUtils.response(jsonArray);
 	}
 }
