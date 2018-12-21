@@ -134,10 +134,10 @@
 
     <select id="countError" resultType="java.lang.Integer">
 
-		select SUM(COUNT) AS COUNT FROM (
+		select  ifnull(sum(COUNT),0) AS COUNT FROM (
 		    select COUNT
 			  from (
-			    select SUM(ERRORS)  AS COUNT , QRTZ_JOB_GROUP
+			    select ifnull(sum(ERRORS),0)  AS COUNT , QRTZ_JOB_GROUP
 			    from  LOG_TRANS GROUP BY QRTZ_JOB_GROUP
 			  )a JOIN  QRTZ_GROUP gp on gp.DEL_FLAG =0 and gp.ID_GROUP = a.QRTZ_JOB_GROUP WHERE gp.ORGANIZER_ID  = #{organizerId}
 
@@ -145,7 +145,7 @@
 
 				select COUNT
 			  from (
-			    select SUM(COALESCE(ERRORS,0))  AS COUNT , QRTZ_JOB_GROUP
+			    select ifnull(sum(ERRORS),0)   AS COUNT , QRTZ_JOB_GROUP
 			    from  LOG_JOB GROUP BY QRTZ_JOB_GROUP
 			  ) b JOIN  QRTZ_GROUP gp on gp.DEL_FLAG =0 and gp.ID_GROUP = b.QRTZ_JOB_GROUP WHERE gp.ORGANIZER_ID  = #{organizerId}
 		) d

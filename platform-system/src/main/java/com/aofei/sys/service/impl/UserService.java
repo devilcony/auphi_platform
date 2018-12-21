@@ -215,6 +215,7 @@ public class UserService extends BaseService<UserMapper, User> implements IUserS
         organizer.insert();
         User existing = new User();
         existing.setCountryCode(request.getCountryCode());
+        existing.setUserStatus(Const.NO);
         existing.setMobilephone(request.getMobilephone());
         existing.setUsername(request.getUsername());
         existing.setPassword(MD5Utils.getStringMD5(request.getPassword()));
