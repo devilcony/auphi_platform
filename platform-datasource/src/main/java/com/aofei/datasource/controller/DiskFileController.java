@@ -7,24 +7,21 @@ import com.aofei.base.controller.BaseController;
 import com.aofei.base.exception.ApplicationException;
 import com.aofei.base.model.response.CurrentUserResponse;
 import com.aofei.base.model.response.Response;
+import com.aofei.datasource.exception.DiskError;
 import com.aofei.datasource.model.request.DiskFileCreateRequest;
 import com.aofei.datasource.model.request.DiskFileDeleteRequest;
 import com.aofei.datasource.model.request.DiskFileRequest;
 import com.aofei.datasource.model.response.DiskFileListResponse;
 import com.aofei.datasource.model.response.DiskFileResponse;
+import com.aofei.datasource.model.response.ResidualSpaceResponse;
 import com.aofei.datasource.service.IDiskFileService;
+import com.aofei.utils.DiskFileUtil;
 import com.aofei.utils.StringUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -73,6 +70,28 @@ public class DiskFileController extends BaseController {
     }
 
 
+    /**
+     * 服务器文件列表
+     * @return
+     */
+    @ApiOperation(value = "磁盘剩余空间", notes = "磁盘剩余空间", httpMethod = "POST")
+    @RequestMapping(value = "/residual", method = RequestMethod.POST)
+    public Response<ResidualSpaceResponse> residual(
+            @ApiIgnore @CurrentUser CurrentUserResponse user)  {
+
+        String path =  Const.getUserDir(user.getOrganizerId());
+
+        long total = DiskFileUtil.getTotalSizeOfFilesInDir(new File(path));
+
+
+        ResidualSpaceResponse response = new ResidualSpaceResponse();
+        response.setDiskSpace(DiskFileUtil.getPrintSize(user.getDiskSpace()));
+        response.setResidualSpace(DiskFileUtil.getPrintSize(total));
+        response.setPercentage(DiskFileUtil.getPercentage(total,user.getDiskSpace()));
+       return Response.ok(response);
+    }
+
+
 
     /**
      * 创建文件夹
@@ -95,12 +114,21 @@ public class DiskFileController extends BaseController {
      * @return
      */
     @ApiOperation(value = "上传文件", notes = "上传文件", httpMethod = "POST")
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ApiResponses(value = {
+            @ApiResponse(code = 300001, message = "Insufficient disk space"),
+            @ApiResponse(code = 200, message = "success")})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "file", value = "文件", paramType = "form", required = true, dataType = "__file")
+    })
+    @PostMapping(value = "/upload",consumes = "multipart/*",headers = "content-type=multipart/form-data")
     public Response<Boolean> upload(
             HttpServletRequest request,
             @ApiIgnore @CurrentUser CurrentUserResponse user) throws IOException {
 
-        String path = ServletRequestUtils.getStringParameter(request,"path", Const.getUserDir(user.getOrganizerId()));
+        String userPath = Const.getUserDir(user.getOrganizerId());
+        long total = DiskFileUtil.getTotalSizeOfFilesInDir(new File(userPath));
+
+        String path = ServletRequestUtils.getStringParameter(request,"path", userPath);
         if(StringUtils.isEmpty(path) || "/".equalsIgnoreCase(path)){
             path = Const.getUserDir(user.getOrganizerId());
         }
@@ -114,6 +142,11 @@ public class DiskFileController extends BaseController {
             while(iter.hasNext()) {
                 //一次遍历所有文件
                 MultipartFile file=multiRequest.getFile(iter.next().toString());
+
+                long all = total+file.getSize();
+                if(all > user.getDiskSpace()){
+                    throw new ApplicationException(DiskError.INSUFFICIENT_DISK_SPACE.getCode(),DiskError.INSUFFICIENT_DISK_SPACE.getMessage());
+                }
                 if(file!=null) {
                     File filepath = new File(path,file.getOriginalFilename());
                     //上传

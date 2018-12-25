@@ -10,7 +10,8 @@ public enum DiskError {
         --------------------------------------------------------------------
     */
     //2 00 001 释义：  00 = System 业务模块标识，001为具体的错误代码
-    DIR_EXISTS(300000, "dir exists")//文件夹已存在
+    DIR_EXISTS(300000, "dir exists"),//文件夹已存在
+    INSUFFICIENT_DISK_SPACE(300001, "Insufficient disk space")//文件夹已存在
 
     ;
 

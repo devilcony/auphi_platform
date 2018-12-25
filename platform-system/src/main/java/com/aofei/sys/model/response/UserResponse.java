@@ -1,5 +1,6 @@
 package com.aofei.sys.model.response;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -68,7 +69,10 @@ public class UserResponse {
     @ApiModelProperty(value = "组织名称")
     private String organizerName;
 
-
+    /**
+     * 磁盘空间 字节 默认   1073741824字节
+     */
+    private Long diskSpace;
     /**
      * 用户状态
      */

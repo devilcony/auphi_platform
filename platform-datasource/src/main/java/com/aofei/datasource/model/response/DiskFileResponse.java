@@ -13,7 +13,7 @@ public class DiskFileResponse {
     @ApiModelProperty(value = "是否是文件夹 0:否 1:是")
     private Integer isdir;
     @ApiModelProperty(value = "文件大小")
-    private Long size;
+    private String size;
 
     @ApiModelProperty(value = "最后修改时间")
     private Long lastModified;

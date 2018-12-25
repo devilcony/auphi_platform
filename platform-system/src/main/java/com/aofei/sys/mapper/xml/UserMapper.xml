@@ -32,6 +32,7 @@
         , a.C_PASSWORD AS password
         , a.C_NICK_NAME AS nickName
         , a.C_EMAIL AS email
+        , a.C_DISK_SPACE AS diskSpace
         , a.C_MOBILEPHONE AS mobilephone
         , a.C_DESCRIPTION AS description
         , a.C_IS_SYSTEM_USER AS isSystemUser

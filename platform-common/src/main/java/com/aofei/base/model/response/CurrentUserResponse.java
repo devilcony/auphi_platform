@@ -33,6 +33,11 @@ public class CurrentUserResponse {
     private Long organizerId;
 
     /**
+     * 磁盘空间 字节 默认   1073741824字节
+     */
+    private Long diskSpace;
+
+    /**
      * 组织ID
      */
     private String organizerName;

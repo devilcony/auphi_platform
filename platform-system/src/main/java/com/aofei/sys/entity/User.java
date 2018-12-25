@@ -59,6 +59,12 @@ public class User extends DataEntity<User> {
     private String email;
 
     /**
+     * 磁盘空间 字节 默认   1073741824字节
+     */
+    @TableField("C_DISK_SPACE")
+    private Long diskSpace;
+
+    /**
      * 手机国家代码
      */
     @TableField("C_COUNTRY_CODE")

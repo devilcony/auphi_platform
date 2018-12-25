@@ -8,6 +8,7 @@ import com.aofei.datasource.model.request.DiskFileRequest;
 import com.aofei.datasource.model.response.DiskFileResponse;
 import com.aofei.datasource.service.IDiskFileService;
 
+import com.aofei.utils.DiskFileUtil;
 import com.aofei.utils.StringUtils;
 import org.apache.commons.vfs2.*;
 import org.slf4j.Logger;
@@ -56,7 +57,7 @@ public class DiskFileService implements IDiskFileService {
                 response.setFilename(file.getName());
                 response.setIsdir(Const.NO);
                 response.setPath(file.getPath());
-                response.setSize(file.length());
+                response.setSize(DiskFileUtil.getPrintSize(file.length()));
                 response.setLastModified(file.lastModified());
             }
 
