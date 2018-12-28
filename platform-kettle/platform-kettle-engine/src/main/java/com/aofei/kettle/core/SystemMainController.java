@@ -66,11 +66,43 @@ import java.util.*;
 @RequestMapping(value="/system")
 @Api(tags = "Kettle字典接口api")
 public class SystemMainController {
+	
+	private static Properties locales = new Properties();
+	
+	static {
+		locales.put("输入", "Input");
+		locales.put("输出", "Output");
+		locales.put("转换", "Transform");
+		locales.put("应用", "Utility");
+		locales.put("流程", "Flow");
+		locales.put("脚本", "Scripting");
+		locales.put("查询", "Lookup");
+		locales.put("连接", "Joins");
+		locales.put("校验", "Validation");
+		locales.put("统计", "Statistics");
+		locales.put("作业", "Job");
+		locales.put("批量加载", "Bulk loading");
+		
+		locales.put("通用", "General");
+		locales.put("邮件", "Mail");
+		locales.put("文件管理", "File management");
+		locales.put("条件", "Conditions");
+		locales.put("文件传输", "File transfer");
+		
+		locales.put("表输入", "Table input");
+	}
+	
+	private static String i18n(String locale, String key) {
+		if(!"zh".equalsIgnoreCase(locale)) {
+			return locales.getProperty(key, key);
+		}
+		return key;
+	}
 
 	@ApiOperation(value = "返回已实现的所有的转换步骤", httpMethod = "POST")
 	@ResponseBody
 	@RequestMapping("/steps2")
-	protected void steps2() throws ServletException, IOException {
+	protected void steps2(String locale) throws ServletException, IOException {
 		JSONArray jsonArray = new JSONArray();
 
 		PluginRegistry registry = PluginRegistry.getInstance();
@@ -79,18 +111,22 @@ public class SystemMainController {
 
 		for (String baseCategory : baseCategories) {
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("text", baseCategory);
+			String category = i18n(locale, baseCategory);
+			jsonObject.put("text", category);
 			JSONArray children = new JSONArray();
 
 			List<PluginInterface> sortedCat = new ArrayList<PluginInterface>();
 			for (PluginInterface baseStep : baseSteps) {
-				if (baseStep.getCategory().equalsIgnoreCase(baseCategory)) {
+				String category2 = i18n(locale, baseStep.getCategory());
+				if (category2.equalsIgnoreCase(category)) {
 					sortedCat.add(baseStep);
 				}
 			}
 			Collections.sort(sortedCat, new Comparator<PluginInterface>() {
 				public int compare(PluginInterface p1, PluginInterface p2) {
-					return p1.getName().compareTo(p2.getName());
+					String name1 = i18n(locale, p1.getName());
+					String name2 = i18n(locale, p2.getName());
+					return name1.compareTo(name2);
 				}
 			});
 			for (PluginInterface p : sortedCat) {
@@ -99,7 +135,7 @@ public class SystemMainController {
 
 				if(PluginFactory.containBean(p.getIds()[0])) {
 					JSONObject child = new JSONObject();
-					child.put("text", pluginName);
+					child.put("text", i18n(locale, pluginName));
 					child.put("pluginId", p.getIds()[0]);
 					child.put("icon", SvgImageUrl.getMiddleUrl(p));
 					child.put("dragIcon", SvgImageUrl.getUrl(p));
@@ -119,7 +155,7 @@ public class SystemMainController {
 	@ApiOperation(value = "返回已实现的所有的作业步骤", httpMethod = "POST")
 	@ResponseBody
 	@RequestMapping("/jobentrys2")
-	protected void jobentrys2() throws ServletException, IOException {
+	protected void jobentrys2(String locale) throws ServletException, IOException {
 		JSONArray jsonArray = new JSONArray();
 
 		PluginRegistry registry = PluginRegistry.getInstance();
@@ -129,7 +165,8 @@ public class SystemMainController {
 		for (String baseCategory : baseCategories) {
 
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("text", baseCategory);
+			String category = i18n(locale, baseCategory);
+			jsonObject.put("text", category);
 			JSONArray children = new JSONArray();
 
 			List<PluginInterface> sortedCat = new ArrayList<PluginInterface>();
@@ -155,14 +192,17 @@ public class SystemMainController {
 			for (PluginInterface baseJobEntry : baseJobEntries) {
 				if ( baseJobEntry.getIds()[ 0 ].equals( JobMeta.STRING_SPECIAL ) )
 					continue;
-
-				if (baseJobEntry.getCategory().equalsIgnoreCase(baseCategory)) {
+				
+				String category2 = i18n(locale, baseJobEntry.getCategory());
+				if (category2.equalsIgnoreCase(category)) {
 					sortedCat.add(baseJobEntry);
 				}
 			}
 			Collections.sort(sortedCat, new Comparator<PluginInterface>() {
 				public int compare(PluginInterface p1, PluginInterface p2) {
-					return p1.getName().compareTo(p2.getName());
+					String name1 = i18n(locale, p1.getName());
+					String name2 = i18n(locale, p2.getName());
+					return name1.compareTo(name2);
 				}
 			});
 			for (PluginInterface p : sortedCat) {
@@ -171,7 +211,7 @@ public class SystemMainController {
 
 				if(PluginFactory.containBean(p.getIds()[0])) {
 					JSONObject child = new JSONObject();
-					child.put("text", PluginFactory.containBean(p.getIds()[0]) ? pluginName : "<font color='red'>" + pluginName + "</font>");
+					child.put("text", i18n(locale, pluginName));
 					child.put("pluginId", p.getIds()[0]);
 					child.put("icon", SvgImageUrl.getMiddleUrl(p));
 					child.put("dragIcon", SvgImageUrl.getUrl(p));
