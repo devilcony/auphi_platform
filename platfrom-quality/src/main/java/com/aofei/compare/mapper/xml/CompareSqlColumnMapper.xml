@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.compare.mapper.CompareSqlColumnMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ID_COMPARE_SQL_COLUMN AS compareSqlColumnId
+        , a.COLUMN_NAME AS columnName
+        , a.COLUMN_TYPE AS columnType
+        , a.REFERENCE_COLUMN_NAME AS referenceColumnName
+        , a.COLUMN_DESC AS columnDesc
+        , a.ID_COMPARE_SQL AS compareSqlId
+        , a.COMPARE_STYLE AS compareStyle
+        , a.MIN_RATIO AS minRatio
+        , a.MAX_RATIO AS maxRatio
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+    <sql id="Result_Join">
+        LEFT JOIN(
+          SELECT
+              ID_COMPARE_SQL_COLUMN
+            , CREATE_TIME
+            , COLUMN_VALUE
+            , REFERENCE_COLUMN_VALUE
+            , COMPARE_RESULT
+          FROM COMPARE_SQL_RESULT AS b WHERE CREATE_TIME = (SELECT MAX(c.CREATE_TIME) FROM COMPARE_SQL_RESULT as c WHERE b.ID_COMPARE_SQL_COLUMN = c.ID_COMPARE_SQL_COLUMN ) ) d
+        ON a.ID_COMPARE_SQL_COLUMN = d.ID_COMPARE_SQL_COLUMN;
+    </sql>
+
+    <select id="findResultList" parameterType="com.aofei.compare.entity.CompareSqlColumn">
+        select
+        <include refid="Base_Column_List"/>
+        , d.CREATE_TIME AS resultTime
+        , d.COLUMN_VALUE AS compareResult
+        , d.COMPARE_RESULT AS columnValue
+        , d.REFERENCE_COLUMN_VALUE AS referenceColumnValue
+        from COMPARE_SQL_COLUMN a
+        <include refid="Result_Join"/>
+
+        <where>
+            a.DEL_FLAG = 0
+            <if test="compareSqlColumnId !=null ">
+                AND  a.ID_COMPARE_SQL_COLUMN  = #{compareSqlColumnId}
+            </if>
+            <if test="compareSqlId !=null ">
+                AND  a.ID_COMPARE_SQL  = #{compareSqlId}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="findList" parameterType="com.aofei.compare.entity.CompareSqlColumn">
+        select
+        <include refid="Base_Column_List"/>
+        from COMPARE_SQL_COLUMN a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="compareSqlColumnId !=null ">
+                AND  a.ID_COMPARE_SQL_COLUMN  = #{compareSqlColumnId}
+            </if>
+            <if test="compareSqlId !=null ">
+                AND  a.ID_COMPARE_SQL  = #{compareSqlId}
+            </if>
+        </where>
+    </select>
+</mapper>

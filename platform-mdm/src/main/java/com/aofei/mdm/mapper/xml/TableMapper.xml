@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.mdm.mapper.TableMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ID_TABLE AS tableId
+        , a.ID_MODEL AS modelId
+        , b.MODEL_NAME AS modelName
+        , a.REPOSITORY_NAME AS repositoryName
+        , a.ID_DATABASE AS databaseId
+        , a.SCHEMA_NAME AS schemaName
+        , a.TABLE_NAME AS tableName
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+    <sql id="Base_Joins">
+        JOIN MDM_MODEL b ON b.ID_MODEL = a.ID_MODEL
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.mdm.entity.Table">
+        select
+        <include refid="Base_Column_List"/>
+        from MDM_TABLE a
+        <include refid="Base_Joins"/>
+        <where>
+            a.DEL_FLAG = 0
+            <if test="organizerId !=null ">
+                AND  b.ORGANIZER_ID  = #{organizerId}
+            </if>
+            <if test="modelId !=null ">
+                AND  a.ID_MODEL  = #{modelId}
+            </if>
+            <if test="tableName !=null and tableName !='' ">
+                AND  a.TABLE_NAME  like '%${tableName}%'
+            </if>
+        </where>
+    </select>
+
+    <update id="updateById">
+        update MDM_TABLE a
+        <set>
+              a.ID_MODEL AS modelId
+            , a.REPOSITORY_NAME AS repositoryName
+            , a.ID_DATABASE AS databaseId
+            , a.SCHEMA_NAME AS schemaName
+            , a.TABLE_NAME AS tableName
+            , a.CREATE_USER AS createUser
+            , a.UPDATE_USER AS updateUser
+            , a.CREATE_TIME AS createTime
+            , a.UPDATE_TIME AS updateTime
+        </set>
+        where a.ID_TABLE = #{et.tableId}
+    </update>
+
+    <update id="deleteById">
+        update MDM_TABLE a set a.DEL_FLAG = 1  where a.ID_TABLE = #{id}
+    </update>
+
+</mapper>

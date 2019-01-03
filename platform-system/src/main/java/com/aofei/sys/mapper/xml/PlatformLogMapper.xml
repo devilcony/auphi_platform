@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.PlatformLogMapper">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.PLATFORM_LOG_ID AS platformLogId
+        , a.USERNAME AS username
+        , a.MODULE   AS module
+        , a.OPERATION AS operation
+        , a.METHOD AS method
+        , a.PARAMS AS params
+        , a.IP AS ip
+        , a.CREATE_DATE AS createDate
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+
+    <select id="findList"  resultType="com.aofei.sys.entity.PlatformLog">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_PLATFORM_LOG a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="startCreateTime !=null ">
+                AND  DATE_FORMAT(a.CREATE_DATE,'%Y%m%d') <![CDATA[ >= ]]> DATE_FORMAT(#{startCreateTime},'%Y%m%d')
+            </if>
+            <if test="endCreateTime !=null ">
+                AND   DATE_FORMAT(a.CREATE_DATE,'%Y%m%d') <![CDATA[ <= ]]> DATE_FORMAT(#{endCreateTime},'%Y%m%d')
+            </if>
+        </where>
+    </select>
+
+
+
+</mapper>

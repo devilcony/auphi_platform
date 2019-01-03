@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.compare.mapper.CompareSqlResultMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          ID_COMPARE_SQL_RESULT AS compareSqlResultId
+        , ID_COMPARE_SQL_COLUMN AS compareSqlColumnId
+        , COLUMN_VALUE AS columnValue
+        , REFERENCE_COLUMN_VALUE AS referenceColumnValue
+        , COMPARE_RESULT AS compareResult
+        , CREATE_TIME AS createTime
+        , CREATE_USER AS createUser
+        , UPDATE_USER AS updateUser
+        , UPDATE_TIME AS updateTime
+        , DEL_FLAG AS delFlag
+    </sql>
+
+</mapper>

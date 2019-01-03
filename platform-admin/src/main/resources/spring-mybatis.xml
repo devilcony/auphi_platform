@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+    <!-- ali druid 数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <!-- 数据库基本信息配置 -->
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="filters" value="${jdbc.filters}"/>
+        <!-- 最大并发连接数 -->
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+        <!-- 初始化连接数量 -->
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${jdbc.maxWait}"/>
+        <!-- 最小空闲连接数 -->
+        <property name="minIdle" value="${jdbc.minIdle}"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}"/>
+
+        <property name="validationQuery" value="${jdbc.validationQuery}"/>
+        <property name="testWhileIdle" value="${jdbc.testWhileIdle}"/>
+        <property name="testOnBorrow" value="${jdbc.testOnBorrow}"/>
+        <property name="testOnReturn" value="${jdbc.testOnReturn}"/>
+
+        <property name="maxOpenPreparedStatements" value="${jdbc.maxOpenPreparedStatements}"/>
+        <!-- 打开 removeAbandoned 功能 -->
+        <property name="removeAbandoned" value="${jdbc.removeAbandoned}"/>
+        <!-- 1800 秒，也就是 30 分钟 -->
+        <property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}"/>
+        <!-- 关闭 abanded 连接时输出错误日志 -->
+        <property name="logAbandoned" value="${jdbc.logAbandoned}"/>
+    </bean>
+
+    <!-- Spring整合Mybatis，更多查看文档：http://mp.baomidou.com -->
+    <bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="com.aofei"/>
+        <property name="typeAliasesSuperType" value="com.aofei.base.entity.BaseEntity"/>
+        <!-- 自动扫描Mapping.xml文件 -->
+        <property name="mapperLocations" value="classpath*:com/aofei/**/mapper/xml/*Mapper.xml"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+
+        <property name="plugins">
+            <array>
+                <!-- 分页插件配置 -->
+                <bean id="paginationInterceptor" class="com.baomidou.mybatisplus.plugins.PaginationInterceptor">
+                    <property name="dialectType" value="mysql" />
+                </bean>
+            </array>
+        </property>
+        <!-- 全局配置注入 -->
+        <property name="globalConfig" ref="globalConfig"/>
+    </bean>
+
+    <bean id="globalConfig" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+        <!--
+            AUTO->`0`("数据库ID自增")
+             INPUT->`1`(用户输入ID")
+            ID_WORKER->`2`("全局唯一ID")
+            UUID->`3`("全局唯一ID")
+        -->
+        <property name="idType" value="2"/>
+        <!--
+            MYSQL->`mysql`
+            ORACLE->`oracle`
+            DB2->`db2`
+            H2->`h2`
+            HSQL->`hsql`
+            SQLITE->`sqlite`
+            POSTGRE->`postgresql`
+            SQLSERVER2005->`sqlserver2005`
+            SQLSERVER->`sqlserver`
+        -->
+        <!-- Oracle需要添加该项 -->
+        <!-- <property name="dbType" value="oracle" /> -->
+        <!-- 全局表为下划线命名设置 true -->
+        <property name="dbColumnUnderline" value="true"/>
+        <!--<property name="metaObjectHandler">
+            <bean class="com.baomidou.springmvc.common.MyMetaObjectHandler"/>
+        </property>-->
+    </bean>
+
+
+
+    <!-- 扫描basepackage下所有以@MyBatisDao注解的接口 -->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+        <property name="basePackage" value="com.aofei"/>
+        <property name="annotationClass" value="com.aofei.base.annotation.MyBatisMapper"/>
+    </bean>
+
+    <!--动态加载 mapper.xml，XML文件热加载-->
+    <bean class="com.baomidou.mybatisplus.spring.MybatisMapperRefresh">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <constructor-arg name="mapperLocations" value="classpath*:com/aofei/**/mapper/xml/*Mapper.xml"/>
+        <!--项目启动延迟加载时间  单位：秒  默认:10s-->
+        <constructor-arg name="delaySeconds" value="10"/>
+        <!--刷新时间间隔  单位：秒 默认:20s-->
+        <constructor-arg name="sleepSeconds" value="20"/>
+        <constructor-arg name="enabled" value="true"/>
+    </bean>
+
+    <!-- 配置事务管理 -->
+    <bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置 Annotation 驱动，扫描@Transactional注解的类定义事务  -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+</beans>

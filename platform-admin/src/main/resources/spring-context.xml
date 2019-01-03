@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.3.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+    <!-- 使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@RestController注解，在SpringMvc中只扫描@RestController注解。  -->
+    <context:component-scan base-package="com.aofei" scoped-proxy="interfaces">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 加载配置文件数据 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:config/db.properties</value>
+                <value>classpath*:config/redis.properties</value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
+
+    <!--@Value读取配置文件-->
+    <bean id="propertiesReader"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath*:config/token.properties</value>
+                <value>classpath*:config/application.properties</value>
+            </list>
+        </property>
+        <!-- 设置编码格式 -->
+        <property name="fileEncoding" value="UTF-8"></property>
+    </bean>
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="properties" ref="propertiesReader" />
+    </bean>
+
+    <!-- 激活自动代理功能 -->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+
+    <!-- 扫描切面包路径 -->
+    <bean id="logAspect" class="com.aofei.log.aop.LogAspect">
+        <property name="logPoint">
+            <bean class="com.aofei.sys.service.impl.PlatformLogService" />
+        </property>
+    </bean>
+    <aop:config>
+        <aop:aspect ref="logAspect">
+            <aop:pointcut id="logPointCut" expression="@annotation(com.aofei.log.annotation.Log)" />
+            <aop:around pointcut-ref="logPointCut" method="save" />
+        </aop:aspect>
+    </aop:config>
+
+    <!-- 邮件发送 -->
+    <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.smtp.host}"></property>
+        <property name="username" value="${mail.smtp.username}"></property>
+        <property name="password" value="${mail.smtp.password}"></property>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!-- 相当于javax.mail.Session中的props属性-->
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+                <prop key="mail.smtp.timeout">${mail.smtp.timeout}</prop>
+                <prop key="mail.smtp.from">${mail.smtp.from}</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <import resource="/spring-ehcache.xml" />
+    <import resource="/spring-mybatis.xml"/>
+    <import resource="/spring-schedule.xml"/>
+</beans>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.dataservice.mapper.ServiceJobLogMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.aofei.dataservice.entity.ServiceJobLog">
+        <id column="ID_JOB" property="jobId" />
+        <result column="MONITOR_ID" property="monitorId" />
+        <result column="JOB_CONFIG_ID" property="jobConfigId" />
+        <result column="CHANNEL_ID" property="channelId" />
+        <result column="JOBName" property="JOBName" />
+        <result column="JOB_CN_NAME" property="jobCnName" />
+        <result column="STATUS" property="status" />
+        <result column="LINES_READ" property="linesRead" />
+        <result column="LINES_WRITTEN" property="linesWritten" />
+        <result column="LINES_UPDATED" property="linesUpdated" />
+        <result column="LINES_INPUT" property="linesInput" />
+        <result column="LINES_OUTPUT" property="linesOutput" />
+        <result column="LINES_REJECTED" property="linesRejected" />
+        <result column="ERRORS" property="errors" />
+        <result column="STARTDATE" property="startdate" />
+        <result column="ENDDATE" property="enddate" />
+        <result column="LOGDATE" property="logdate" />
+        <result column="DEPDATE" property="depdate" />
+        <result column="REPLAYDATE" property="replaydate" />
+        <result column="LOG_FIELD" property="logField" />
+        <result column="EXECUTING_SERVER" property="executingServer" />
+        <result column="EXECUTING_USER" property="executingUser" />
+        <result column="EXCUTOR_TYPE" property="excutorType" />
+        <result column="JOB_LOG" property="jobLog" />
+        <result column="CREATE_USER" property="createUser" />
+        <result column="UPDATE_USER" property="updateUser" />
+        <result column="CREATE_TIME" property="createTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="DEL_FLAG" property="delFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID_JOB AS jobId, MONITOR_ID AS monitorId, JOB_CONFIG_ID AS jobConfigId, CHANNEL_ID AS channelId, JOBName, JOB_CN_NAME AS jobCnName, STATUS AS status, LINES_READ AS linesRead, LINES_WRITTEN AS linesWritten, LINES_UPDATED AS linesUpdated, LINES_INPUT AS linesInput, LINES_OUTPUT AS linesOutput, LINES_REJECTED AS linesRejected, ERRORS AS errors, STARTDATE AS startdate, ENDDATE AS enddate, LOGDATE AS logdate, DEPDATE AS depdate, REPLAYDATE AS replaydate, LOG_FIELD AS logField, EXECUTING_SERVER AS executingServer, EXECUTING_USER AS executingUser, EXCUTOR_TYPE AS excutorType, JOB_LOG AS jobLog, CREATE_USER AS createUser, UPDATE_USER AS updateUser, CREATE_TIME AS createTime, UPDATE_TIME AS updateTime, DEL_FLAG AS delFlag
+    </sql>
+
+</mapper>

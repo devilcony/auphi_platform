@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.joblog.mapper.LogJobMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.LOG_JOB_ID AS logJobId
+        , a.JOB_CONFIG_ID AS jobConfigId
+        , a.CHANNEL_ID AS channelId
+        , a.JOB_NAME AS jobName
+        , a.JOB_CN_NAME AS jobCnName
+        , a.STATUS AS status
+        , a.LINES_READ AS linesRead
+        , a.LINES_WRITTEN AS linesWritten
+        , a.LINES_UPDATED AS linesUpdated
+        , a.LINES_INPUT AS linesInput
+        , a.LINES_OUTPUT AS linesOutput
+        , a.LINES_REJECTED AS linesRejected
+        , a.ERRORS AS errors
+        , a.STARTDATE AS startdate
+        , a.ENDDATE AS enddate
+        , a.LOGDATE AS logdate
+        , a.DEPDATE AS depdate
+        , a.REPLAYDATE AS replaydate
+        , a.LOG_FIELD AS logField
+        , a.EXECUTING_SERVER AS executingServer
+        , a.EXECUTING_USER AS executingUser
+        , a.EXCUTOR_TYPE AS excutorType
+        , a.JOB_LOG AS jobLog
+        , a.QRTZ_JOB_NAME AS qrtzJobName
+        , a.QRTZ_JOB_GROUP AS qrtzJobGroup
+    </sql>
+
+</mapper>

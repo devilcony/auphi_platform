@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>etl_platform</artifactId>
+        <groupId>com.aofei</groupId>
+        <version>v3.9.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>platform-kettle</artifactId>
+    <packaging>pom</packaging>
+    <description>kettle相关</description>
+    <modules>
+        <module>platform-kettle-base</module>
+        <module>platform-kettle-engine</module>
+    </modules>
+
+    <properties>
+        <pentaho.version>9.0.0.0-SNAPSHOT</pentaho.version>
+        <commons-xul.version>9.0.0.0-SNAPSHOT</commons-xul.version>
+        <pentaho-metastore.version>9.0.0.0-SNAPSHOT</pentaho-metastore.version>
+        <pentaho-reporting.version>9.0.0.0-SNAPSHOT</pentaho-reporting.version>
+        <pentaho-hadoop-shims-api.version>9.0.0.0-SNAPSHOT</pentaho-hadoop-shims-api.version>
+        <mondrian.version>9.0.0.0-SNAPSHOT</mondrian.version>
+        <encoder.version>1.2</encoder.version>
+        <ftp4che.version>0.7.1</ftp4che.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-common</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>pentaho-kettle</groupId>
+            <artifactId>kettle-core</artifactId>
+            <version>9.0.0.0-SNAPSHOT</version>
+            <classifier>auphi</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>pentaho-kettle</groupId>
+            <artifactId>kettle-engine</artifactId>
+            <version>9.0.0.0-SNAPSHOT</version>
+            <classifier>auphi</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.pentaho.di</groupId>
+            <artifactId>kettle-dbdialog</artifactId>
+            <version>9.0.0.0</version>
+            <classifier>auphi</classifier>
+        </dependency>
+
+
+        <!-- pentaho begin-->
+        <dependency>
+            <groupId>org.pentaho.metastore</groupId>
+            <artifactId>metastore</artifactId>
+            <version>9.0.0.0</version>
+            <classifier>auphi</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.platform</groupId>
+            <artifactId>pentaho-platform-core</artifactId>
+            <version>9.0.0.0</version>
+            <classifier>auphi</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>pentaho</groupId>
+            <artifactId>pentaho-platform-api</artifactId>
+            <version>9.0.0.0-SNAPSHOT</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>org.pentaho.di</groupId>
+            <artifactId>kettle-log4j-core</artifactId>
+            <version>9.0.0.0</version>
+            <classifier>auphi</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.pentaho.di</groupId>
+            <artifactId>kettle-ui-swt</artifactId>
+            <version>9.0.0.0</version>
+            <classifier>auphi</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.pentaho</groupId>
+            <artifactId>pentaho-big-data-plugin</artifactId>
+            <version>5.0.1</version>
+            <type>zip</type>
+        </dependency>
+
+
+        <!--  Pentaho reporting dependencies -->
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions</artifactId>
+            <version>${pentaho-reporting.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>pentaho-kettle</groupId>
+                    <artifactId>kettle-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>pentaho-kettle</groupId>
+                    <artifactId>kettle-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions-drill-down</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions-kettle</artifactId>
+            <version>${pentaho-reporting.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.pentaho.di.plugins</groupId>
+                    <artifactId>kettle-log4j-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>kettle-core</artifactId>
+                    <groupId>pentaho-kettle</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>kettle-engine</artifactId>
+                    <groupId>pentaho-kettle</groupId>
+                </exclusion>
+
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions-mondrian</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions-olap4j</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions-pmd</artifactId>
+            <version>${pentaho-reporting.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>pentaho-kettle</groupId>
+                    <artifactId>kettle-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>pentaho-kettle</groupId>
+                    <artifactId>kettle-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions-reportdesigner-parser</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions-sampledata</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions-scripting</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions-toc</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>classic-extensions-xpath</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>legacy-charts</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>legacy-functions</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pentaho.reporting.engine</groupId>
+            <artifactId>wizard-core</artifactId>
+            <version>${pentaho-reporting.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.pentaho</groupId>
+            <artifactId>pentaho-hadoop-shims-api</artifactId>
+            <version>${pentaho-hadoop-shims-api.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>pentaho-kettle</groupId>
+                    <artifactId>kettle-engine</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>pentaho-kettle</groupId>
+                    <artifactId>kettle-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.pentaho.di.plugins</groupId>
+            <artifactId>kettle-sap-plugin-core</artifactId>
+            <version>${pentaho.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.pentaho.di.plugins</groupId>
+            <artifactId>pdi-core-plugins-impl</artifactId>
+            <version>${pentaho.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>pentaho</groupId>
+            <artifactId>mondrian</artifactId>
+            <version>${mondrian.version}</version>
+        </dependency>
+
+        <!-- pentaho end-->
+
+
+        <!-- fastjson begin-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+        <!-- fastjson end-->
+
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ftp4che</groupId>
+            <artifactId>ftp4che</artifactId>
+            <version>${ftp4che.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.enterprisedt</groupId>
+            <artifactId>edtftpj</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.owasp.encoder</groupId>
+            <artifactId>encoder</artifactId>
+            <version>${encoder.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.mxgraph</groupId>
+            <artifactId>mxgraph-all</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- maven compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <fork>true</fork>
+                    <meminitial>512m</meminitial>
+                    <maxmem>2048m</maxmem>
+                </configuration>
+            </plugin>
+
+
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+
+</project>

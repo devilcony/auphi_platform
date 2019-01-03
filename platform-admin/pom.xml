@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!-- $Id: pom.xml 642118 2008-03-28 08:04:16Z reinhard $ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>etl_platform</artifactId>
+        <groupId>com.aofei</groupId>
+        <version>v3.9.0</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>war</packaging>
+
+    <name>platform-admin</name>
+    <artifactId>platform-admin</artifactId>
+
+    <properties>
+        <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-common</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>ehcache-core</artifactId>
+                    <groupId>net.sf.ehcache</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--系统管理-->
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-system</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>ehcache-core</artifactId>
+                    <groupId>net.sf.ehcache</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-auth</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--数据质量管理-->
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-mdm</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--调度-->
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-schedule</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--日志-->
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-log-sys</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--数据源管理-->
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-datasource</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--集群管理-->
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platfrom-cluster</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--数据质量管理-->
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platfrom-quality</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aofei</groupId>
+            <artifactId>platform-kettle-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <!-- spring begin-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <!-- spring end-->
+
+        <!-- apache.commons begin-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+        <!-- apache.commons end-->
+
+        <!-- servlet/jsp/jstl/taglibs for web begin-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+        </dependency>
+        <!-- servlet/jsp/jstl/taglibs for web end-->
+
+        <!-- jwt begin -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+        </dependency>
+        <!-- jwt end -->
+
+
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring4</artifactId>
+            <version>${thymeleaf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>${thymeleaf.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>etl_platform</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+
+
+</project>

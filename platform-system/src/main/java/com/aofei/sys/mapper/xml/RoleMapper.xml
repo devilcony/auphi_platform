@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.RoleMapper">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.C_ROLE_ID AS roleId
+        , a.C_ROLE_NAME AS roleName
+        , a.C_DESCRIPTION AS description
+        , a.C_ORGANIZER_ID AS organizerId
+        , b.ORGANIZER_NAME AS organizerName
+        , a.C_PRIVILEDGES AS priviledges
+        , a.C_ISSYSTEMROLE AS isSystemRole
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , DEL_FLAG AS delFlag
+    </sql>
+
+    <sql id="Base_Joins">
+       LEFT JOIN SYS_ORGANIZER b ON b.ORGANIZER_ID = a.C_ORGANIZER_ID
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.sys.entity.Role">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_ROLE a
+        <include refid="Base_Joins"/>
+        <where>
+            a.DEL_FLAG = 0
+            <if test="C_ORGANIZER_ID !=null ">
+                AND (a.C_ORGANIZER_ID  = #{organizerId} or a.C_ORGANIZER_ID = -1)
+            </if>
+
+            <if test="roleName !=null and roleName!=''">
+                <bind name="pattern" value="'%' + _parameter.roleName + '%'" />
+                AND  a.ROLE_NAME like #{pattern}
+            </if>
+        </where>
+    </select>
+
+    <select id="findRoleByUserId"  resultType="com.aofei.sys.entity.Role">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_ROLE a
+        <include refid="Base_Joins"/>
+        left join SYS_USER_ROLE ur on ur.C_ROLE_ID= a.C_ROLE_ID
+        left join SYS_USER u on ur.C_USER_ID = u.C_USER_ID
+        where a.DEL_FLAG = 0 and u.C_USER_ID = #{userId}
+
+    </select>
+
+    <update id="updateById">
+        update SYS_ROLE a
+        <set>
+              a.C_ROLE_NAME = #{et.roleName}
+            , a.C_DESCRIPTION = #{et.description}
+            , a.C_ORGANIZER_ID = #{et.organizerId}
+            , a.C_PRIVILEDGES = #{et.priviledges}
+            , a.C_ISSYSTEMROLE = #{et.isSystemRole}
+            , a.UPDATE_USER = #{et.updateUser}
+            , a.UPDATE_TIME = #{et.updateTime}
+        </set>
+        where a.SYS_ROLE = #{et.roleId}
+    </update>
+
+    <update id="deleteById">
+        update SYS_ROLE a set a.DEL_FLAG = 1  where a.C_ROLE_ID = #{id}
+    </update>
+</mapper>

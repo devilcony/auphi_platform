@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.datasource.mapper.DatabaseMapper">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ID_DATABASE AS databaseId
+        , a.NAME AS name
+        , a.ID_DATABASE_TYPE AS databaseTypeId
+        , db.DESCRIPTION AS databaseTypeName
+        , a.ID_DATABASE_CONTYPE AS databaseContypeId
+        , dbc.DESCRIPTION AS databaseContypeName
+        , a.HOST_NAME AS hostName
+        , a.DATABASE_NAME AS databaseName
+        , a.PORT AS port
+        , a.USERNAME AS username
+        , a.PASSWORD AS password
+        , a.SERVERNAME AS servername
+        , a.DATA_TBS AS dataTbs
+        , a.INDEX_TBS AS indexTbs
+    </sql>
+
+    <sql id="Base_Joins">
+        LEFT JOIN R_DATABASE_TYPE db on db.ID_DATABASE_TYPE = a.ID_DATABASE_TYPE
+        LEFT JOIN R_DATABASE_CONTYPE dbc on dbc.ID_DATABASE_CONTYPE = a.ID_DATABASE_CONTYPE
+    </sql>
+    <select id="findList"  resultType="com.aofei.datasource.entity.DatabaseEntity">
+        select
+        <include refid="Base_Column_List"/>
+        from R_DATABASE a
+        <include refid="Base_Joins"/>
+        <where>
+            <if test="organizerId != null ">
+                AND a.ORGANIZER_ID = #{organizerId}
+            </if>
+            <if test="name != null and name!=''">
+                AND a.NAME  like  '%${name}%'
+            </if>
+        </where>
+    </select>
+
+</mapper>

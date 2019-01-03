@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.mdm.mapper.ModelConstaintMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ID_CONSTAINT AS constaintId
+        , a.CONSTAINT_ORDER AS constaintOrder
+        , a.CONSTAINT_TYPE AS constaintType
+        , a.CONSTAINT_NAME AS constaintName
+        , a.ID_ATTRIBUTE AS attributeId
+        , a.REFERENCE_ID_MODEL AS referenceModelId
+        , a.REFERENCE_ID_ATTRIBUTE AS referenceAttributeId
+        , a.ALIAS_TABLE_FLAG AS aliasTableFlag
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+
+    <select id="findList"  resultType="com.aofei.mdm.entity.ModelConstaint">
+        select
+        <include refid="Base_Column_List"/>
+        from MDM_MODEL_CONSTAINT a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="attributeId !=null ">
+                AND  a.ID_MOID_ATTRIBUTEDEL  = #{attributeId}
+            </if>
+        </where>
+    </select>
+    <select id="findListByModelId" resultType="com.aofei.mdm.entity.ModelConstaint">
+        select
+        <include refid="Base_Column_List"/>
+        from MDM_MODEL_CONSTAINT a
+        LEFT JOIN MDM_MODEL_ATTRIBUTE attribute on attribute.ID_ATTRIBUTE = a.ID_ATTRIBUTE AND  attribute.DEL_FLAG = 0
+        <where>
+            a.DEL_FLAG = 0 AND attribute.ID_MODEL = #{modelId}
+        </where>
+
+    </select>
+
+    <select id="findListByAttributeId"  resultType="com.aofei.mdm.entity.ModelConstaint">
+        select
+        <include refid="Base_Column_List"/>
+        from MDM_MODEL_CONSTAINT a
+        <where>
+            a.DEL_FLAG = 0 AND  a.ID_MOID_ATTRIBUTEDEL  = #{attributeId}
+        </where>
+    </select>
+
+    <update id="deleteById">
+        update MDM_MODEL_CONSTAINT a set a.DEL_FLAG = 1  where a.ID_CONSTAINT = #{id}
+    </update>
+    <update id="deleteByAttributeId">
+        update MDM_MODEL_ATTRIBUTE a set a.DEL_FLAG = 1  where a.ID_ATTRIBUTE = #{attributeId}
+    </update>
+</mapper>

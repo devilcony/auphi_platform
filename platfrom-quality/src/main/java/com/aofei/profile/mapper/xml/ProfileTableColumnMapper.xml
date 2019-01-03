@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.profile.mapper.ProfileTableColumnMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.ID_PROFILE_TABLE_COLUMN AS profileTableColumnId
+        , a.PROFILE_TABLE_COLUMN_NAME AS profileTableColumnName
+        , a.ID_PROFILE_TABLE AS profileTableId
+        , a.PROFILE_TABLE_COLUMN_DESC AS profileTableColumnDesc
+        , a.PROFILE_TABLE_COLUMN_ORDER AS profileTableColumnOrder
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+    <sql id="Result_Join">
+        LEFT JOIN(
+          SELECT
+            , ID_PROFILE_TABLE_COLUMN
+            , INDICATOR_ALL_COUNT
+            , INDICATOR_DISTINCT_COUNT
+            , INDICATOR_NULL_COUNT
+            , INDICATOR_ZERO_COUNT
+            , INDICATOR_AGG_AVG
+            , INDICATOR_AGG_MAX
+            , INDICATOR_AGG_MIN
+            , CREATE_TIME
+          FROM PROFILE_TABLE_RESULT AS b WHERE CREATE_TIME = (SELECT MAX(c.CREATE_TIME) FROM PROFILE_TABLE_RESULT as c WHERE b.ID_PROFILE_TABLE_COLUMN = c.ID_PROFILE_TABLE_COLUMN ) ) d
+        ON a.ID_PROFILE_TABLE_COLUMN = d.ID_PROFILE_TABLE_COLUMN;
+    </sql>
+
+    <select id="findList" resultType="com.aofei.profile.entity.ProfileTableColumn">
+        select
+        <include refid="Base_Column_List"/>
+        from PROFILE_TABLE_COLUMN a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="profileTableColumnId !=null ">
+                AND  a.ID_PROFILE_TABLE_COLUMN  = #{profileTableColumnId}
+            </if>
+            <if test="profileTableId !=null ">
+                AND  a.ID_PROFILE_TABLE  = #{profileTableId}
+            </if>
+
+        </where>
+    </select>
+
+    <select id="findResultList" resultType="com.aofei.profile.entity.ProfileTableColumn">
+        select
+            <include refid="Base_Column_List"/>
+              d.CREATE_TIME AS resultTime
+            , d.INDICATOR_ALL_COUNT AS indicatorAllCount
+            , d.INDICATOR_DISTINCT_COUNT AS indicatorDistinctCount
+            , d.INDICATOR_NULL_COUNT AS indicatorNullCount
+            , d.INDICATOR_ZERO_COUNT AS indicatorZeroCount
+            , d.INDICATOR_AGG_AVG AS indicatorAggAvg
+            , d.INDICATOR_AGG_MAX AS indicatorAggMax
+            , d.INDICATOR_AGG_MIN AS indicatorAggMin
+        from PROFILE_TABLE_COLUMN a
+        <include refid="Result_Join"/>
+
+        <where>
+            a.DEL_FLAG = 0
+            <if test="compareSqlColumnId !=null ">
+                AND  a.ID_PROFILE_TABLE_COLUMN  = #{profileTableColumnId}
+            </if>
+            <if test="profileTableId !=null ">
+                AND  a.ID_PROFILE_TABLE  = #{profileTableId}
+            </if>
+
+        </where>
+
+    </select>
+</mapper>

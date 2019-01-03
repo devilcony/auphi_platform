@@ -1,0 +1,167 @@
+<div class="open_email" style="margin-left: 8px; margin-top: 8px; margin-bottom: 8px; margin-right: 8px;">
+    <div>
+<span class="genEmailNicker">
+
+</span>
+        <br>
+        <span class="genEmailContent">
+          <div class="block">
+
+          </div>
+            <div class="block">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" id="backgroundTable">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <table width="600" height="60" bgcolor="#00a4ff" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="http://www.doetl.com/" rel="noopener" target="_blank">
+                                            <img src="http://www.doetl.com/templets/Picture/logo.png" height="30px" border="0" style="display:block; border:none; outline:none; text-decoration:none; margin-left: 35px;" class="logo">
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="block">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" id="backgroundTable">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <table bgcolor="#ffffff" width="600px" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth" style="border-left: 1px solid #e6e6e6; border-right: 1px solid #e6e6e6;border-bottom: 1px solid #e6e6e6;">
+                                <tbody>
+                                <tr>
+                                    <td style="padding-left: 45px; padding-right: 45px;" class="content-text">
+                                        <table width="100%" align="center" cellspacing="0" cellpadding="0" border="0" class="devicewidthinner">
+                                            <tbody>
+                                            <tr>
+                                                <td height="30">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color:#000000; font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif; font-size: 16px; padding-bottom:15px; text-align: left;" class="news-text">
+                                                    尊敬的傲飞数据整合平台用户：
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color:#666; font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif; font-size: 16px; padding-bottom:5px;text-align: left; line-height: 1.5em;" class="news-text">
+                                                    请点击以下链接，完成用户激活。
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="15"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color:#666; font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif; font-size: 16px; padding-bottom:5px; text-align: left; line-height: 1.5em;" class="news-text">
+                                                    <a href="$active_url$auth_code" style="color:#fff;font-size: 14px;font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif;padding:10px 23px;text-decoration:none;color:#fff;background-color:#00a4ff;" class="btn-reset" rel="noopener" target="_blank">
+                                                        用户激活
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="40">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color:#666; font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif; font-size: 16px; padding-bottom:5px; text-align: left; line-height: 1.5em;" class="news-text">或复制以下链接到浏览器中以完成验证：</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color:#666; font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif; font-size: 16px; padding-bottom:5px; text-align: left; line-height: 1.5em; word-break: break-all; word-wrap: break-word; overflow: hidden;" class="news-text"><a href="https://cloud.tencent.com/register/active?auth_code=eb7eFg389g1ofnZXSm7eHN2lXuY2c04jp%2F2%2F%2FQ9BoLq20ryij4KhxNi9JWhBLCRvKVrLzvhcEjNGkAlZW5S%2FOt%2B2ZZzakk7Dq7fGOp5f&amp;s_url=https%3A%2F%2Fcloud.tencent.com%2F%3FfromSource%3Dgwzcw.234976.234976.234976" class="news-text-link" style="font-size: 16px;color: #2277da;font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif;text-decoration: none;text-decoration: underline;word-break: break-all;" rel="noopener" target="_blank"></a>
+                                                    <a href="$active_url$auth_code" rel="noopener" target="_blank">$active_url$auth_code</a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color:#666; font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif; font-size: 16px; padding-bottom:5px; text-align: left; line-height: 1.5em;" class="news-text">
+                                                    上述链接48小时内有效。如果激活链接失效，请您登录网站
+                                                    <a href="$register_url" targt="_blank" style="font-size: 16px;font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif;text-decoration: none;text-decoration: underline;" rel="noopener" target="_blank">
+                                                        $register_url
+                                                    </a>重新申请激活。
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <table width="80%" align="left" cellspacing="0" cellpadding="0" border="0" class="left-blank">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>&nbsp;</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <table width="20%" align="right" cellspacing="0" cellpadding="0" border="0" class="right-sign">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td style="color:#000000; font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif; font-size: 16px; padding-bottom:5px;" class="news-text">
+                                                                此致
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="color:#000000; font-family:PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif; font-size: 16px; padding-bottom:5px;" class="news-text">
+                                                                傲飞数据整合平台团队
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="40"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="block"><table width="100%" cellpadding="0" cellspacing="0" border="0" id="backgroundTable">
+                <tbody>
+                <tr>
+                    <td width="100%">
+                        <table width="580" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                            <tbody>
+                            <tr>
+                                <td width="100%" height="20"></td>
+                            </tr>
+                            <tr>
+                                <td align="center" valign="middle" style="font-family: PingFangSC-Light,'helvetica neue','hiragino sans gb',arial,'microsoft yahei ui','microsoft yahei',simsun,sans-serif; font-size: 10px;color: #999999" st-content="preheader">
+                                    此为系统邮件，请勿回复©
+                                    <span style="border-bottom:1px dashed #ccc;z-index:1" t="7" onclick="return false;" data="2013-2016">
+                                        2013-2018
+                                    </span> doetl.com版权所有</td></tr><tr><td width="100%" height="5">
+
+                            </td>
+                            </tr>
+
+                            <tr>
+                                <td width="100%" height="15">
+
+                                </td>
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+</span>
+        <br>
+        <span class="genEmailTail">
+
+</span>
+    </div>
+</div>

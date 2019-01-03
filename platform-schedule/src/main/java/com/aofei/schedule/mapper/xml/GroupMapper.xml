@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.schedule.mapper.GroupMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          ID_GROUP AS groupId
+        , ORGANIZER_ID AS organizerId
+        , GROUP_NAME AS groupName
+        , DESCRIPTION AS description
+        , CREATE_USER AS createUser
+        , UPDATE_USER AS updateUser
+        , CREATE_TIME AS createTime
+        , UPDATE_TIME AS updateTime
+        , DEL_FLAG AS delFlag
+    </sql>
+
+
+
+    <select id="findList"  resultType="com.aofei.schedule.entity.Group">
+        select
+        <include refid="Base_Column_List"/>
+        from QRTZ_GROUP a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="organizerId !=null ">
+                AND  a.ORGANIZER_ID  = #{organizerId}
+            </if>
+            <if test="groupName !=null and groupName != ''">
+                AND  a.GROUP_NAME  like '%${groupName}%'
+            </if>
+        </where>
+    </select>
+
+    <update id="updateById">
+        update QRTZ_GROUP a
+        <set>
+              a.GROUP_NAME = #{et.groupName}
+            , a.DESCRIPTION = #{et.description}
+            , a.UPDATE_USER = #{et.updateUser}
+            , a.UPDATE_TIME = #{et.updateTime}
+        </set>
+        where a.ID_GROUP = #{et.groupId}
+    </update>
+
+    <update id="deleteById">
+        update QRTZ_GROUP a set a.DEL_FLAG = 1  where a.ID_GROUP = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofei.sys.mapper.MenuMapper">
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.MENU_ID AS menuId
+        , a.PARENT_ID AS parentId
+        , a.NAME AS name
+        , a.URL AS url
+        , a.PERMS AS perms
+        , a.TYPE AS type
+        , a.ICON AS icon
+        , a.ORDER_NUM AS orderNum
+        , a.STATUS AS status
+        , a.CREATE_USER AS createUser
+        , a.UPDATE_USER AS updateUser
+        , a.CREATE_TIME AS createTime
+        , a.UPDATE_TIME AS updateTime
+        , a.DEL_FLAG AS delFlag
+    </sql>
+
+    <select id="findList"  resultType="com.aofei.sys.entity.Menu">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_MENU a
+        <where>
+            a.DEL_FLAG = 0
+            <if test="parentId !=null ">
+                AND  a.PARENT_ID  = #{parentId}
+            </if>
+            <if test="name != null and name != ''">
+                AND a.NAME LIKE '%#{name}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="findMenusByUser" resultType="com.aofei.sys.entity.Menu">
+        select
+        <include refid="Base_Column_List"/>
+
+        from SYS_MENU a
+        JOIN SYS_ROLE_MENU rm on rm.MENU_ID = a.MENU_ID
+        JOIN SYS_USER_ROLE ur on ur.C_ROLE_ID = rm.ROLE_ID
+        where ur.ID_USER = #{userId} and a.DEL_FLAG = 0
+    </select>
+
+
+    <update id="updateById">
+        update SYS_MENU a
+        <set>
+              a.PARENT_ID = #{et.parentId}
+            , a.NAME = #{et.name}
+            , a.URL = #{et.url}
+            , a.PERMS = #{et.perms}
+            , a.TYPE = #{et.type}
+            , a.ICON = #{et.icon}
+            , a.ORDER_NUM = #{et.orderNum}
+            , a.UPDATE_USER = #{et.updateUser}
+            , a.UPDATE_TIME = #{et.updateTime}
+        </set>
+        where a.MENU_ID = #{et.menuId}
+    </update>
+
+
+    <update id="deleteById">
+        update SYS_MENU a set a.DEL_FLAG = 1  where a.MENU_ID = #{id}
+    </update>
+</mapper>
